@@ -44,6 +44,6 @@ const html = (await marked.parse(source)).replace(/<h([23])>([\s\S]*?)<\/h\1>/g,
 <style>
   .skill-source-note { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 28px; padding: 12px 16px; border: 1px solid #dedcfb; border-radius: 10px; color: #57536f; background: #f7f6ff; font-size: 13px; }
   .skill-source-note a { color: #5149e8; font-weight: 650; }
-  @media (prefers-color-scheme: dark) { .skill-source-note { color: #cbc9e3; border-color: #3b3860; background: #1c1a2b; } }
+  :global(html[data-theme="dark"]) .skill-source-note { color: #cbc9e3; border-color: #3b3860; background: #1c1a2b; }
   @media (max-width: 600px) { .skill-source-note { flex-direction: column; } }
 </style>

@@ -15,6 +15,7 @@ type NavSection = { label: string; items: readonly NavItem[] };
 const sections: readonly NavSection[] = [
   { label: "시작", items: [["/docs/getting-started", "시작하기"], ["/docs/react", "React에서 사용하기"]] },
   { label: "핵심 안내서", items: [["/docs/features", "기능과 표현 요소"], ["/docs/api", "API와 hooks"], ["/docs/schema", "JSON Schema"], ["/docs/ai-authoring", "AI로 만들기"]] },
+  { label: "표현 요소", items: [["/docs/elements/rect", "Rectangle"], ["/docs/elements/circle", "Circle"], ["/docs/elements/line", "Line"], ["/docs/elements/arrow", "Arrow"], ["/docs/elements/text", "Text"], ["/docs/elements/image", "Image"], ["/docs/elements/path", "Path"], ["/docs/elements/polygon", "Polygon"], ["/docs/elements/group", "Group"], ["/docs/elements/code", "Code"]] },
   { label: "AI 작성 Skill", items: [["/docs/skill/overview", "Skill 안내"], ["/docs/skill/schema", "Schema reference"], ["/docs/skill/patterns", "작성 pattern"], ["/docs/skill/integration", "Editor와 MCP 연동"]] },
 ];
 const pages: NavItem[] = sections.flatMap((section) => [...section.items]);
@@ -35,6 +36,10 @@ const next = pageIndex >= 0 && pageIndex < pages.length - 1 ? pages[pageIndex + 
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <title>{title} · Clotho</title>
+    <script is:inline>
+      const savedTheme = localStorage.getItem("clotho-docs-theme");
+      document.documentElement.dataset.theme = savedTheme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    </script>
   </head>
   <body>
     <header class="site-header">
@@ -45,6 +50,7 @@ const next = pageIndex >= 0 && pageIndex < pages.length - 1 ? pages[pageIndex + 
           <a href="/docs/skill/overview">AI Skill</a>
           <a href="https://clotho-editor.shinkeonkim.com/">Editor</a>
           <a href="https://github.com/shinkeonkim/clotho">GitHub ↗</a>
+          <button class="theme-toggle" type="button" aria-label="라이트 모드와 다크 모드 전환" title="색상 모드 전환"><span class="theme-icon-light">☀</span><span class="theme-icon-dark">☾</span></button>
         </div>
       </nav>
     </header>
@@ -64,7 +70,7 @@ const next = pageIndex >= 0 && pageIndex < pages.length - 1 ? pages[pageIndex + 
         </aside>
         <main class="doc-main">
           <div class="breadcrumb"><a href="/">Clotho</a><span>/</span><span>{title}</span></div>
-          <article class="doc-content prose prose-slate dark:prose-invert"><slot /></article>
+          <article class="doc-content prose prose-slate"><slot /></article>
           {(previous || next) && (
             <nav class="page-navigation" aria-label="이전 및 다음 문서">
               {previous ? <a href={previous[0]}><small>← 이전</small><strong>{previous[1]}</strong></a> : <span />}
@@ -78,5 +84,12 @@ const next = pageIndex >= 0 && pageIndex < pages.length - 1 ? pages[pageIndex + 
         </aside>
       </div>
     )}
+    <script is:inline>
+      document.querySelector(".theme-toggle")?.addEventListener("click", () => {
+        const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem("clotho-docs-theme", next);
+      });
+    </script>
   </body>
 </html>

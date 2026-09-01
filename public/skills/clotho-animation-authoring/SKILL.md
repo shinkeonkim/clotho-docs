@@ -1,11 +1,13 @@
 ---
 name: clotho-animation-authoring
-description: Create, revise, validate, or review Clotho v1 animation JSON and code-authored animation documents. Use for educational visualizations, algorithm animations, timeline effects, connectors, chapters, assets, and migration from legacy animation JSON.
+description: Create, revise, validate, or review animation JSON and code-authored documents that follow the current Clotho schema. Use for educational visualizations, algorithm animations, timeline effects, connectors, chapters, assets, and application integrations.
 ---
 
 # Clotho Animation Authoring
 
-Create a valid `clothoVersion: 1` document whose visual story remains understandable at any seek time. Clotho is deterministic: every frame is computed from the document and an absolute millisecond time, not from earlier frames.
+Create a document that follows Clotho's current schema and whose visual story remains understandable at any seek time. Clotho is deterministic: every frame is computed from the document and an absolute millisecond time, not from earlier frames. Treat the package schema as the single source of truth instead of inventing or negotiating a format version.
+
+Begin with the story, not the shapes. List the states a reader must understand, assign those states to absolute times, and then choose the smallest set of elements that communicates each state. A technically valid document is not finished until its labels, movement, contrast, connectors, and chapter boundaries remain clear when the reader seeks to any point.
 
 ## Authoring workflow
 
@@ -21,7 +23,7 @@ Read [references/schema.md](references/schema.md) whenever creating or changing 
 
 ## Output contract
 
-- Emit a complete Clotho v1 document when asked for JSON. Never emit legacy `version: 3` or `version: 4`.
+- Emit a complete document conforming to the current Clotho schema when asked for JSON.
 - Preserve existing fields and references during revisions unless the requested change makes them obsolete.
 - For a partial storage API, first merge the update into the full current document and validate that result. Arrays are commonly replacement values, not item patches.
 - Do not invent a host URL, revision, authentication value, database operation, or deployment action. Return the document and validation result unless the user authorizes integration work.

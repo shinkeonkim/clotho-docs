@@ -1,0 +1,26 @@
+---
+import { ElementExample } from "@/components/ElementExample";
+import { elementGuides, type ElementSlug } from "@/data/element-guides";
+import DocsLayout from "@/layouts/DocsLayout.astro";
+
+export function getStaticPaths() { return ["rect", "circle", "line", "arrow", "text", "image", "path", "polygon", "group", "code"].map((slug) => ({ params: { slug } })); }
+const slug = Astro.params.slug as ElementSlug;
+const guide = elementGuides[slug];
+const headings = [{ depth: 2, slug: "example", text: "실행 예시" }, { depth: 2, slug: "options", text: "사용할 수 있는 옵션" }, { depth: 2, slug: "json", text: "JSON 예시" }];
+const sample = JSON.stringify(guide.document, null, 2);
+---
+<DocsLayout title={`${guide.title} 요소`} description={guide.summary} headings={headings}>
+  <h1>{guide.title}</h1>
+  <p class="lead">{guide.summary}</p>
+  <h2 id="example">실행 예시</h2>
+  <p>아래 예시는 이 요소의 주요 속성이 시간에 따라 어떻게 계산되는지 보여줍니다.</p>
+  <ElementExample guide={guide} client:load />
+  <h2 id="options">사용할 수 있는 옵션</h2>
+  <p>모든 요소가 공유하는 <code>id</code>, <code>name</code>, <code>parentId</code>, <code>rotation</code>, <code>appearances</code>, <code>tracks</code>에 더해 다음 값을 사용할 수 있습니다.</p>
+  <table><thead><tr><th>옵션</th><th>형식</th><th>설명</th></tr></thead><tbody>{guide.options.map(([name, type, description]) => <tr><td><code>{name}</code></td><td>{type}</td><td>{description}</td></tr>)}</tbody></table>
+  <h2 id="json">JSON 예시</h2>
+  <p>player에 전달된 전체 문서입니다. 필요한 요소만 가져와 기존 문서의 <code>elements</code>에 넣어도 됩니다.</p>
+  <pre><code>{sample}</code></pre>
+</DocsLayout>
+
+<style>.lead { color: #697184; font-size: 1.15rem; }</style>

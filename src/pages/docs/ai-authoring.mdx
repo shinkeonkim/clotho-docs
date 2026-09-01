@@ -5,7 +5,7 @@ title: AI로 애니메이션 만들기
 
 # AI로 Clotho 애니메이션 만들기
 
-`clotho-animation-authoring` skill은 AI coding agent가 Clotho v1 JSON을 생성·수정·검증할 때 필요한 작업 순서와 schema reference를 제공합니다. 기존 oh-my-blog MCP의 revision 안전 규칙과 Clotho의 실제 schema·gallery pattern을 하나로 정리했습니다.
+`clotho-animation-authoring` skill은 AI coding agent가 현재 Clotho schema에 맞는 JSON을 생성·수정·검증할 때 필요한 판단 기준을 제공합니다. 단순히 유효한 도형 목록을 만드는 데 그치지 않고, 설명할 상태를 먼저 나누고 절대 시간에 배치한 다음 가장 적은 요소로 전달하도록 안내합니다. oh-my-blog MCP의 revision 안전 규칙과 실제 gallery에서 검증한 작성 pattern도 함께 정리했습니다.
 
 ## 설치
 
@@ -47,7 +47,7 @@ $clotho-animation-authoring으로 이 JSON의 connector가 이동하는 node를 
 
 ## AI가 지켜야 하는 핵심 규칙
 
-1. `clothoVersion: 1`만 생성합니다.
+1. 설치된 package의 현재 schema를 형식의 유일한 기준으로 사용합니다.
 2. 누적 상태가 아니라 절대 시간의 keyframe으로 장면을 정의합니다.
 3. 지속 변화는 track, 보이는 구간은 appearance, 짧은 강조는 effect로 표현합니다.
 4. 이동하는 요소 사이에는 ID와 anchor로 connector를 연결합니다.

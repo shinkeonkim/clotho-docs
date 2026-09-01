@@ -14,12 +14,8 @@ Open the document in Clotho Editor for visual editing. A host supplies an `Anima
 
 ## MCP or revisioned storage
 
-Before updating, fetch the full document and current revision. Merge locally, validate the complete v1 document, then submit the changed top-level fields and returned revision. Treat `elements`, `chapters`, `effects`, and assets as replacement collections unless the API explicitly documents item patches.
+Before updating, fetch the full document and current revision. Merge locally, validate the complete document against the installed Clotho schema, then submit the changed top-level fields and returned revision. Treat `elements`, `chapters`, `effects`, and assets as replacement collections unless the API explicitly documents item patches.
 
 Never change `id` or `clothoVersion` through a partial update. A stale revision requires another read and a new merge. Use a unique stable idempotency key for one logical create or update attempt; do not reuse it for different content.
 
 Publication state such as draft/published belongs to the host record, not inside a Clotho document.
-
-## Legacy documents
-
-Documents with `version: 3` or `version: 4` require `migrateLegacyDocument` or the CLI migrate command. Review migration notes, validate the v1 result, and compare representative frames before replacing stored data.
