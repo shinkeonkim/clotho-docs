@@ -15,6 +15,7 @@ export const navigation = [
     en: "Guides",
     items: [
       ["/docs/features", "기능과 표현 요소", "Features and elements"],
+      ["/docs/authoring-platform", "확장형 작성 환경", "Extensible authoring platform"],
       ["/docs/i18n", "Text 국제화", "Text localization"],
       ["/docs/api", "API와 hooks", "API and hooks"],
       ["/docs/schema", "JSON Schema", "JSON Schema"],

@@ -112,6 +112,37 @@ Chapters drive captions and a list positioned on any side. Images refer to reusa
 
 Clotho provides React, Vue, DOM, SVG, Node.js, GIF, and CLI entry points.`,
   },
+  "authoring-platform": {
+    title: "Extensible authoring platform",
+    description: "Connect authoring, validation, responsive rendering, and QA around one Clotho document.",
+    body: `# Extensible authoring platform
+
+Clotho keeps core scene semantics in the runtime and exposes host-specific policy, import, export, and additional validation through plugins. The complete workflow is: create a document or template, bind data, compile constraints and responsive variants, lint and visually verify it, then render the same result through any adapter.
+
+## Plugins
+
+Declare plugins with \`definePlugin\`, register them with \`createPluginRegistry\`, and execute \`parse → normalize → compile → validate\` through \`runPluginPipeline\`. \`exportWithPlugins\` collects export artifacts. Plugin execution is deterministic and traced; plugins extend host boundaries rather than replacing schema, geometry, timeline, or scene semantics.
+
+## Layout, annotations, and templates
+
+Constraint layout expresses alignment, spacing, pinning, and centering relationships between elements. Linked annotations connect tokens in explanatory text to element IDs. \`defineTemplate\` validates string, number, boolean, enum, array, and object parameters before producing a complete document.
+
+## Checkpoints, data, and stories
+
+Interactive checkpoints pause playback for choice, text, or number input. Element bindings read JSON Pointer values from document \`data\` and assign them only to supported properties. Branching stories connect complete Clotho documents through a \`StoryManifest\`, preserving independent rendering, caching, and export for every node.
+
+## Responsive stages and large scenes
+
+\`responsive.variants\` select canvas, element overrides, and chapter placement by container width while preserving playback time. \`compileSceneDependencyPlan\`, \`createPreparedSceneBuilder\`, and viewport culling reduce repeated work for large scenes without changing scene output.
+
+## Lint and visual regression
+
+\`lintDocument\` provides correctness, accessibility, and recommended presets. \`autofixDocument\` changes only unambiguous findings. The gallery visual baseline renders representative times at multiple widths; use \`bun run visual:check\` in CI and update the baseline only after visual review.
+
+## Editor QA
+
+The development plugin panel in Clotho Editor exposes data bindings, story graphs, responsive inspection, performance profiling, lint findings, autofix previews, and visual regression. Inspector state is not stored in the animation document.`,
+  },
   i18n: {
     title: "Text localization",
     description:
