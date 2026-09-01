@@ -46,8 +46,10 @@ import DocsLayout from "@/layouts/DocsLayout.astro";
   .capabilities div { display: flex; flex-direction: column; gap: 4px; padding: 20px 10px; border-right: 1px solid #e8e9ef; }
   .capabilities div:last-child { border: 0; }.capabilities strong { font-size: 21px; }.capabilities span { color: #7a8190; font-size: 12px; }
   .gallery-section { max-width: 1160px; margin: auto; padding: 88px 24px 100px; }
-  .section-heading { display: grid; grid-template-columns: 1.15fr .85fr; gap: 60px; align-items: end; margin-bottom: 38px; }
-  .section-heading p { margin: 0; color: #6c7383; line-height: 1.7; word-break: keep-all; }.section-heading > div > p { margin-bottom: 8px; color: #625bf5; font-size: 13px; font-weight: 750; }.section-heading h2 { margin: 0; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; letter-spacing: -.045em; }
+  .section-heading { margin-bottom: 38px; }
+  .section-heading > p { max-width: 760px; margin: 18px 0 0; color: #6c7383; line-height: 1.75; word-break: keep-all; }
+  .section-heading > div > p { margin: 0 0 8px; color: #625bf5; font-size: 13px; font-weight: 750; }
+  .section-heading h2 { margin: 0; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; letter-spacing: -.045em; }
   :global(html[data-theme="dark"]) .hero { border-color: #292d37; background: radial-gradient(circle at 50% -20%, #28254c 0, #15161d 42%, #101217 75%); }
   :global(html[data-theme="dark"]) .eyebrow { border-color: #39365f; background: #1b1a28; color: #b5b1ff; }
   :global(html[data-theme="dark"]) h1 { color: #f4f5f8; }
@@ -55,5 +57,5 @@ import DocsLayout from "@/layouts/DocsLayout.astro";
   :global(html[data-theme="dark"]) .secondary-action { color: #edf1f7; border-color: #343844; background: #191c23; }
   :global(html[data-theme="dark"]) .capabilities { border-color: #30333d; background: #171920cc; }
   :global(html[data-theme="dark"]) .capabilities div { border-color: #30333d; }
-  @media (max-width: 700px) { .hero { padding-top: 72px; }.hero-actions { flex-direction: column; }.capabilities { grid-template-columns: repeat(2, 1fr); }.capabilities div:nth-child(2) { border-right: 0; }.capabilities div:nth-child(-n+2) { border-bottom: 1px solid #e8e9ef; }.section-heading { grid-template-columns: 1fr; gap: 18px; } }
+  @media (max-width: 700px) { .hero { padding-top: 72px; }.hero-actions { flex-direction: column; }.capabilities { grid-template-columns: repeat(2, 1fr); }.capabilities div:nth-child(2) { border-right: 0; }.capabilities div:nth-child(-n+2) { border-bottom: 1px solid #e8e9ef; } }
 </style>
