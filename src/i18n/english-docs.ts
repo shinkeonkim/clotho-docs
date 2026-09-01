@@ -1,5 +1,8 @@
 export const englishDocs = {
-  "getting-started": { title: "Getting started", description: "Install Clotho and render your first animation document.", body: `# Getting started
+  "getting-started": {
+    title: "Getting started",
+    description: "Install Clotho and render your first animation document.",
+    body: `# Getting started
 
 Clotho computes a scene from a JSON document and an absolute time, then renders that scene through the adapter your application needs.
 
@@ -35,8 +38,12 @@ Validate unknown JSON with \`parseDocument\` before passing it to an adapter.
 
 - [Render with React](/en/docs/react)
 - [Explore every element](/en/docs/features)
-- [Read the JSON Schema guide](/en/docs/schema)` },
-  react: { title: "Using React", description: "Render a Clotho document with React components and hooks.", body: `# Using React
+- [Read the JSON Schema guide](/en/docs/schema)`,
+  },
+  react: {
+    title: "Using React",
+    description: "Render a Clotho document with React components and hooks.",
+    body: `# Using React
 
 Import the stylesheet once near your application root, then pass a validated document to the player.
 
@@ -63,8 +70,13 @@ The player supplies playback, restart, fullscreen, speed, chapter, caption, and 
 - \`useReducedMotion()\` follows the viewer's motion preference.
 - \`useHostTheme()\` reports the host color scheme.
 - \`useInView(ref, threshold?)\` reports viewport visibility.
-- \`useFullscreen(ref)\` returns fullscreen state and a toggle function.` },
-  features: { title: "Features and elements", description: "Understand Clotho's elements, timeline features, assets, and output adapters.", body: `# Features and elements
+- \`useFullscreen(ref)\` returns fullscreen state and a toggle function.`,
+  },
+  features: {
+    title: "Features and elements",
+    description:
+      "Understand Clotho's elements, timeline features, assets, and output adapters.",
+    body: `# Features and elements
 
 The same document and time always produce the same scene. Use the pages below for complete option tables, live examples, and source JSON.
 
@@ -98,8 +110,64 @@ Chapters drive captions and a list positioned on any side. Images refer to reusa
 
 ## Output adapters
 
-Clotho provides React, Vue, DOM, SVG, Node.js, GIF, and CLI entry points.` },
-  api: { title: "API and hooks", description: "Public entry points, runtime APIs, adapters, and editor hooks.", body: `# API and hooks
+Clotho provides React, Vue, DOM, SVG, Node.js, GIF, and CLI entry points.`,
+  },
+  i18n: {
+    title: "Text localization",
+    description:
+      "Store localized text in one Clotho document and select it through SceneOptions.",
+    body: `# Text localization
+
+A single Clotho JSON document can carry text for any number of languages. The existing \`content\` field is always the default copy, so old documents continue to render without conversion.
+
+## Korean, English, Japanese, and Chinese
+
+Declare the languages offered by the document at the top level. When \`locales\` is omitted, Clotho uses Korean and English by default.
+
+\`\`\`json
+{
+  "clothoVersion": 1,
+  "id": "localized-guide",
+  "locales": ["ko", "en", "ja", "zh-CN"]
+}
+\`\`\`
+
+## Per-element languages and translations
+
+A text element inherits the document list. Add \`text.locales\` only when that element needs a different list. Locale tags are open-ended BCP 47 tags, so users may add \`fr\`, \`pt-BR\`, or any other language their application supports.
+
+\`\`\`json
+{
+  "type": "text",
+  "id": "greeting",
+  "x": 360,
+  "y": 135,
+  "content": "안녕하세요",
+  "locales": ["ko", "en", "ja", "zh-CN", "fr"],
+  "translations": {
+    "en": "Hello",
+    "ja": "こんにちは",
+    "zh-CN": "你好",
+    "fr": "Bonjour"
+  }
+}
+\`\`\`
+
+## Select the active locale
+
+Pass the locale chosen by your browser, account settings, or URL through \`SceneOptions.locale\`.
+
+\`\`\`tsx
+<AnimationPlayer doc={document} options={{ locale: userLocale }} />
+\`\`\`
+
+Clotho tries an exact match first, then a base-language match such as \`en-US\` to \`en\`, and finally \`content\`.`,
+  },
+  api: {
+    title: "API and hooks",
+    description:
+      "Public entry points, runtime APIs, adapters, and editor hooks.",
+    body: `# API and hooks
 
 ## Package entry points
 
@@ -131,8 +199,13 @@ React and Vue provide \`AnimationPlayer\`, \`AnimationStage\`, and player bindin
 
 ## Host hooks
 
-\`SceneOptions\` accepts an asset resolver and cache, code highlighter, text measurer, font families, and raw-color mode. Clotho Editor accepts an \`AnimationRepository\` and image resolver so each host can control loading, saving, deletion, and uploads.` },
-  schema: { title: "JSON Schema", description: "A human-readable reference for the complete Clotho document format.", body: `# JSON Schema
+\`SceneOptions\` accepts a locale, asset resolver and cache, code highlighter, text measurer, font families, and raw-color mode. The locale selects a text translation. Clotho Editor accepts an \`AnimationRepository\` and image resolver so each host can control loading, saving, deletion, and uploads.`,
+  },
+  schema: {
+    title: "JSON Schema",
+    description:
+      "A human-readable reference for the complete Clotho document format.",
+    body: `# JSON Schema
 
 The machine-readable schema ships as \`@kokoa/clotho/schema.json\`. This guide explains the document structure used by people and tools.
 
@@ -144,6 +217,7 @@ The machine-readable schema ships as \`@kokoa/clotho/schema.json\`. This guide e
 | \`id\` | ID | Stable document ID |
 | \`title\`, \`description\` | string | Reader-facing metadata |
 | \`duration\` | non-negative integer | Timeline length in milliseconds |
+| \`locales\` | locale tag array | Document languages; defaults to Korean and English |
 | \`canvas\` | object | Width, height, and background |
 | \`assets\` | map | Reusable image sources |
 | \`elements\` | array | Shapes and content in document order |
@@ -152,7 +226,7 @@ The machine-readable schema ships as \`@kokoa/clotho/schema.json\`. This guide e
 
 ## Common element fields
 
-Every element has \`type\`, \`id\`, optional \`name\` and \`parentId\`, \`rotation\`, \`appearances\`, and \`tracks\`. See each [element page](/en/docs/features) for its complete fields and a valid JSON example.
+Every element has \`type\`, \`id\`, optional \`name\` and \`parentId\`, \`rotation\`, \`appearances\`, and \`tracks\`. Text also has optional \`locales\` and a \`translations\` map while \`content\` remains its default copy. See [Text localization](/en/docs/i18n) and each [element page](/en/docs/features) for complete fields and valid JSON.
 
 ## Appearance and PropertyTrack
 
@@ -168,8 +242,12 @@ After schema parsing, run \`validateDocument\` to catch duplicate IDs, missing r
 
 \`\`\`bash
 bunx clotho validate animation.json --strict
-\`\`\`` },
-  "ai-authoring": { title: "Authoring with AI", description: "Install and use the Clotho animation authoring skill.", body: `# Authoring Clotho animations with AI
+\`\`\``,
+  },
+  "ai-authoring": {
+    title: "Authoring with AI",
+    description: "Install and use the Clotho animation authoring skill.",
+    body: `# Authoring Clotho animations with AI
 
 The \`clotho-animation-authoring\` skill teaches an AI coding agent to plan the visual story first, use the installed Clotho schema as its source of truth, validate the complete document, and inspect representative frames.
 
@@ -199,5 +277,6 @@ Use $clotho-animation-authoring to create an eight-second animation that explain
 Bellman-Ford edge relaxation. Put the chapter list on the right and verify both themes.
 \`\`\`
 
-The final document should still be opened in Clotho Editor or a real \`AnimationPlayer\` for visual review.` },
+The final document should still be opened in Clotho Editor or a real \`AnimationPlayer\` for visual review.`,
+  },
 } as const;

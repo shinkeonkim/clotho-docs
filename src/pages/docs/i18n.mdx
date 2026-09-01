@@ -1,0 +1,59 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Text 국제화
+---
+
+import { LocalizedTextExample } from "@/components/LocalizedTextExample";
+
+# Text 국제화
+
+하나의 Clotho JSON에서 언어별 문구를 관리할 수 있습니다. 기존 `content`는 언제나 기본 문구이며, 번역이 없거나 현재 locale과 일치하지 않을 때 그대로 표시됩니다.
+
+## 한국어·영어·일본어·중국어 예시
+
+버튼을 눌러 같은 `text` 요소가 선택한 언어로 표시되는지 확인하세요.
+
+<LocalizedTextExample client:load />
+
+## 문서의 언어 목록
+
+최상위 `locales`에 문서가 제공하는 언어를 적습니다. 생략하면 `ko`, `en`을 기본값으로 사용합니다. 언어 태그는 `ja`, `zh-CN`, `fr`, `pt-BR`처럼 BCP 47 형식으로 자유롭게 확장할 수 있습니다.
+
+```json
+{
+  "clothoVersion": 1,
+  "id": "localized-guide",
+  "locales": ["ko", "en", "ja", "zh-CN"]
+}
+```
+
+## 요소별 언어와 번역
+
+`text.locales`를 지정하면 해당 요소만 문서 목록과 다른 언어를 사용할 수 있습니다. 생략하면 문서의 `locales`를 따릅니다. `translations`는 locale을 key로 사용합니다.
+
+```json
+{
+  "type": "text",
+  "id": "greeting",
+  "x": 360,
+  "y": 135,
+  "content": "안녕하세요",
+  "locales": ["ko", "en", "ja", "zh-CN", "fr"],
+  "translations": {
+    "en": "Hello",
+    "ja": "こんにちは",
+    "zh-CN": "你好",
+    "fr": "Bonjour"
+  }
+}
+```
+
+## 재생할 언어 선택
+
+host가 browser 언어, 사용자 설정 또는 URL을 바탕으로 locale을 정한 뒤 `SceneOptions.locale`에 전달합니다. Clotho는 locale을 자동으로 저장하거나 바꾸지 않으므로 애플리케이션의 i18n 정책과 자연스럽게 결합할 수 있습니다.
+
+```tsx
+<AnimationPlayer doc={document} options={{ locale: userLocale }} />
+```
+
+`en-US`처럼 지역이 포함된 locale에 정확히 일치하는 번역이 없으면 `en` 번역을 확인합니다. 그래도 없으면 `content`를 사용합니다. 기존 문서는 변환 없이 `content`를 기본 문구로 계속 사용합니다.

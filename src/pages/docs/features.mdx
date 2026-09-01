@@ -32,18 +32,20 @@ Clotho의 기능은 JSON 문서, 결정적인 runtime, scene builder와 환경�
 
 모든 요소는 `id`, `name?`, `parentId?`, `rotation`, `appearances`, `tracks`를 공통으로 가집니다. ID는 소문자 영문이나 숫자로 시작하며 이후 소문자 영문, 숫자, `-`, `_`만 사용합니다.
 
+Text는 기본 문구와 언어별 번역을 함께 저장할 수 있습니다. 문서와 요소별 언어 목록, locale 선택과 fallback 규칙은 [Text 국제화](/docs/i18n)에서 확인하세요.
+
 ## 등장과 퇴장
 
 `appearances`는 요소가 보이는 시간 구간입니다. 여러 구간을 넣으면 하나의 요소가 반복해서 나타났다 사라질 수 있습니다.
 
-| mode | 표현 |
-| --- | --- |
-| `instant` | 즉시 표시 또는 숨김 |
-| `fade` | opacity 변화 |
-| `slide-left`, `slide-right` | 가로 이동 |
-| `slide-up`, `slide-down` | 세로 이동 |
-| `zoom` | scale 변화 |
-| `pop` | 짧은 확대를 포함한 등장 |
+| mode                        | 표현                    |
+| --------------------------- | ----------------------- |
+| `instant`                   | 즉시 표시 또는 숨김     |
+| `fade`                      | opacity 변화            |
+| `slide-left`, `slide-right` | 가로 이동               |
+| `slide-up`, `slide-down`    | 세로 이동               |
+| `zoom`                      | scale 변화              |
+| `pop`                       | 짧은 확대를 포함한 등장 |
 
 각 구간은 `start`, `end`, `entryMode`, `entryDuration`, `exitMode`, `exitDuration`을 사용합니다.
 
@@ -59,11 +61,11 @@ Clotho의 기능은 JSON 문서, 결정적인 runtime, scene builder와 환경�
 
 ## 강조 Effect
 
-| effect | 필드 | 동작 |
-| --- | --- | --- |
-| `highlight` | `color`, `duration` | 지정한 요소에 강조색 적용 |
-| `pulse` | `scale`, `duration` | 지정한 요소를 확대했다 복원 |
-| `flow` | `color`, `particles`, `radius`, `duration` | connector를 따라 입자 이동 |
+| effect      | 필드                                       | 동작                        |
+| ----------- | ------------------------------------------ | --------------------------- |
+| `highlight` | `color`, `duration`                        | 지정한 요소에 강조색 적용   |
+| `pulse`     | `scale`, `duration`                        | 지정한 요소를 확대했다 복원 |
+| `flow`      | `color`, `particles`, `radius`, `duration` | connector를 따라 입자 이동  |
 
 공통 필드는 `id`, `elementId`, `time`입니다. Effect는 요소의 track을 바꾸지 않는 일시적인 장식입니다.
 

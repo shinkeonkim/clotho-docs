@@ -7,17 +7,17 @@ title: API와 hooks
 
 Clotho는 사용 환경이 browser bundle에 섞이지 않도록 subpath export를 나눕니다.
 
-| import | 용도 |
-| --- | --- |
-| `@kokoa/clotho` | schema, runtime, player, scene, authoring helper |
-| `@kokoa/clotho/react` | React component와 hooks |
-| `@kokoa/clotho/vue` | Vue component와 composable |
-| `@kokoa/clotho/dom` | vanilla DOM mount와 patch |
-| `@kokoa/clotho/svg` | SVG 문자열 생성 |
-| `@kokoa/clotho/node` | 파일 loader와 GIF export |
-| `@kokoa/clotho/gif` | GIF export 전용 entry |
-| `@kokoa/clotho/styles.css` | player UI stylesheet |
-| `@kokoa/clotho/schema.json` | Clotho v1 JSON Schema |
+| import                      | 용도                                             |
+| --------------------------- | ------------------------------------------------ |
+| `@kokoa/clotho`             | schema, runtime, player, scene, authoring helper |
+| `@kokoa/clotho/react`       | React component와 hooks                          |
+| `@kokoa/clotho/vue`         | Vue component와 composable                       |
+| `@kokoa/clotho/dom`         | vanilla DOM mount와 patch                        |
+| `@kokoa/clotho/svg`         | SVG 문자열 생성                                  |
+| `@kokoa/clotho/node`        | 파일 loader와 GIF export                         |
+| `@kokoa/clotho/gif`         | GIF export 전용 entry                            |
+| `@kokoa/clotho/styles.css`  | player UI stylesheet                             |
+| `@kokoa/clotho/schema.json` | Clotho v1 JSON Schema                            |
 
 ## Core schema와 loading
 
@@ -35,7 +35,14 @@ Clotho는 사용 환경이 browser bundle에 섞이지 않도록 subpath export�
 JSON과 같은 결과를 TypeScript로 안전하게 구성할 수 있습니다.
 
 ```ts
-import { appear, defineAnimation, effects, repeatAppearances, stagger, track } from "@kokoa/clotho";
+import {
+  appear,
+  defineAnimation,
+  effects,
+  repeatAppearances,
+  stagger,
+  track,
+} from "@kokoa/clotho";
 
 const document = defineAnimation({
   clothoVersion: 1,
@@ -51,7 +58,16 @@ const document = defineAnimation({
     height: 70,
     label,
     appearances: [appear(time, 4000, "fade")],
-    tracks: [track("fill", [[time, "#c7d2fe"], [time + 500, "#86efac"]], "color")],
+    tracks: [
+      track(
+        "fill",
+        [
+          [time, "#c7d2fe"],
+          [time + 500, "#86efac"],
+        ],
+        "color",
+      ),
+    ],
   })),
   effects: [effects.pulse("visit", "cell-1", 1600)],
 });
@@ -73,18 +89,18 @@ const document = defineAnimation({
 - `renderDocumentToSvg(document, time, options)`: SVG 문자열
 - `renderDocumentToGif(document, options)`: GIF byte 생성
 
-`SceneOptions`에서 `assetResolver`, `assetCache`, `highlighter`, `measurer`, `fontFamily`, `monospaceFamily`, `rawColors`를 설정할 수 있습니다. host별 자원은 문서에 hard-code하지 말고 이 경계로 전달하세요.
+`SceneOptions`에서 `locale`, `assetResolver`, `assetCache`, `highlighter`, `measurer`, `fontFamily`, `monospaceFamily`, `rawColors`를 설정할 수 있습니다. `locale`은 text 번역을 고르며, host별 자원과 사용자 설정은 문서에 hard-code하지 말고 이 경계로 전달하세요.
 
 그 밖의 core export는 다음 범주로 나뉩니다.
 
-| 범주 | 주요 API |
-| --- | --- |
-| 시간 | `advanceTime`, `effectivePlayback`, `easeApply`, `lerp`, `clamp` |
-| geometry | `anchorPoint`, `resolveEndpoints`, `curveControlPoint`, matrix 생성·합성·역변환 함수, stage 비율 helper |
+| 범주          | 주요 API                                                                                                |
+| ------------- | ------------------------------------------------------------------------------------------------------- |
+| 시간          | `advanceTime`, `effectivePlayback`, `easeApply`, `lerp`, `clamp`                                        |
+| geometry      | `anchorPoint`, `resolveEndpoints`, `curveControlPoint`, matrix 생성·합성·역변환 함수, stage 비율 helper |
 | color와 theme | `parseColor`, `lerpColor`, `resolveElementColor`, `resolveStageBackground`, entry·exit phase style 함수 |
-| text | XML escape와 sanitize 함수, Base64·data URI 함수, grapheme 분리와 길이 계산, text width 추정 |
-| scene graph | `walkScene`, `countNodes`, marker helper, effect visual helper와 각 `SceneNode` type |
-| adapter 지원 | `SceneSvg`, `renderSceneNode`, `renderSceneSvg`, `serializeScene`, `serializeSceneBody` |
+| text          | XML escape와 sanitize 함수, Base64·data URI 함수, grapheme 분리와 길이 계산, text width 추정            |
+| scene graph   | `walkScene`, `countNodes`, marker helper, effect visual helper와 각 `SceneNode` type                    |
+| adapter 지원  | `SceneSvg`, `renderSceneNode`, `renderSceneSvg`, `serializeScene`, `serializeSceneBody`                 |
 
 ## Player controller
 

@@ -9,23 +9,24 @@ title: JSON Schema
 
 ## 최상위 문서
 
-| 필드 | 형식 | 기본값 | 설명 |
-| --- | --- | --- | --- |
-| `clothoVersion` | literal `1` | 필수 | 포맷 식별자 |
-| `$schema` | string? | 없음 | editor autocomplete용 URL |
-| `id` | ID | 필수 | 문서 ID |
-| `title` | string | `""` | 제목 |
-| `description` | string | `""` | 설명 |
-| `category` | string | `general` | 자유 category |
-| `tags` | string[] | `[]` | 검색·분류 tag |
-| `duration` | 0 이상 정수 | `5000` | 전체 시간(ms) |
-| `canvas` | object | 800×500 | stage 크기와 배경 |
-| `assets` | object map | `{}` | image registry |
-| `elements` | element[] | `[]` | document order의 요소 |
-| `chapters` | chapter[] | `[]` | 단계와 caption |
-| `effects` | effect[] | `[]` | 일시적인 강조 |
-| `settings` | object | 아래 참조 | player 표시 의도 |
-| `updatedAt` | string? | 없음 | host가 관리하는 시각 |
+| 필드            | 형식         | 기본값         | 설명                      |
+| --------------- | ------------ | -------------- | ------------------------- |
+| `clothoVersion` | literal `1`  | 필수           | 포맷 식별자               |
+| `$schema`       | string?      | 없음           | editor autocomplete용 URL |
+| `id`            | ID           | 필수           | 문서 ID                   |
+| `title`         | string       | `""`           | 제목                      |
+| `description`   | string       | `""`           | 설명                      |
+| `category`      | string       | `general`      | 자유 category             |
+| `tags`          | string[]     | `[]`           | 검색·분류 tag             |
+| `duration`      | 0 이상 정수  | `5000`         | 전체 시간(ms)             |
+| `locales`       | locale tag[] | `["ko", "en"]` | 문서가 제공하는 언어      |
+| `canvas`        | object       | 800×500        | stage 크기와 배경         |
+| `assets`        | object map   | `{}`           | image registry            |
+| `elements`      | element[]    | `[]`           | document order의 요소     |
+| `chapters`      | chapter[]    | `[]`           | 단계와 caption            |
+| `effects`       | effect[]     | `[]`           | 일시적인 강조             |
+| `settings`      | object       | 아래 참조      | player 표시 의도          |
+| `updatedAt`     | string?      | 없음           | host가 관리하는 시각      |
 
 `canvas`: `width`와 `height`는 양의 정수이며 `background`는 CSS color 또는 `transparent`입니다.
 
@@ -35,15 +36,15 @@ title: JSON Schema
 
 ## 모든 요소의 공통 필드
 
-| 필드 | 형식 | 기본값 |
-| --- | --- | --- |
-| `type` | 요소 discriminator | 필수 |
-| `id` | ID | 필수 |
-| `name` | string? | 없음 |
-| `parentId` | ID? | 없음 |
-| `rotation` | number | `0` |
-| `appearances` | Appearance[] | `[]` |
-| `tracks` | PropertyTrack[] | `[]` |
+| 필드          | 형식               | 기본값 |
+| ------------- | ------------------ | ------ |
+| `type`        | 요소 discriminator | 필수   |
+| `id`          | ID                 | 필수   |
+| `name`        | string?            | 없음   |
+| `parentId`    | ID?                | 없음   |
+| `rotation`    | number             | `0`    |
+| `appearances` | Appearance[]       | `[]`   |
+| `tracks`      | PropertyTrack[]    | `[]`   |
 
 ## 요소별 필드
 
@@ -63,7 +64,7 @@ arrow 추가 필드: `label?`, `labelColor #0b0b0f`, `labelOffsetX 0`, `labelOff
 
 ### text
 
-필수: `x`, `y`, `content`. 기본값: `fontSize 16`, `fontWeight 400`, `color #18181b`, `textAnchor start`. `textAnchor`는 `start | middle | end`입니다.
+필수: `x`, `y`, `content`. `content`는 기존 문서와 번역이 없을 때 사용하는 기본 문구입니다. 선택 필드 `locales`는 이 요소의 언어 목록을 덮어쓰고 `translations`는 locale별 문구를 저장합니다. 기본값: `translations {}`, `fontSize 16`, `fontWeight 400`, `color #18181b`, `textAnchor start`. 자세한 fallback 규칙은 [Text 국제화](/docs/i18n)를 참고하세요.
 
 ### image
 
