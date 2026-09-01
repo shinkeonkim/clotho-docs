@@ -1,0 +1,46 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: 저장소와 Host 연동
+---
+
+# 저장소와 Host 연동
+
+Editor package는 저장 위치를 정하지 않습니다. Host가 `AnimationRepository`, image resolver와 import hook을 제공하므로 LocalStorage, HTTP API, Git 기반 저장소를 같은 UI에 연결할 수 있습니다.
+
+## 설치
+
+```bash
+npm install @kokoa/clotho @kokoa/clotho-editor react react-dom
+```
+
+```tsx
+import { StudioMount } from "@kokoa/clotho-editor";
+import "@kokoa/clotho/styles.css";
+import "@kokoa/clotho-editor/styles.css";
+
+export function AnimationStudio() {
+  return (
+    <StudioMount
+      editorTitle="서비스 애니메이션 편집기"
+      repository={repository}
+      resolveImage={uploadImage}
+    />
+  );
+}
+```
+
+## AnimationRepository
+
+Repository는 `list`, `load`, `create`, `save`, `delete`를 구현합니다. revision, 인증, 충돌 처리와 API 오류 문구는 Host 책임입니다. Cloudflare demo는 `createLocalStorageRepository`를 사용하고, oh-my-blog는 내부 animation API에 연결합니다.
+
+## JSON 가져오기와 내보내기
+
+가져오기는 Host의 `importDocument` hook을 거친 뒤 Clotho schema로 검증합니다. 내보내기는 사용하지 않는 image asset을 제거하고 다시 불러올 수 있는 들여쓰기 JSON을 내려받습니다.
+
+## Image 처리
+
+같은 이미지는 문서의 `assets`에 한 번 저장하고 여러 image 요소가 `assetId`로 재사용합니다. `resolveImage(file)`은 CDN URL, Host key 또는 data URL을 반환할 수 있습니다. 독립적인 Cloudflare demo에서는 Base64 inline asset이 기본입니다.
+
+## 제목과 초기 문서
+
+`editorTitle`로 상단 제목을 환경별로 바꿀 수 있습니다. `initialId`가 있으면 repository에서 해당 문서를 열고, 없으면 제목 없는 Draft로 시작합니다.

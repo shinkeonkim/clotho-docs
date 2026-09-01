@@ -1,0 +1,64 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: 코드 라이브러리
+description: Clotho runtime과 adapter를 코드에서 사용하는 방법을 설명합니다.
+---
+
+# 코드 라이브러리
+
+`@kokoa/clotho`는 JSON 문서를 검증하고 특정 시간의 scene을 계산하는 핵심 라이브러리입니다. 화면을 직접 편집하려면 [Clotho Editor](/docs/editor)를 사용하고, 애플리케이션 코드에서 재생하거나 SVG와 GIF를 만들려면 이 라이브러리를 사용합니다.
+
+## 어떤 package를 설치해야 하나요?
+
+```bash
+npm install @kokoa/clotho
+```
+
+React player를 사용할 때는 React와 React DOM도 설치합니다.
+
+```bash
+npm install @kokoa/clotho react react-dom
+```
+
+## Package entry point
+
+| import | 역할 |
+| --- | --- |
+| `@kokoa/clotho` | Schema, runtime, authoring, layout, data binding, story와 linter |
+| `@kokoa/clotho/react` | React player, stage와 hooks |
+| `@kokoa/clotho/vue` | Vue player, stage와 composable |
+| `@kokoa/clotho/dom` | Vanilla DOM player와 scene patching |
+| `@kokoa/clotho/svg` | 결정적인 SVG 문자열 생성 |
+| `@kokoa/clotho/node` | 파일 loading과 GIF 생성 |
+| `@kokoa/clotho/testing` | Animation assertion과 visual regression 도구 |
+| `@kokoa/clotho/plugins` | Plugin API 전용 entry point |
+
+## 가장 작은 사용 예
+
+```tsx
+import { animationDocumentSchema } from "@kokoa/clotho";
+import { AnimationPlayer } from "@kokoa/clotho/react";
+import "@kokoa/clotho/styles.css";
+
+const document = animationDocumentSchema.parse(input);
+
+export function Example() {
+  return <AnimationPlayer doc={document} theme="auto" />;
+}
+```
+
+## 기능을 선택하는 기준
+
+- 반복 가능한 장면을 코드로 만들려면 `defineTemplate`과 parameter를 사용합니다.
+- API 응답이나 고정 JSON 값을 연결하려면 data binding을 사용합니다.
+- 요소 간 간격과 정렬을 유지하려면 constraint layout을 사용합니다.
+- 사용자의 응답을 기다리려면 checkpoint를 사용합니다.
+- 여러 문서로 갈라지는 흐름은 `StoryManifest`로 구성합니다.
+- container 폭에 따라 stage를 바꾸려면 responsive variant를 사용합니다.
+- 배포 전에 `validateDocument`, `lintDocument`와 visual regression을 실행합니다.
+
+각 기능의 관계와 실행 순서는 [확장형 작성 환경](/docs/authoring-platform), 전체 공개 함수는 [API와 hooks](/docs/api)에서 확인할 수 있습니다.
+
+## Editor와 역할 구분
+
+코드 라이브러리는 문서의 의미, 계산과 rendering을 담당합니다. Editor는 같은 schema 위에서 문서를 만드는 UI입니다. Editor가 저장한 JSON을 다시 `@kokoa/clotho`로 검증하고 재생하기 때문에 두 구현 사이에 별도 변환 계층이 필요하지 않습니다.
