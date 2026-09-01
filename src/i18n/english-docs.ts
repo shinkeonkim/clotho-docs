@@ -37,6 +37,8 @@ Validate unknown JSON with \`parseDocument\` before passing it to an adapter.
 ## Continue
 
 - [Render with React](/en/docs/react)
+- [Render with Vue.js](/en/docs/vue)
+- [Render with Vanilla JS](/en/docs/vanilla)
 - [Explore every element](/en/docs/features)
 - [Read the JSON Schema guide](/en/docs/schema)`,
   },
@@ -71,6 +73,64 @@ The player supplies playback, restart, fullscreen, speed, chapter, caption, and 
 - \`useHostTheme()\` reports the host color scheme.
 - \`useInView(ref, threshold?)\` reports viewport visibility.
 - \`useFullscreen(ref)\` returns fullscreen state and a toggle function.`,
+  },
+  vue: {
+    title: "Using Vue.js",
+    description: "Render Clotho players and deterministic stages in a Vue 3 application.",
+    body: `# Using Vue.js
+
+Install Vue 3 and import the stylesheet once from your application entry.
+
+## Player component
+
+\`\`\`vue
+<script setup lang="ts">
+import { AnimationPlayer } from "@kokoa/clotho/vue";
+import { parseDocumentOrThrow } from "@kokoa/clotho";
+import "@kokoa/clotho/styles.css";
+import source from "./animation.json";
+
+const document = parseDocumentOrThrow(source);
+</script>
+
+<template>
+  <AnimationPlayer :doc="document" theme="auto" />
+</template>
+\`\`\`
+
+The player includes playback, restart, speed, chapters, fullscreen, and timeline controls. Pass \`hide-controls\` when your host supplies them.
+
+## Stage and composable
+
+Use \`AnimationStage\` with a fixed \`time\` for thumbnails and editor previews. Use \`usePlayer(document)\` when building custom controls from the controller and its reactive state.`,
+  },
+  vanilla: {
+    title: "Using Vanilla JS",
+    description: "Mount a Clotho player into existing HTML without a framework.",
+    body: `# Using Vanilla JS
+
+Use the DOM adapter when your application does not use React or Vue.
+
+## Mount a player
+
+\`\`\`ts
+import { parseDocumentOrThrow } from "@kokoa/clotho";
+import { mountPlayer } from "@kokoa/clotho/dom";
+import "@kokoa/clotho/styles.css";
+
+const source = await fetch("/animations/example.json").then((response) =>
+  response.json(),
+);
+const animationDocument = parseDocumentOrThrow(source);
+const container = document.querySelector<HTMLElement>("#animation");
+
+if (!container) throw new Error("Animation container was not found.");
+
+const handle = mountPlayer(container, animationDocument, { theme: "auto" });
+window.addEventListener("pagehide", () => handle.destroy(), { once: true });
+\`\`\`
+
+Use \`handle.player\` to play, pause, seek, restart, change speed, read state, and subscribe to changes. Use \`mountStage\` when you need one fixed SVG frame without player controls.`,
   },
   library: {
     title: "Code library",

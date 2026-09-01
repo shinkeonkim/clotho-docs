@@ -13,7 +13,6 @@ import iteration from "@public/animations/documents/iteration.json";
 import transitions from "@public/animations/documents/transitions.json";
 
 const documents: AnimationDocument[] = [
-  incidentWalkthrough,
   elements,
   transitions,
   easing,
@@ -23,6 +22,7 @@ const documents: AnimationDocument[] = [
   connectors,
   groups,
   chapters,
+  incidentWalkthrough,
 ].map((value) => animationDocumentSchema.parse(value));
 
 const koreanMetadata: Record<string, { title: string; description: string }> = {

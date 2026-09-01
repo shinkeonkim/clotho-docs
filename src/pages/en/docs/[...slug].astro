@@ -2,7 +2,7 @@
 import { marked } from "marked";
 import DocsLayout from "@/layouts/DocsLayout.astro";
 import { englishDocs } from "@/i18n/english-docs";
-export function getStaticPaths() { return ["getting-started", "react", "library", "features", "authoring-platform", "i18n", "api", "schema", "editor", "editor/tools", "editor/timeline", "editor/integration", "editor/qa", "ai-authoring"].map((slug) => ({ params: { slug } })); }
+export function getStaticPaths() { return ["getting-started", "react", "vue", "vanilla", "library", "features", "authoring-platform", "i18n", "api", "schema", "editor", "editor/tools", "editor/timeline", "editor/integration", "editor/qa", "ai-authoring"].map((slug) => ({ params: { slug } })); }
 const page = englishDocs[Astro.params.slug as keyof typeof englishDocs];
 const headings = [...page.body.matchAll(/^(#{2,3})\s+(.+)$/gm)].map((match, index) => ({ depth: match[1].length, text: match[2].replace(/[`*_]/g, ""), slug: `section-${index + 1}` }));
 let headingIndex = 0;

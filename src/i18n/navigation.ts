@@ -8,6 +8,8 @@ export const navigation = [
     items: [
       ["/docs/getting-started", "시작하기", "Getting started"],
       ["/docs/react", "React에서 사용하기", "Using React"],
+      ["/docs/vue", "Vue.js에서 사용하기", "Using Vue.js"],
+      ["/docs/vanilla", "Vanilla JS에서 사용하기", "Using Vanilla JS"],
     ],
   },
   {

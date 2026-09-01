@@ -1,0 +1,46 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Vue.js에서 사용하기
+---
+
+# Vue.js에서 사용하기
+
+Vue 3 애플리케이션에서는 `@kokoa/clotho/vue`의 component와 composable을 사용합니다. 전역 stylesheet는 application entry에서 한 번만 불러옵니다.
+
+## 설치
+
+```bash
+npm install @kokoa/clotho vue
+```
+
+## Player 표시
+
+```vue
+<script setup lang="ts">
+import { AnimationPlayer, koreanStrings } from "@kokoa/clotho/vue";
+import { parseDocumentOrThrow } from "@kokoa/clotho";
+import "@kokoa/clotho/styles.css";
+import source from "./animation.json";
+
+const document = parseDocumentOrThrow(source);
+</script>
+
+<template>
+  <AnimationPlayer :doc="document" theme="auto" :strings="koreanStrings" />
+</template>
+```
+
+`AnimationPlayer`는 재생, 다시 시작, 속도, Chapter, 전체 화면과 Timeline을 제공합니다. 자체 control을 구성한다면 `hide-controls`를 사용합니다.
+
+## 특정 장면 표시
+
+```vue
+<AnimationStage
+  :doc="document"
+  :time="document.duration / 2"
+  theme="light"
+/>
+```
+
+`AnimationStage`는 내부 clock 없이 지정한 시간의 장면만 표시하므로 thumbnail이나 Editor preview에 적합합니다. 직접 control을 만들 때는 `usePlayer(document)`가 반환하는 `player`와 reactive `state`를 사용합니다.
+
