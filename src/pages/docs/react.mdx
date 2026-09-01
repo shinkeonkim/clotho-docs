@@ -1,0 +1,25 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: React에서 사용하기
+---
+
+# React에서 사용하기
+
+```tsx
+import { AnimationPlayer } from "@kokoa/clotho/react";
+import "@kokoa/clotho/styles.css";
+
+export function Animation({ document }) {
+  return <AnimationPlayer doc={document} theme="auto" />;
+}
+```
+
+재생 UI가 필요 없는 thumbnail은 `AnimationStage`를 사용합니다.
+
+```tsx
+import { AnimationStage } from "@kokoa/clotho/react";
+
+<AnimationStage doc={document} time={document.duration / 2} />;
+```
+
+Clotho stylesheet는 Tailwind CSS보다 뒤에서 불러오면 package의 component style이 reset에 의해 사라지지 않습니다.

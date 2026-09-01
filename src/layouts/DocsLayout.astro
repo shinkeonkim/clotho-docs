@@ -1,0 +1,40 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  frontmatter?: { title?: string; description?: string };
+}
+
+const { frontmatter } = Astro.props;
+const title = Astro.props.title ?? frontmatter?.title ?? "문서";
+const description = Astro.props.description ?? frontmatter?.description ?? "JSON으로 작성하고 어디서나 재생하는 애니메이션 라이브러리";
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{title} · Clotho</title>
+  </head>
+  <body>
+    <header class="border-b border-slate-200 bg-white/90 dark:border-slate-800 dark:bg-slate-950/90">
+      <nav class="mx-auto flex max-w-6xl items-center gap-6 px-6 py-4">
+        <a class="text-lg font-semibold" href="/">Clotho</a>
+        <a href="/docs/getting-started">시작하기</a>
+        <a href="/docs/react">React</a>
+        <a href="/docs/json">JSON 문서</a>
+        <a class="ml-auto" href="https://clotho-editor.shinkeonkim.com/">Editor</a>
+        <a href="https://github.com/shinkeonkim/clotho">GitHub</a>
+      </nav>
+    </header>
+    <main class="mx-auto max-w-6xl px-6 py-12">
+      <article class="prose prose-slate max-w-none dark:prose-invert">
+        <slot />
+      </article>
+    </main>
+  </body>
+</html>

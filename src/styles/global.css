@@ -1,0 +1,16 @@
+@import "tailwindcss";
+@import "@kokoa/clotho/styles.css";
+
+:root {
+  color-scheme: light dark;
+  font-family: Inter, Pretendard, ui-sans-serif, system-ui, sans-serif;
+  background: #f8fafc;
+  color: #172033;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root { background: #101217; color: #edf1f7; }
+}
+
+body { margin: 0; }
+code { font-family: "SFMono-Regular", Consolas, monospace; }

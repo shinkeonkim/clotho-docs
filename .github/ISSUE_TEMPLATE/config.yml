@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Clotho bug
+    url: https://github.com/shinkeonkim/clotho/issues/new/choose
+    about: library 동작 문제는 Clotho 저장소에 등록해주세요.
+  - name: Editor bug
+    url: https://github.com/shinkeonkim/clotho-editor/issues/new/choose
+    about: editor 동작 문제는 Clotho Editor 저장소에 등록해주세요.

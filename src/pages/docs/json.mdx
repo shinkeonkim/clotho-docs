@@ -1,0 +1,31 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: JSON 문서
+---
+
+# JSON 문서
+
+모든 문서는 `clothoVersion: 1`을 사용합니다. 시간의 단위는 millisecond입니다.
+
+```json
+{
+  "clothoVersion": 1,
+  "id": "move-a-box",
+  "title": "상자 이동",
+  "duration": 3000,
+  "canvas": { "width": 800, "height": 450, "background": "transparent" },
+  "assets": {},
+  "elements": [],
+  "chapters": [],
+  "effects": [],
+  "settings": {
+    "loop": true,
+    "autoplay": true,
+    "showCaption": false,
+    "showChapterList": false,
+    "chapterListPosition": "right"
+  }
+}
+```
+
+schema 원문은 npm package의 `@kokoa/clotho/schema.json`에서 가져올 수 있습니다. 저장하기 전에는 `animationDocumentSchema.parse(document)`로 검증하세요.

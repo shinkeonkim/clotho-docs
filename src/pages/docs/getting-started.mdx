@@ -1,0 +1,42 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: 시작하기
+---
+
+# 시작하기
+
+Clotho는 JSON 문서를 시간에 따른 scene으로 계산하고 원하는 환경에서 렌더링합니다.
+
+## 설치
+
+```bash
+npm install @kokoa/clotho
+```
+
+React에서 player를 사용하려면 React package도 함께 설치합니다.
+
+```bash
+npm install @kokoa/clotho react react-dom
+```
+
+## 문서 만들기
+
+```ts
+import { animationDocumentSchema } from "@kokoa/clotho";
+
+const document = animationDocumentSchema.parse({
+  clothoVersion: 1,
+  id: "hello-clotho",
+  title: "Hello, Clotho",
+  duration: 3000,
+  elements: [],
+});
+```
+
+외부 JSON은 `parseDocument`로 검사한 뒤 사용하세요. legacy v3/v4 문서는 `migrateLegacyDocument`로 v1으로 변환할 수 있습니다.
+
+## 다음 단계
+
+- [React에서 재생하기](/docs/react)
+- [JSON 문서 구성하기](/docs/json)
+- [Clotho Editor 열기](https://clotho-editor.shinkeonkim.com/)
