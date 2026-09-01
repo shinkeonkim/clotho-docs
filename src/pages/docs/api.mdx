@@ -1,0 +1,189 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: API와 hooks
+---
+
+# API와 hooks
+
+Clotho는 사용 환경이 browser bundle에 섞이지 않도록 subpath export를 나눕니다.
+
+| import | 용도 |
+| --- | --- |
+| `@kokoa/clotho` | schema, runtime, player, scene, authoring helper |
+| `@kokoa/clotho/react` | React component와 hooks |
+| `@kokoa/clotho/vue` | Vue component와 composable |
+| `@kokoa/clotho/dom` | vanilla DOM mount와 patch |
+| `@kokoa/clotho/svg` | SVG 문자열 생성 |
+| `@kokoa/clotho/node` | 파일 loader와 GIF export |
+| `@kokoa/clotho/gif` | GIF export 전용 entry |
+| `@kokoa/clotho/styles.css` | player UI stylesheet |
+| `@kokoa/clotho/schema.json` | Clotho v1 JSON Schema |
+
+## Core schema와 loading
+
+- `animationDocumentSchema`, 요소별 schema, `effectSchema`, asset schema: Zod 검증과 타입 추론
+- `parseDocument(value)`: throw하지 않는 v1 parse 결과
+- `parseDocumentOrThrow(value)`: 오류 시 Zod error
+- `parseDocumentText(text, options)`, `parseUnknown(value, options)`: JSON text와 unknown 입력 loading
+- `documentUrl(id, baseUrl)`, `createDocumentCache(options)`: browser fetch와 cache
+- `isSafeDocumentId(id)`: path에 사용할 ID 검사
+- `isClothoDocument`, `isLegacyDocument`, `needsMigration`, `migrateLegacyDocument`: 포맷 판별과 v3/v4 변환
+- `validateDocument`, `formatFindings`: schema와 참조·시간·tree 의미 검증
+
+## Code authoring helper
+
+JSON과 같은 결과를 TypeScript로 안전하게 구성할 수 있습니다.
+
+```ts
+import { appear, defineAnimation, effects, repeatAppearances, stagger, track } from "@kokoa/clotho";
+
+const document = defineAnimation({
+  clothoVersion: 1,
+  id: "scan",
+  title: "배열 순회",
+  duration: 4000,
+  elements: stagger(["A", "B", "C"], 300, (label, index, time) => ({
+    type: "rect",
+    id: `cell-${index}`,
+    x: 100 + index * 110,
+    y: 120,
+    width: 90,
+    height: 70,
+    label,
+    appearances: [appear(time, 4000, "fade")],
+    tracks: [track("fill", [[time, "#c7d2fe"], [time + 500, "#86efac"]], "color")],
+  })),
+  effects: [effects.pulse("visit", "cell-1", 1600)],
+});
+```
+
+- `defineAnimation(input)`: default를 채우고 완전한 `AnimationDocument` 반환
+- `appear(start, end, entryMode?, exitMode?)`: appearance 생성
+- `track(property, keyframes, interpolate?)`: property track 생성
+- `repeatAppearances(options)`: interval과 횟수로 반복 구간 생성
+- `stagger(items, interval, factory, start?)`: 항목별 시작 시간을 계산
+- `effects.highlight`, `effects.pulse`, `effects.flow`: typed effect 생성
+
+## Runtime과 scene
+
+- `computeSnapshot(document, time)`: 모든 요소의 계산된 visual state
+- `trackValueAt`, `activeAppearance`, `activeEffects`, `currentChapter`, `sortedChapters`
+- `buildElementTree`, `flattenTree`, `ancestorIds`: `parentId` hierarchy
+- `buildScene(document, time, options)`: adapter가 소비하는 scene graph
+- `renderDocumentToSvg(document, time, options)`: SVG 문자열
+- `renderDocumentToGif(document, options)`: GIF byte 생성
+
+`SceneOptions`에서 `assetResolver`, `assetCache`, `highlighter`, `measurer`, `fontFamily`, `monospaceFamily`, `rawColors`를 설정할 수 있습니다. host별 자원은 문서에 hard-code하지 말고 이 경계로 전달하세요.
+
+그 밖의 core export는 다음 범주로 나뉩니다.
+
+| 범주 | 주요 API |
+| --- | --- |
+| 시간 | `advanceTime`, `effectivePlayback`, `easeApply`, `lerp`, `clamp` |
+| geometry | `anchorPoint`, `resolveEndpoints`, `curveControlPoint`, matrix 생성·합성·역변환 함수, stage 비율 helper |
+| color와 theme | `parseColor`, `lerpColor`, `resolveElementColor`, `resolveStageBackground`, entry·exit phase style 함수 |
+| text | XML escape와 sanitize 함수, Base64·data URI 함수, grapheme 분리와 길이 계산, text width 추정 |
+| scene graph | `walkScene`, `countNodes`, marker helper, effect visual helper와 각 `SceneNode` type |
+| adapter 지원 | `SceneSvg`, `renderSceneNode`, `renderSceneSvg`, `serializeScene`, `serializeSceneBody` |
+
+## Player controller
+
+```ts
+const player = createPlayer(document, {
+  initialTime: 0,
+  autoplay: false,
+  loop: false,
+  speed: 1,
+  onEnd: () => console.log("완료"),
+});
+```
+
+`Player`는 `getState`, `subscribe`, `play`, `pause`, `toggle`, `seek`, `restart`, `setSpeed`, `setLoop`, `destroy`와 `duration`을 제공합니다. `createManualScheduler`는 test나 결정적인 frame 진행에 사용합니다.
+
+## React
+
+```tsx
+<AnimationPlayer
+  doc={document}
+  options={{ assetResolver }}
+  strings={{ play: "재생", pause: "일시정지" }}
+  hideControls={false}
+  className="article-animation"
+  theme="auto"
+/>
+```
+
+`AnimationPlayerProps`: `doc`, `options?`, `strings?`, `hideControls?`, `className?`, `theme?`.
+
+`AnimationStageProps`: `doc`, `time`, `options?`, `className?`, `theme?`. clock과 control이 없는 한 장면을 렌더링합니다.
+
+Hooks:
+
+- `usePlayer(doc, options)`: `{ player, state }`
+- `useReducedMotion()`: OS motion 축소 설정
+- `useHostTheme()`: host의 light/dark scheme
+- `useInView(ref, threshold?)`: viewport 진입 여부
+- `useFullscreen(ref)`: `{ isFullscreen, toggle }`
+
+`SceneSvg({ scene, className? })`, `renderSceneNode(node)`, `toReactPropName(name)`, `toReactProps(attrs)`는 custom React renderer를 만들 때 사용하는 low-level API입니다.
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import { AnimationPlayer } from "@kokoa/clotho/vue";
+import "@kokoa/clotho/styles.css";
+</script>
+
+<template>
+  <AnimationPlayer :doc="document" theme="auto" />
+</template>
+```
+
+- `AnimationPlayer`, `AnimationStage`: Vue component
+- `usePlayer(doc, options)`: `{ player, state }`를 반환하는 composable
+- `renderSceneNode(node)`, `renderSceneSvg(scene, className?)`: low-level Vue scene renderer
+- `defaultStrings`, `koreanStrings`, `CLASS`: DOM·React와 공유하는 UI 문자열과 class name
+
+## DOM
+
+- `mountPlayer(container, doc, options)`: built-in control이 포함된 `PlayerHandle`
+- `mountStage(container, doc, options)`: control UI 없이 player와 stage를 연결한 `StageHandle`
+- `patchScene(svg, scene)`, `createStageSvg(scene)`: low-level DOM rendering
+- `defaultStrings`, `koreanStrings`, `CLASS`: UI text와 stable class name
+
+두 handle은 `player`, `element`, `render()`, `destroy()`를 제공하며, `PlayerHandle`에는 전체 wrapper인 `root`가 추가됩니다. 시간을 옮기려면 `handle.player.seek(time)`을 사용하고 component가 unmount될 때는 반드시 `destroy()`를 호출하세요.
+
+## Asset와 code hooks
+
+- `AssetResolver.resolve(ref)`: `ref` asset key를 URL이나 data URI로 변환
+- `resolveAsset`, `missingAssetIds`: asset resolution helper
+- `encodeImageAsset`, `inlineAssetFromDataUri`, `sniffImageMime`: inline image 처리
+- `CodeHighlighter.highlight(code, language)`: code token과 palette 공급
+- 기본 highlighter: `javascriptHighlighter`, `plainHighlighter`
+
+Node.js에서는 `listDocumentFiles(dir)`, `listDocumentIds(dir)`, `loadDocument(dir, id, options)`, `loadAllDocuments(dir, options)`로 JSON 파일을 다룹니다. `renderDocumentToGif(document, options)`는 GIF byte를 만들고, `renderDocumentGifFrame(document, time, options)`은 player 전체 또는 stage만 담은 SVG frame을 반환합니다. SVG adapter의 `renderDocumentToSvg(document, time, options)`는 browser global 없이 문자열을 반환합니다.
+
+## Clotho Editor package
+
+```tsx
+<StudioMount
+  initialId="scan"
+  repository={repository}
+  editorTitle="Animation Studio"
+  resolveImage={uploadImage}
+/>
+```
+
+- `Studio({ initial, onSave })`: host가 저장 UI를 직접 구성하는 editor component
+- `StudioMount`: 완성된 editor shell
+- `AnimationRepository`: `list`, `load`, `create`, `save`, `delete`
+- `createLocalStorageRepository({ storageKey?, examples?, storage? })`
+- `configureAnimationRepository(repository)`: legacy/default shell의 repository 교체
+- `configureApi({ baseUrl? })`: HTTP adapter 경로 설정
+- `configureHost({ placeholderImageUrl? })`: placeholder 자원 설정
+- `animationDocumentToJson`, `animationDocumentFileName`, `downloadAnimationJson`
+- `garbageCollectAnimationAssets`: 참조되지 않는 asset 제거
+- `groupElements`, `ungroupElement`, `childIdsOf`, `isGroup`
+
+`resolveImage(file)`은 image URL 또는 data URL을 반환하는 host hook입니다. 저장 충돌, 인증, revision과 API 오류는 `AnimationRepository` 구현이 담당합니다.

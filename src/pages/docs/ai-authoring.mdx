@@ -1,0 +1,56 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: AI로 애니메이션 만들기
+---
+
+# AI로 Clotho 애니메이션 만들기
+
+`clotho-animation-authoring` skill은 AI coding agent가 Clotho v1 JSON을 생성·수정·검증할 때 필요한 작업 순서와 schema reference를 제공합니다. 기존 oh-my-blog MCP의 revision 안전 규칙과 Clotho의 실제 schema·gallery pattern을 하나로 정리했습니다.
+
+## 설치
+
+skill 폴더 전체를 사용하는 agent의 skill directory로 복사합니다.
+
+```bash
+mkdir -p ~/.codex/skills
+base=https://clotho-docs.shinkeonkim.com/skills/clotho-animation-authoring
+target=~/.codex/skills/clotho-animation-authoring
+curl -L "$base/SKILL.md" --create-dirs -o "$target/SKILL.md"
+curl -L "$base/references/schema.md" --create-dirs -o "$target/references/schema.md"
+curl -L "$base/references/patterns.md" --create-dirs -o "$target/references/patterns.md"
+curl -L "$base/references/integration.md" --create-dirs -o "$target/references/integration.md"
+```
+
+위 명령은 skill 본문과 reference 세 파일을 같은 상대 경로에 설치합니다.
+
+- [SKILL.md](/skills/clotho-animation-authoring/SKILL.md)
+- [Schema reference](/skills/clotho-animation-authoring/references/schema.md)
+- [Animation patterns](/skills/clotho-animation-authoring/references/patterns.md)
+- [Editor와 MCP integration](/skills/clotho-animation-authoring/references/integration.md)
+
+저장소를 clone했다면 `public/skills/clotho-animation-authoring` 폴더를 그대로 복사하는 편이 간단합니다.
+
+## 요청 예시
+
+```text
+$clotho-animation-authoring을 사용해서 Bellman-Ford의 간선 완화 과정을 설명하는
+800×500, 8초 길이의 Clotho JSON을 만들어주세요. 단계 목록은 오른쪽에 표시하고,
+라이트·다크 모드에서 모두 읽을 수 있게 구성해주세요.
+```
+
+```text
+$clotho-animation-authoring으로 이 JSON의 connector가 이동하는 node를 계속 추적하도록
+고쳐주세요. 기존 ID와 chapter는 유지하고, 전체 문서를 검증한 결과도 알려주세요.
+```
+
+## AI가 지켜야 하는 핵심 규칙
+
+1. `clothoVersion: 1`만 생성합니다.
+2. 누적 상태가 아니라 절대 시간의 keyframe으로 장면을 정의합니다.
+3. 지속 변화는 track, 보이는 구간은 appearance, 짧은 강조는 effect로 표현합니다.
+4. 이동하는 요소 사이에는 ID와 anchor로 connector를 연결합니다.
+5. 전체 문서를 schema parse와 의미 검증에 통과시킵니다.
+6. 시작·전환 중간·chapter 경계·마지막 frame을 확인합니다.
+7. MCP나 저장 API를 사용할 때는 revision, idempotency와 배열 교체 의미를 지킵니다.
+
+AI가 만든 JSON도 최종적으로는 [Clotho Editor](https://clotho-editor.shinkeonkim.com/) 또는 실제 `AnimationPlayer`에서 시각 검증해야 합니다.

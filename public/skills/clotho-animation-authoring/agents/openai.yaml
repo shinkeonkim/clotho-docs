@@ -1,0 +1,4 @@
+interface:
+  display_name: "Clotho Animation Authoring"
+  short_description: "Create and validate Clotho v1 animation documents"
+  default_prompt: "Use $clotho-animation-authoring to create a validated Clotho v1 animation JSON for this explanation."

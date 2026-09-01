@@ -1,0 +1,98 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: 기능과 표현
+---
+
+# 기능과 표현
+
+Clotho의 기능은 JSON 문서, 결정적인 runtime, scene builder와 환경별 adapter로 나뉩니다. 같은 문서와 같은 시간이 주어지면 모든 adapter가 같은 장면을 표현합니다.
+
+## 요소 10종
+
+| 요소 | 용도 | 고유한 주요 값 |
+| --- | --- | --- |
+| `rect` | 카드, 배열 칸, 영역 | `x`, `y`, `width`, `height`, `cornerRadius`, `label`, `subtitle` |
+| `circle` | 노드, 상태점 | `cx`, `cy`, `r`, `label` |
+| `line` | 연결선 | 좌표 또는 `fromId`/`toId`, anchor, 양 끝 head |
+| `arrow` | 방향 연결 | line 값 + `curvature`, `label`, label offset |
+| `text` | 설명과 수식 | `content`, `fontSize`, `fontWeight`, `textAnchor` |
+| `image` | registry의 이미지 | `assetId`, `alt`, `preserveAspectRatio`, `opacity` |
+| `path` | 자유 SVG path | `d`, `x`, `y`, fill/stroke |
+| `polygon` | 임의 다각형 | SVG `points`, fill/stroke |
+| `group` | 자식 transform/visibility | `x`, `y`; 자식이 `parentId`로 참조 |
+| `code` | code block | `content`, `language`, line number, padding, title |
+
+모든 요소는 `id`, `name?`, `parentId?`, `rotation`, `appearances`, `tracks`를 공통으로 가집니다. ID는 소문자 영문이나 숫자로 시작하며 이후 소문자 영문, 숫자, `-`, `_`만 사용합니다.
+
+## 등장과 퇴장
+
+`appearances`는 요소가 보이는 시간 구간입니다. 여러 구간을 넣으면 하나의 요소가 반복해서 나타났다 사라질 수 있습니다.
+
+| mode | 표현 |
+| --- | --- |
+| `instant` | 즉시 표시 또는 숨김 |
+| `fade` | opacity 변화 |
+| `slide-left`, `slide-right` | 가로 이동 |
+| `slide-up`, `slide-down` | 세로 이동 |
+| `zoom` | scale 변화 |
+| `pop` | 짧은 확대를 포함한 등장 |
+
+각 구간은 `start`, `end`, `entryMode`, `entryDuration`, `exitMode`, `exitDuration`을 사용합니다.
+
+## Property track
+
+`tracks`는 시간에 따라 요소 속성을 바꿉니다. 하나의 track은 `property`, `interpolate`, `keyframes`로 구성합니다.
+
+- ease: `linear`, `easeIn`, `easeOut`, `easeInOut`
+- interpolation: `auto`, `number`, `color`, `discrete`
+- value: string, number 또는 boolean
+
+`auto`는 알려진 숫자·색상·텍스트 속성을 자동 분류합니다. 의도를 명확히 하거나 사용자 정의 속성을 다룰 때는 interpolation을 직접 지정하세요.
+
+## 강조 Effect
+
+| effect | 필드 | 동작 |
+| --- | --- | --- |
+| `highlight` | `color`, `duration` | 지정한 요소에 강조색 적용 |
+| `pulse` | `scale`, `duration` | 지정한 요소를 확대했다 복원 |
+| `flow` | `color`, `particles`, `radius`, `duration` | connector를 따라 입자 이동 |
+
+공통 필드는 `id`, `elementId`, `time`입니다. Effect는 요소의 track을 바꾸지 않는 일시적인 장식입니다.
+
+## Connector
+
+line과 arrow는 두 방식 중 하나로 끝점을 정합니다.
+
+- 절대 좌표: `x1`, `y1`, `x2`, `y2`
+- 요소 추적: `fromId`, `toId`, `fromAnchor`, `toAnchor`
+
+anchor는 `auto`, `top`, `right`, `bottom`, `left`, `center`, 네 대각선(`top-left` 등)을 지원합니다. head는 `none`, `arrow`, `triangle`, `triangle-open`, `circle`, `circle-open`, `diamond`, `diamond-open`, `bar`를 양 끝에 독립적으로 지정합니다.
+
+## Chapter와 Player UI
+
+chapter는 `id`, `time`, `label`, `subtitle`로 구성합니다. `settings`에서 현재 caption과 chapter 목록을 켜고 목록 위치를 `left`, `right`, `top`, `bottom`으로 선택합니다. chapter가 없으면 목록과 caption 영역은 표시하지 않습니다.
+
+## 이미지 Asset
+
+문서의 `assets`는 ID를 key로 쓰는 map입니다.
+
+- `inline`: `mime`과 prefix 없는 raw base64 `data`
+- `external`: 공개 또는 host가 허용한 `url`
+- `ref`: host의 `AssetResolver`가 해석하는 `key`
+
+image 요소는 URL을 직접 저장하지 않고 `assetId`를 참조합니다. 여러 요소가 같은 asset을 재사용할 수 있습니다.
+
+## Theme와 접근성
+
+`AnimationPlayer`의 `theme`은 `auto`, `light`, `dark`를 지원합니다. `auto`는 host 문서의 `color-scheme`과 OS 설정을 따릅니다. player는 `prefers-reduced-motion`을 감지하면 정지된 장면을 제공하고, 화면 밖에서는 clock을 멈춥니다. image에는 의미를 설명하는 `alt`를 지정하세요.
+
+## 출력 환경
+
+- React: `AnimationPlayer`, `AnimationStage`, hooks
+- Vue: `AnimationPlayer`, `AnimationStage`, `usePlayer`
+- DOM: `mountPlayer`, `mountStage`, scene patching
+- SVG: 문자열 또는 standalone SVG 생성
+- Node.js: 파일 loading, GIF 생성
+- CLI: validate, migrate와 파일 기반 작업
+
+공개 함수와 option은 [API와 hooks](/docs/api), 정확한 JSON 필드는 [JSON Schema](/docs/schema)에서 확인할 수 있습니다.
