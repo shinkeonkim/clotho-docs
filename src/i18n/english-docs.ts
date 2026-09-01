@@ -72,6 +72,26 @@ The player supplies playback, restart, fullscreen, speed, chapter, caption, and 
 - \`useInView(ref, threshold?)\` reports viewport visibility.
 - \`useFullscreen(ref)\` returns fullscreen state and a toggle function.`,
   },
+  library: {
+    title: "Code library",
+    description: "Choose Clotho runtime, adapter, authoring, and QA APIs for application code.",
+    body: `# Code library
+
+Use \`@kokoa/clotho\` to validate a JSON document and compute its scene at any time. Use [Clotho Editor](/en/docs/editor) when you want a visual authoring interface.
+
+## Package entry points
+
+- \`@kokoa/clotho\`: schema, runtime, authoring, layout, data, stories, and lint
+- \`@kokoa/clotho/react\` and \`@kokoa/clotho/vue\`: framework players and stages
+- \`@kokoa/clotho/dom\`: vanilla DOM mounting and patching
+- \`@kokoa/clotho/svg\` and \`@kokoa/clotho/node\`: SVG and GIF output
+- \`@kokoa/clotho/testing\`: animation assertions and visual regression
+- \`@kokoa/clotho/plugins\`: plugin contracts and pipelines
+
+## Library and Editor responsibilities
+
+The library owns document semantics, scene computation, and rendering. Editor is a hostable UI that writes the same JSON Schema. No conversion layer is required between an Editor export and a runtime player.`,
+  },
   features: {
     title: "Features and elements",
     description:
@@ -111,6 +131,101 @@ Chapters drive captions and a list positioned on any side. Images refer to reusa
 ## Output adapters
 
 Clotho provides React, Vue, DOM, SVG, Node.js, GIF, and CLI entry points.`,
+  },
+  "authoring-platform": {
+    title: "Extensible authoring platform",
+    description: "Connect authoring, validation, responsive rendering, and QA around one Clotho document.",
+    body: `# Extensible authoring platform
+
+Clotho keeps core scene semantics in the runtime and exposes host-specific policy, import, export, and additional validation through plugins. The complete workflow is: create a document or template, bind data, compile constraints and responsive variants, lint and visually verify it, then render the same result through any adapter.
+
+## Plugins
+
+Declare plugins with \`definePlugin\`, register them with \`createPluginRegistry\`, and execute \`parse → normalize → compile → validate\` through \`runPluginPipeline\`. \`exportWithPlugins\` collects export artifacts. Plugin execution is deterministic and traced; plugins extend host boundaries rather than replacing schema, geometry, timeline, or scene semantics.
+
+## Layout, annotations, and templates
+
+Constraint layout expresses alignment, spacing, pinning, and centering relationships between elements. Linked annotations connect tokens in explanatory text to element IDs. \`defineTemplate\` validates string, number, boolean, enum, array, and object parameters before producing a complete document.
+
+## Checkpoints, data, and stories
+
+Interactive checkpoints pause playback for choice, text, or number input. Element bindings read JSON Pointer values from document \`data\` and assign them only to supported properties. Branching stories connect complete Clotho documents through a \`StoryManifest\`, preserving independent rendering, caching, and export for every node.
+
+## Responsive stages and large scenes
+
+\`responsive.variants\` select canvas, element overrides, and chapter placement by container width while preserving playback time. \`compileSceneDependencyPlan\`, \`createPreparedSceneBuilder\`, and viewport culling reduce repeated work for large scenes without changing scene output.
+
+## Lint and visual regression
+
+\`lintDocument\` provides correctness, accessibility, and recommended presets. \`autofixDocument\` changes only unambiguous findings. The gallery visual baseline renders representative times at multiple widths; use \`bun run visual:check\` in CI and update the baseline only after visual review.
+
+## Editor QA
+
+The development plugin panel in Clotho Editor exposes data bindings, story graphs, responsive inspection, performance profiling, lint findings, autofix previews, and visual regression. Inspector state is not stored in the animation document.`,
+  },
+  editor: {
+    title: "Getting started with Clotho Editor",
+    description: "Create and inspect Clotho JSON through the hosted or embedded visual editor.",
+    body: `# Getting started with Clotho Editor
+
+Open the [hosted Editor](https://clotho-editor.shinkeonkim.com/) or embed \`@kokoa/clotho-editor\` in your application.
+
+![Clotho Editor with an incident-response document](/images/editor/overview.png)
+
+## Basic workflow
+
+Start from the untitled draft, draw elements, edit properties, arrange chapters and tracks on the timeline, inspect the real player in a separate window, then save through the host repository or export JSON.
+
+![Switching between real Gallery documents](/images/editor/gallery-workflow.gif)
+
+## Continue
+
+- [Tools and canvas](/en/docs/editor/tools)
+- [Timeline and preview](/en/docs/editor/timeline)
+- [Repository and host integration](/en/docs/editor/integration)
+- [Extensions and QA](/en/docs/editor/qa)`,
+  },
+  "editor/tools": {
+    title: "Tools and canvas",
+    description: "Select, draw, connect, group, and edit elements on the canvas.",
+    body: `# Tools and canvas
+
+Select a tool first, then click for its default size or drag to define its bounds. Use V, R, O, L, A, T, I, B, and Y for select, rectangle, circle, line, arrow, text, image, path, and polygon. Tool shortcuts are ignored while typing.
+
+Use Shift, Control, or Command click for multiple selection. Double-click text for inline editing. Lines and arrows retain side and corner anchors while their targets move.
+
+![Editing corner anchors and connectors](/images/editor/connectors.png)`,
+  },
+  "editor/timeline": {
+    title: "Timeline and preview",
+    description: "Edit chapters, appearances, tracks, playback, and detached previews.",
+    body: `# Timeline and preview
+
+The timeline shows chapters, appearances, and property tracks against one clock. Drag its resize handle to change the workspace height.
+
+![Chapters and element tracks](/images/editor/chapters.png)
+
+The detached timeline opens the same component in a browser window and synchronizes state with the main editor. Real preview opens an \`AnimationPlayer\` without editing handles so you can verify controls, themes, chapters, captions, and fullscreen behavior.`,
+  },
+  "editor/integration": {
+    title: "Repository and host integration",
+    description: "Connect storage, imports, image uploads, and host branding.",
+    body: `# Repository and host integration
+
+\`AnimationRepository\` defines list, load, create, save, and delete operations. Hosts own authentication, revisions, conflicts, and error handling. The Cloudflare demo uses LocalStorage while oh-my-blog connects its animation API.
+
+\`resolveImage\` may return a CDN URL, host key, or data URL. Images live once in the document asset registry and are reused by ID. JSON export removes unreferenced image assets.
+
+Use \`editorTitle\` for host branding and \`initialId\` to open a repository document. Without an ID, Editor starts from a real untitled draft.`,
+  },
+  "editor/qa": {
+    title: "Extensions and QA",
+    description: "Use permissioned Editor plugins for authoring and release checks.",
+    body: `# Extensions and QA
+
+Development plugins provide template parameters, data bindings, story graphs, responsive inspection, scene profiling, lint and autofix, and visual regression. Hosts grant UI, document-read, and document-write permissions independently.
+
+Before release, inspect light and dark themes, compare responsive widths, resolve lint and accessibility findings, verify visual baselines, export JSON, and validate it again with the core schema.`,
   },
   i18n: {
     title: "Text localization",

@@ -1,0 +1,41 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: 확장 기능과 QA
+---
+
+# 확장 기능과 QA
+
+Editor plugin은 Host별 도구와 검사 panel을 추가합니다. 문서 읽기, 문서 쓰기와 UI 권한은 각각 명시적으로 허용해야 합니다.
+
+## 제공되는 개발용 Plugin
+
+- Template parameter editor: parameter 입력과 생성 결과 미리보기
+- Data binding editor: sample JSON과 요소 property 연결
+- Story graph editor: 문서 node와 분기 edge 편집
+- Responsive inspector: compact, regular, wide stage 비교
+- Scene profiler: 요소·track·keyframe 수와 frame 계산 시간 측정
+- Clotho linter: finding 선택, 전후 SVG 비교와 안전한 autofix
+- Visual regression inspector: 대표 시간과 viewport의 결과 비교
+
+## Plugin 권한
+
+```tsx
+<StudioMount
+  plugins={plugins}
+  resolvePluginPermissions={(plugin) => ({
+    ui: true,
+    documentRead: true,
+    documentWrite: trustedPluginIds.has(plugin.id),
+  })}
+/>
+```
+
+Plugin hook에는 복제된 JSON 문서를 전달합니다. Plugin이 core schema, geometry나 timeline semantics를 바꾸는 구조가 아니라 Host 정책과 검사 기능을 확장하는 구조입니다.
+
+## 배포 전 검사
+
+1. Editor의 실제 미리보기에서 light와 dark theme를 확인합니다.
+2. compact, regular, wide responsive 결과를 비교합니다.
+3. Linter finding과 accessibility 항목을 해결합니다.
+4. 대표 시간의 visual baseline을 확인합니다.
+5. JSON을 내보내 다시 schema validation을 실행합니다.

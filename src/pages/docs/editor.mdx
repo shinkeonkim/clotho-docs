@@ -1,0 +1,37 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Clotho Editor 시작하기
+description: Clotho JSON을 시각적으로 만들고 검사하는 Editor의 기본 흐름을 안내합니다.
+---
+
+# Clotho Editor 시작하기
+
+Clotho Editor는 Clotho JSON을 시각적으로 작성하는 별도 package입니다. [웹 Editor](https://clotho-editor.shinkeonkim.com/)에서 바로 사용하거나, `@kokoa/clotho-editor`를 애플리케이션에 넣어 저장소와 업로드 방식을 직접 연결할 수 있습니다.
+
+![Clotho Editor에서 장애 대응 예시를 연 화면](/images/editor/overview.png)
+
+## 기본 작업 순서
+
+1. 처음 열면 제목 없는 Draft와 기본 Canvas가 준비됩니다.
+2. 왼쪽 도구를 고른 뒤 Canvas를 클릭하거나 drag해 요소를 만듭니다.
+3. 오른쪽 panel에서 위치, 크기, 색상, 번역, binding과 animation 값을 수정합니다.
+4. 아래 Timeline에서 Chapter, appearance와 keyframe 시간을 조정합니다.
+5. `실제 미리보기`로 배포될 player를 별도 창에서 확인합니다.
+6. 저장소에 저장하거나 `JSON 내보내기`로 독립 파일을 받습니다.
+
+## Gallery 문서 열기
+
+웹 Editor의 `열기`에는 Clotho 공식 Gallery 문서가 함께 표시됩니다. 요소, connector, Chapter뿐 아니라 constraint, data binding, checkpoint와 responsive stage를 결합한 예시도 그대로 편집할 수 있습니다.
+
+![Editor에서 여러 Gallery 문서를 전환하는 모습](/images/editor/gallery-workflow.gif)
+
+## 제목 없는 상태에서 시작하기
+
+첫 화면의 Draft는 실제 `AnimationDocument`입니다. 요소를 바로 추가할 수 있고 저장할 때 ID와 제목을 정합니다. Plugin도 Draft가 만들어진 뒤 mount되므로 빈 문서 오류 없이 inspector를 사용할 수 있습니다.
+
+## 다음 안내
+
+- [도구와 Canvas](/docs/editor/tools): 선택, 도형, 연결선, Text, Path와 다중 선택
+- [Timeline과 미리보기](/docs/editor/timeline): Chapter, keyframe, 재생과 별도 창
+- [저장소와 Host 연동](/docs/editor/integration): API, LocalStorage, image upload와 JSON
+- [확장 기능과 QA](/docs/editor/qa): Plugin panel, responsive 검사, profiler와 linter

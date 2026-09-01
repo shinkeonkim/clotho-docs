@@ -1,0 +1,26 @@
+---
+layout: ../../../layouts/DocsLayout.astro
+title: Timeline과 미리보기
+---
+
+# Timeline과 미리보기
+
+Timeline은 현재 시간, Chapter, 요소의 appearance와 property track을 같은 축에서 보여줍니다. 아래쪽 resize handle을 drag해 작업 공간 높이를 바꿀 수 있습니다.
+
+![Chapter와 요소 track을 함께 표시한 Timeline](/images/editor/chapters.png)
+
+## 재생과 시간 이동
+
+`Play`로 작업용 미리보기를 시작하고 slider나 playhead를 drag해 시간을 이동합니다. 무한 재생 checkbox는 문서의 `settings.loop`에 저장됩니다. 재생 중에는 빨간 playhead가 player의 실제 시간과 함께 움직입니다.
+
+## Chapter
+
+현재 시간에 Chapter를 추가한 뒤 label, subtitle과 annotation reference를 편집할 수 있습니다. Chapter 목록은 player에서 좌·우·상·하에 배치할 수 있으며 Chapter가 없으면 목록과 caption 영역을 만들지 않습니다.
+
+## Timeline을 별도 창으로 분리하기
+
+`타임라인 분리`는 CSS panel을 숨기는 기능이 아니라 실제 browser 창을 엽니다. 동일한 Timeline component가 새 창으로 이동하고 원래 창과 상태를 동기화합니다. 분리된 창에서 다시 합치기를 누르면 원래 Editor로 돌아옵니다.
+
+## 실제 미리보기
+
+작업용 Canvas는 selection handle과 편집 정보를 포함합니다. `실제 미리보기`는 `AnimationPlayer`를 별도 창에 띄워 독자가 보게 될 control, Chapter, caption, theme와 fullscreen 동작을 확인합니다.

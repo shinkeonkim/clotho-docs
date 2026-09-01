@@ -11,13 +11,32 @@ export const navigation = [
     ],
   },
   {
-    ko: "핵심 안내서",
-    en: "Guides",
+    ko: "코드 라이브러리",
+    en: "Code library",
     items: [
+      ["/docs/library", "라이브러리 개요", "Library overview"],
+      ["/docs/authoring-platform", "확장형 작성 환경", "Extensible authoring platform"],
       ["/docs/features", "기능과 표현 요소", "Features and elements"],
-      ["/docs/i18n", "Text 국제화", "Text localization"],
       ["/docs/api", "API와 hooks", "API and hooks"],
       ["/docs/schema", "JSON Schema", "JSON Schema"],
+      ["/docs/i18n", "Text 국제화", "Text localization"],
+    ],
+  },
+  {
+    ko: "Clotho Editor",
+    en: "Clotho Editor",
+    items: [
+      ["/docs/editor", "Editor 시작하기", "Getting started with Editor"],
+      ["/docs/editor/tools", "도구와 Canvas", "Tools and canvas"],
+      ["/docs/editor/timeline", "Timeline과 미리보기", "Timeline and preview"],
+      ["/docs/editor/integration", "저장소와 Host 연동", "Repository and host integration"],
+      ["/docs/editor/qa", "확장 기능과 QA", "Extensions and QA"],
+    ],
+  },
+  {
+    ko: "AI 작성",
+    en: "AI authoring",
+    items: [
       ["/docs/ai-authoring", "AI로 만들기", "Authoring with AI"],
     ],
   },

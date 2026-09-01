@@ -7,11 +7,13 @@ import easing from "@public/animations/documents/easing.json";
 import effects from "@public/animations/documents/effects.json";
 import elements from "@public/animations/documents/elements.json";
 import groups from "@public/animations/documents/groups.json";
+import incidentWalkthrough from "@public/animations/documents/incident-walkthrough.json";
 import interpolation from "@public/animations/documents/interpolation.json";
 import iteration from "@public/animations/documents/iteration.json";
 import transitions from "@public/animations/documents/transitions.json";
 
 const documents: AnimationDocument[] = [
+  incidentWalkthrough,
   elements,
   transitions,
   easing,
@@ -24,6 +26,10 @@ const documents: AnimationDocument[] = [
 ].map((value) => animationDocumentSchema.parse(value));
 
 const koreanMetadata: Record<string, { title: string; description: string }> = {
+  "incident-walkthrough": {
+    title: "장애 대응 흐름",
+    description: "하나의 문서에서 data binding, constraint, annotation, checkpoint와 반응형 stage가 함께 동작합니다.",
+  },
   elements: { title: "열 가지 표현 요소", description: "Clotho가 그릴 수 있는 모든 요소를 한 화면에서 확인합니다." },
   transitions: { title: "등장과 퇴장", description: "여덟 가지 전환 방식이 함께 나타나고 사라집니다." },
   easing: { title: "Easing 곡선", description: "같은 이동에 서로 다른 easing을 적용해 속도 변화를 비교합니다." },
