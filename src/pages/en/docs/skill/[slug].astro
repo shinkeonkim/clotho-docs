@@ -1,0 +1,17 @@
+---
+import { marked } from "marked";
+import DocsLayout from "@/layouts/DocsLayout.astro";
+import overviewSource from "@public/skills/clotho-animation-authoring/SKILL.md?raw";
+import schemaSource from "@public/skills/clotho-animation-authoring/references/schema.md?raw";
+import patternsSource from "@public/skills/clotho-animation-authoring/references/patterns.md?raw";
+import integrationSource from "@public/skills/clotho-animation-authoring/references/integration.md?raw";
+const documents = { overview: { title: "Clotho Animation Authoring Skill", file: "SKILL.md", source: overviewSource }, schema: { title: "Skill · Schema reference", file: "references/schema.md", source: schemaSource }, patterns: { title: "Skill · Authoring patterns", file: "references/patterns.md", source: patternsSource }, integration: { title: "Skill · Editor and MCP integration", file: "references/integration.md", source: integrationSource } } as const;
+export function getStaticPaths() { return ["overview", "schema", "patterns", "integration"].map((slug) => ({ params: { slug } })); }
+const document = documents[Astro.params.slug as keyof typeof documents];
+let source = document.source.replace(/^---\n[\s\S]*?\n---\n/, "");
+const headings = [...source.matchAll(/^(#{2,3})\s+(.+)$/gm)].map((match, index) => ({ depth: match[1].length, text: match[2].replace(/[`*_]/g, ""), slug: `section-${index + 1}` }));
+let headingIndex = 0;
+const html = (await marked.parse(source)).replace(/<h([23])>([\s\S]*?)<\/h\1>/g, (_match, depth, content) => `<h${depth} id="${headings[headingIndex++]?.slug}">${content}</h${depth}>`);
+---
+<DocsLayout title={document.title} locale="en" headings={headings}><div class="skill-source-note"><span>This page renders the installable skill source.</span><a href={`/skills/clotho-animation-authoring/${document.file}`}>Open raw Markdown</a></div><div set:html={html} /></DocsLayout>
+<style>.skill-source-note { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 28px; padding: 12px 16px; border: 1px solid #dedcfb; border-radius: 10px; color: #57536f; background: #f7f6ff; font-size: 13px; }.skill-source-note a { color: #5149e8; font-weight: 650; }:global(html[data-theme="dark"]) .skill-source-note { color: #cbc9e3; border-color: #3b3860; background: #1c1a2b; }</style>

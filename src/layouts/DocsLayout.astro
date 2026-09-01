@@ -1,5 +1,6 @@
 ---
 import "@/styles/global.css";
+import { localizedPath, navigation, type Locale } from "@/i18n/navigation";
 
 interface Heading { depth: number; slug: string; text: string }
 interface Props {
@@ -8,49 +9,51 @@ interface Props {
   frontmatter?: { title?: string; description?: string };
   headings?: Heading[];
   landing?: boolean;
+  locale?: Locale;
 }
-
-type NavItem = readonly [href: string, label: string];
-type NavSection = { label: string; items: readonly NavItem[] };
-const sections: readonly NavSection[] = [
-  { label: "시작", items: [["/docs/getting-started", "시작하기"], ["/docs/react", "React에서 사용하기"]] },
-  { label: "핵심 안내서", items: [["/docs/features", "기능과 표현 요소"], ["/docs/api", "API와 hooks"], ["/docs/schema", "JSON Schema"], ["/docs/ai-authoring", "AI로 만들기"]] },
-  { label: "표현 요소", items: [["/docs/elements/rect", "Rectangle"], ["/docs/elements/circle", "Circle"], ["/docs/elements/line", "Line"], ["/docs/elements/arrow", "Arrow"], ["/docs/elements/text", "Text"], ["/docs/elements/image", "Image"], ["/docs/elements/path", "Path"], ["/docs/elements/polygon", "Polygon"], ["/docs/elements/group", "Group"], ["/docs/elements/code", "Code"]] },
-  { label: "AI 작성 Skill", items: [["/docs/skill/overview", "Skill 안내"], ["/docs/skill/schema", "Schema reference"], ["/docs/skill/patterns", "작성 pattern"], ["/docs/skill/integration", "Editor와 MCP 연동"]] },
-];
-const pages: NavItem[] = sections.flatMap((section) => [...section.items]);
 const { frontmatter, landing = false } = Astro.props;
+const locale: Locale = Astro.props.locale ?? (Astro.url.pathname.startsWith("/en") ? "en" : "ko");
+const copy = locale === "ko" ? { docs: "문서", skill: "AI Skill", toc: "이 페이지의 목차", emptyToc: "이 페이지에는 별도 목차가 없습니다.", previous: "← 이전", next: "다음 →", mainNav: "주요 메뉴", language: "언어", theme: "색상 모드 전환" } : { docs: "Docs", skill: "AI Skill", toc: "On this page", emptyToc: "This page has no additional sections.", previous: "← Previous", next: "Next →", mainNav: "Main navigation", language: "Language", theme: "Toggle color theme" };
+const pages = navigation.flatMap((section) => section.items);
 const title = Astro.props.title ?? frontmatter?.title ?? "문서";
 const description = Astro.props.description ?? frontmatter?.description ?? "JSON으로 작성하고 어디서나 재생하는 애니메이션 라이브러리";
 const headings = (Astro.props.headings ?? []).filter((heading) => heading.depth === 2 || heading.depth === 3);
 const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
-const pageIndex = pages.findIndex(([href]) => href === pathname);
+const basePathname = pathname.replace(/^\/en(?=\/|$)/, "") || "/";
+const pageIndex = pages.findIndex(([href]) => href === basePathname);
 const previous = pageIndex > 0 ? pages[pageIndex - 1] : undefined;
 const next = pageIndex >= 0 && pageIndex < pages.length - 1 ? pages[pageIndex + 1] : undefined;
 ---
 
 <!doctype html>
-<html lang="ko">
+<html lang={locale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <title>{title} · Clotho</title>
+    <link rel="alternate" hreflang="ko" href={new URL(localizedPath(Astro.url.pathname, "ko"), Astro.site ?? Astro.url).href} />
+    <link rel="alternate" hreflang="en" href={new URL(localizedPath(Astro.url.pathname, "en"), Astro.site ?? Astro.url).href} />
     <script is:inline>
+      const savedLocale = localStorage.getItem("clotho-docs-locale");
+      if (!savedLocale && !location.pathname.startsWith("/en") && navigator.language.toLowerCase().startsWith("en")) {
+        location.replace(location.pathname === "/" ? "/en" : `/en${location.pathname}`);
+      }
       const savedTheme = localStorage.getItem("clotho-docs-theme");
       document.documentElement.dataset.theme = savedTheme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     </script>
   </head>
   <body>
     <header class="site-header">
-      <nav class="top-nav" aria-label="주요 메뉴">
-        <a class="brand" href="/"><span class="brand-mark">C</span><span>Clotho</span></a>
+      <nav class="top-nav" aria-label={copy.mainNav}>
+        <a class="brand" href={localizedPath("/", locale)}><span class="brand-mark">C</span><span>Clotho</span></a>
         <div class="top-links">
-          <a href="/docs/getting-started">문서</a>
-          <a href="/docs/skill/overview">AI Skill</a>
+          <a href={localizedPath("/docs/getting-started", locale)}>{copy.docs}</a>
+          <a href={localizedPath("/docs/skill/overview", locale)}>{copy.skill}</a>
           <a href="https://clotho-editor.shinkeonkim.com/">Editor</a>
           <a href="https://github.com/shinkeonkim/clotho">GitHub ↗</a>
-          <button class="theme-toggle" type="button" aria-label="라이트 모드와 다크 모드 전환" title="색상 모드 전환"><span class="theme-icon-light">☀</span><span class="theme-icon-dark">☾</span></button>
+          <label class="language-select"><span class="sr-only">{copy.language}</span><select aria-label={copy.language}><option value="ko" selected={locale === "ko"}>한국어</option><option value="en" selected={locale === "en"}>English</option></select></label>
+          <button class="theme-toggle" type="button" aria-label={copy.theme} title={copy.theme}><span class="theme-icon-light">☀</span><span class="theme-icon-dark">☾</span></button>
         </div>
       </nav>
     </header>
@@ -59,11 +62,11 @@ const next = pageIndex >= 0 && pageIndex < pages.length - 1 ? pages[pageIndex + 
     ) : (
       <div class="docs-shell">
         <aside class="docs-sidebar">
-          <nav aria-label="문서 목차">
-            {sections.map((section) => (
+          <nav aria-label={copy.docs}>
+            {navigation.map((section) => (
               <section class="sidebar-section">
-                <h2>{section.label}</h2>
-                {section.items.map(([href, label]) => <a href={href} class:list={["sidebar-link", { active: pathname === href }]}>{label}</a>)}
+                <h2>{section[locale]}</h2>
+                {section.items.map(([href, ko, en]) => <a href={localizedPath(href, locale)} class:list={["sidebar-link", { active: basePathname === href }]}>{locale === "ko" ? ko : en}</a>)}
               </section>
             ))}
           </nav>
@@ -73,14 +76,14 @@ const next = pageIndex >= 0 && pageIndex < pages.length - 1 ? pages[pageIndex + 
           <article class="doc-content prose prose-slate"><slot /></article>
           {(previous || next) && (
             <nav class="page-navigation" aria-label="이전 및 다음 문서">
-              {previous ? <a href={previous[0]}><small>← 이전</small><strong>{previous[1]}</strong></a> : <span />}
-              {next ? <a class="next" href={next[0]}><small>다음 →</small><strong>{next[1]}</strong></a> : <span />}
+              {previous ? <a href={localizedPath(previous[0], locale)}><small>{copy.previous}</small><strong>{locale === "ko" ? previous[1] : previous[2]}</strong></a> : <span />}
+              {next ? <a class="next" href={localizedPath(next[0], locale)}><small>{copy.next}</small><strong>{locale === "ko" ? next[1] : next[2]}</strong></a> : <span />}
             </nav>
           )}
         </main>
         <aside class="page-toc">
-          <h2>이 페이지의 목차</h2>
-          {headings.length ? headings.map((heading) => <a class:list={[`depth-${heading.depth}`]} href={`#${heading.slug}`}>{heading.text}</a>) : <p>이 페이지에는 별도 목차가 없습니다.</p>}
+          <h2>{copy.toc}</h2>
+          {headings.length ? headings.map((heading) => <a class:list={[`depth-${heading.depth}`]} href={`#${heading.slug}`}>{heading.text}</a>) : <p>{copy.emptyToc}</p>}
         </aside>
       </div>
     )}
@@ -89,6 +92,12 @@ const next = pageIndex >= 0 && pageIndex < pages.length - 1 ? pages[pageIndex + 
         const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
         document.documentElement.dataset.theme = next;
         localStorage.setItem("clotho-docs-theme", next);
+      });
+      document.querySelector(".language-select select")?.addEventListener("change", (event) => {
+        const locale = event.target.value;
+        localStorage.setItem("clotho-docs-locale", locale);
+        const path = location.pathname.replace(/^\/en(?=\/|$)/, "") || "/";
+        location.href = locale === "en" ? (path === "/" ? "/en" : `/en${path}`) : path;
       });
     </script>
   </body>

@@ -1,0 +1,13 @@
+import type { ElementSlug } from "@/data/element-guides";
+export const elementEnglish: Record<ElementSlug, { summary: string; descriptions: string[] }> = {
+  rect: { summary: "A basic rectangle for cards, array cells, and logical regions.", descriptions: ["Top-left position", "Element size", "Fill and border colors", "Border width; defaults to 1.5", "Corner radius; defaults to 8", "Centered primary and secondary text", "Label color; defaults to #0b0b0f", "Label and subtitle font sizes"] },
+  circle: { summary: "A circular shape for graph nodes, states, and focus areas.", descriptions: ["Circle center", "Radius", "Fill and border colors", "Border width", "Centered label", "Label color and size"] },
+  line: { summary: "An undirected connector using fixed coordinates or tracked anchors.", descriptions: ["Fixed endpoint coordinates", "IDs of elements to follow", "Connection positions on those elements", "Line color and width", "SVG dash pattern", "Independent decorations at each end"] },
+  arrow: { summary: "A directional connector with curvature and an optional label.", descriptions: ["All line endpoint options", "Curve amount; defaults to 0", "Connector label", "Label color", "Label position adjustment", "Independent decorations at each end"] },
+  text: { summary: "Places explanations, formulas, and state messages on the canvas.", descriptions: ["Text reference position", "Displayed content", "Font size; defaults to 16", "Font weight; defaults to 400", "Text color", "Horizontal alignment reference"] },
+  image: { summary: "Reuses an image from the document-level asset registry.", descriptions: ["Top-left position", "Displayed size", "Key in the assets map", "Accessible description", "SVG aspect-ratio behavior", "Opacity"] },
+  path: { summary: "Draws a free-form line or shape using SVG path data.", descriptions: ["SVG path data", "Path translation; defaults to 0", "Fill and stroke colors", "Stroke width", "Dash pattern", "Opacity"] },
+  polygon: { summary: "Draws triangles and arbitrary polygons from SVG point pairs.", descriptions: ["Space-separated x,y point pairs", "Fill and border colors", "Border width", "Opacity"] },
+  group: { summary: "Applies shared position, rotation, and visibility to child elements.", descriptions: ["Origin for child coordinates", "Rotation of the whole group", "Optional nesting in another group", "Children refer to the group ID"] },
+  code: { summary: "Places a code block with syntax highlighting and optional line numbers.", descriptions: ["Top-left position", "Block size", "Source code", "Highlighter language", "Font size", "Show line numbers", "Background and base text colors", "Inner spacing and corner radius", "Optional header title"] },
+};

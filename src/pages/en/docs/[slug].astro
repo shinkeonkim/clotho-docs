@@ -1,0 +1,11 @@
+---
+import { marked } from "marked";
+import DocsLayout from "@/layouts/DocsLayout.astro";
+import { englishDocs } from "@/i18n/english-docs";
+export function getStaticPaths() { return ["getting-started", "react", "features", "api", "schema", "ai-authoring"].map((slug) => ({ params: { slug } })); }
+const page = englishDocs[Astro.params.slug as keyof typeof englishDocs];
+const headings = [...page.body.matchAll(/^(#{2,3})\s+(.+)$/gm)].map((match, index) => ({ depth: match[1].length, text: match[2].replace(/[`*_]/g, ""), slug: `section-${index + 1}` }));
+let headingIndex = 0;
+const html = (await marked.parse(page.body)).replace(/<h([23])>([\s\S]*?)<\/h\1>/g, (_match, depth, content) => `<h${depth} id="${headings[headingIndex++]?.slug}">${content}</h${depth}>`);
+---
+<DocsLayout title={page.title} description={page.description} locale="en" headings={headings}><div set:html={html} /></DocsLayout>

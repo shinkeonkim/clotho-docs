@@ -1,0 +1,19 @@
+---
+import { ElementExample } from "@/components/ElementExample";
+import { elementGuides, type ElementSlug } from "@/data/element-guides";
+import { elementEnglish } from "@/i18n/element-english";
+import DocsLayout from "@/layouts/DocsLayout.astro";
+export function getStaticPaths() { return ["rect", "circle", "line", "arrow", "text", "image", "path", "polygon", "group", "code"].map((slug) => ({ params: { slug } })); }
+const slug = Astro.params.slug as ElementSlug;
+const guide = elementGuides[slug];
+const copy = elementEnglish[slug];
+const headings = [{ depth: 2, slug: "example", text: "Live example" }, { depth: 2, slug: "options", text: "Options" }, { depth: 2, slug: "json", text: "JSON example" }];
+---
+<DocsLayout title={`${guide.title} element`} description={copy.summary} locale="en" headings={headings}>
+  <h1>{guide.title}</h1><p class="lead">{copy.summary}</p>
+  <h2 id="example">Live example</h2><p>This animation demonstrates how the element's primary properties are evaluated over time.</p><ElementExample guide={guide} client:load />
+  <h2 id="options">Options</h2><p>In addition to the common <code>id</code>, <code>name</code>, <code>parentId</code>, <code>rotation</code>, <code>appearances</code>, and <code>tracks</code> fields, this element accepts the following options.</p>
+  <table><thead><tr><th>Option</th><th>Type</th><th>Description</th></tr></thead><tbody>{guide.options.map(([name, type], index) => <tr><td><code>{name}</code></td><td>{type}</td><td>{copy.descriptions[index]}</td></tr>)}</tbody></table>
+  <h2 id="json">JSON example</h2><p>This is the complete document passed to the player.</p><pre><code>{JSON.stringify(guide.document, null, 2)}</code></pre>
+</DocsLayout>
+<style>.lead { color: #697184; font-size: 1.15rem; }</style>

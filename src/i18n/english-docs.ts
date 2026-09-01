@@ -1,0 +1,203 @@
+export const englishDocs = {
+  "getting-started": { title: "Getting started", description: "Install Clotho and render your first animation document.", body: `# Getting started
+
+Clotho computes a scene from a JSON document and an absolute time, then renders that scene through the adapter your application needs.
+
+## Install
+
+\`\`\`bash
+npm install @kokoa/clotho
+\`\`\`
+
+For React, install the peer dependencies too.
+
+\`\`\`bash
+npm install @kokoa/clotho react react-dom
+\`\`\`
+
+## Create a document
+
+\`\`\`ts
+import { animationDocumentSchema } from "@kokoa/clotho";
+
+const document = animationDocumentSchema.parse({
+  clothoVersion: 1,
+  id: "hello-clotho",
+  title: "Hello, Clotho",
+  duration: 3000,
+  elements: [],
+});
+\`\`\`
+
+Validate unknown JSON with \`parseDocument\` before passing it to an adapter.
+
+## Continue
+
+- [Render with React](/en/docs/react)
+- [Explore every element](/en/docs/features)
+- [Read the JSON Schema guide](/en/docs/schema)` },
+  react: { title: "Using React", description: "Render a Clotho document with React components and hooks.", body: `# Using React
+
+Import the stylesheet once near your application root, then pass a validated document to the player.
+
+## AnimationPlayer
+
+\`\`\`tsx
+import { AnimationPlayer } from "@kokoa/clotho/react";
+import "@kokoa/clotho/styles.css";
+
+export function Demo({ document }) {
+  return <AnimationPlayer doc={document} theme="auto" />;
+}
+\`\`\`
+
+The player supplies playback, restart, fullscreen, speed, chapter, caption, and timeline controls. Use \`hideControls\` when the host provides its own controls.
+
+## AnimationStage
+
+\`AnimationStage\` renders one deterministic frame and has no clock of its own. Pass \`doc\`, \`time\`, optional scene \`options\`, \`className\`, and \`theme\`.
+
+## Hooks
+
+- \`usePlayer(doc, options)\` returns the controller and current state.
+- \`useReducedMotion()\` follows the viewer's motion preference.
+- \`useHostTheme()\` reports the host color scheme.
+- \`useInView(ref, threshold?)\` reports viewport visibility.
+- \`useFullscreen(ref)\` returns fullscreen state and a toggle function.` },
+  features: { title: "Features and elements", description: "Understand Clotho's elements, timeline features, assets, and output adapters.", body: `# Features and elements
+
+The same document and time always produce the same scene. Use the pages below for complete option tables, live examples, and source JSON.
+
+## Elements
+
+### Shapes and content
+
+- [Rectangle](/en/docs/elements/rect), [Circle](/en/docs/elements/circle), [Text](/en/docs/elements/text)
+- [Image](/en/docs/elements/image), [Code](/en/docs/elements/code)
+
+### Connections and free-form shapes
+
+- [Line](/en/docs/elements/line), [Arrow](/en/docs/elements/arrow)
+- [Path](/en/docs/elements/path), [Polygon](/en/docs/elements/polygon)
+
+### Structure
+
+- [Group](/en/docs/elements/group)
+
+## Appearances and tracks
+
+Appearances define visible time windows and entry or exit modes. Tracks change a property through absolute-time keyframes using numeric, color, automatic, or discrete interpolation.
+
+## Effects and connectors
+
+Use \`highlight\`, \`pulse\`, and \`flow\` for temporary emphasis. A line or arrow can use fixed coordinates or follow moving elements through IDs and anchors.
+
+## Chapters, assets, and themes
+
+Chapters drive captions and a list positioned on any side. Images refer to reusable inline, external, or host-resolved assets. Players support light, dark, reduced-motion, and off-screen playback behavior.
+
+## Output adapters
+
+Clotho provides React, Vue, DOM, SVG, Node.js, GIF, and CLI entry points.` },
+  api: { title: "API and hooks", description: "Public entry points, runtime APIs, adapters, and editor hooks.", body: `# API and hooks
+
+## Package entry points
+
+| Import | Purpose |
+| --- | --- |
+| \`@kokoa/clotho\` | Schema, runtime, player, scene, and authoring helpers |
+| \`@kokoa/clotho/react\` | React components and hooks |
+| \`@kokoa/clotho/vue\` | Vue components and composables |
+| \`@kokoa/clotho/dom\` | Vanilla DOM mounting and patching |
+| \`@kokoa/clotho/svg\` | SVG string output |
+| \`@kokoa/clotho/node\` | File loading and GIF export |
+| \`@kokoa/clotho/gif\` | GIF-only entry point |
+
+## Schema and loading
+
+Use \`animationDocumentSchema\`, \`parseDocument\`, \`parseDocumentOrThrow\`, \`parseDocumentText\`, \`parseUnknown\`, \`createDocumentCache\`, and \`validateDocument\` to accept documents safely.
+
+## Authoring helpers
+
+\`defineAnimation\`, \`appear\`, \`track\`, \`repeatAppearances\`, \`stagger\`, and the \`effects\` helpers provide a typed alternative to writing raw JSON.
+
+## Runtime and player
+
+\`computeSnapshot\` calculates element state. \`buildScene\` produces adapter-neutral nodes. \`createPlayer\` exposes \`play\`, \`pause\`, \`toggle\`, \`seek\`, \`restart\`, \`setSpeed\`, \`setLoop\`, subscriptions, and cleanup.
+
+## Adapter APIs
+
+React and Vue provide \`AnimationPlayer\`, \`AnimationStage\`, and player bindings. DOM provides \`mountPlayer\`, \`mountStage\`, and \`patchScene\`. SVG and GIF adapters provide deterministic static output.
+
+## Host hooks
+
+\`SceneOptions\` accepts an asset resolver and cache, code highlighter, text measurer, font families, and raw-color mode. Clotho Editor accepts an \`AnimationRepository\` and image resolver so each host can control loading, saving, deletion, and uploads.` },
+  schema: { title: "JSON Schema", description: "A human-readable reference for the complete Clotho document format.", body: `# JSON Schema
+
+The machine-readable schema ships as \`@kokoa/clotho/schema.json\`. This guide explains the document structure used by people and tools.
+
+## Top-level document
+
+| Field | Type | Purpose |
+| --- | --- | --- |
+| \`clothoVersion\` | literal \`1\` | Schema identifier |
+| \`id\` | ID | Stable document ID |
+| \`title\`, \`description\` | string | Reader-facing metadata |
+| \`duration\` | non-negative integer | Timeline length in milliseconds |
+| \`canvas\` | object | Width, height, and background |
+| \`assets\` | map | Reusable image sources |
+| \`elements\` | array | Shapes and content in document order |
+| \`chapters\`, \`effects\` | array | Narrative steps and temporary emphasis |
+| \`settings\` | object | Playback and chapter UI intent |
+
+## Common element fields
+
+Every element has \`type\`, \`id\`, optional \`name\` and \`parentId\`, \`rotation\`, \`appearances\`, and \`tracks\`. See each [element page](/en/docs/features) for its complete fields and a valid JSON example.
+
+## Appearance and PropertyTrack
+
+An appearance contains \`start\`, \`end\`, entry and exit modes, and their durations. A track contains a property, interpolation mode, and ordered keyframes with absolute millisecond times.
+
+## Assets and effects
+
+Assets are \`inline\`, \`external\`, or \`ref\` records. Image elements point to them through \`assetId\`. Effects share \`id\`, \`elementId\`, and \`time\`, then add highlight, pulse, or flow options.
+
+## Semantic validation
+
+After schema parsing, run \`validateDocument\` to catch duplicate IDs, missing references, invalid parent trees, incomplete connector endpoints, out-of-range timeline values, and unsupported tracked properties.
+
+\`\`\`bash
+bunx clotho validate animation.json --strict
+\`\`\`` },
+  "ai-authoring": { title: "Authoring with AI", description: "Install and use the Clotho animation authoring skill.", body: `# Authoring Clotho animations with AI
+
+The \`clotho-animation-authoring\` skill teaches an AI coding agent to plan the visual story first, use the installed Clotho schema as its source of truth, validate the complete document, and inspect representative frames.
+
+## Install
+
+\`\`\`bash
+mkdir -p ~/.codex/skills
+base=https://clotho-docs.shinkeonkim.com/skills/clotho-animation-authoring
+target=~/.codex/skills/clotho-animation-authoring
+curl -L "$base/SKILL.md" --create-dirs -o "$target/SKILL.md"
+curl -L "$base/references/schema.md" --create-dirs -o "$target/references/schema.md"
+curl -L "$base/references/patterns.md" --create-dirs -o "$target/references/patterns.md"
+curl -L "$base/references/integration.md" --create-dirs -o "$target/references/integration.md"
+\`\`\`
+
+## Preview the skill
+
+- [Workflow and output contract](/en/docs/skill/overview)
+- [Schema reference](/en/docs/skill/schema)
+- [Animation patterns](/en/docs/skill/patterns)
+- [Editor and MCP integration](/en/docs/skill/integration)
+
+## Prompt example
+
+\`\`\`text
+Use $clotho-animation-authoring to create an eight-second animation that explains
+Bellman-Ford edge relaxation. Put the chapter list on the right and verify both themes.
+\`\`\`
+
+The final document should still be opened in Clotho Editor or a real \`AnimationPlayer\` for visual review.` },
+} as const;
