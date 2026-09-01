@@ -1,34 +1,53 @@
 ---
-import { Gallery } from "../components/Gallery";
-import DocsLayout from "../layouts/DocsLayout.astro";
+import { Gallery } from "@/components/Gallery";
+import DocsLayout from "@/layouts/DocsLayout.astro";
 ---
 
-<DocsLayout title="문서">
-  <section class="mb-16 grid items-center gap-10 lg:grid-cols-2">
-    <div>
-      <p class="font-semibold text-indigo-600">@kokoa/clotho</p>
-      <h1 class="text-5xl font-bold tracking-tight">JSON으로 애니메이션을 작성하고 어디서나 재생하세요.</h1>
-      <p class="text-xl text-slate-600 dark:text-slate-300">같은 문서를 React, Vue, DOM, SVG, Node.js와 GIF에서 사용합니다.</p>
-      <div class="flex gap-3">
-        <a class="rounded-lg bg-indigo-600 px-4 py-3 font-semibold text-white no-underline" href="/docs/getting-started">시작하기</a>
-        <a class="rounded-lg border border-slate-300 px-4 py-3 font-semibold no-underline dark:border-slate-700" href="https://clotho-editor.shinkeonkim.com/">Editor 열기</a>
+<DocsLayout title="문서" landing>
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-inner">
+      <p class="eyebrow"><span></span> @kokoa/clotho</p>
+      <h1>복잡한 흐름을<br /><em>하나의 JSON</em>으로 움직이세요.</h1>
+      <p class="hero-copy">Clotho는 알고리즘과 시스템의 동작을 시간에 따라 표현하는 애니메이션 도구입니다. 같은 문서를 웹 player, SVG, GIF와 시각 편집기에서 그대로 사용합니다.</p>
+      <div class="hero-actions">
+        <a class="primary-action" href="/docs/getting-started">문서 시작하기 <span>→</span></a>
+        <a class="secondary-action" href="https://clotho-editor.shinkeonkim.com/">Editor에서 만들어보기</a>
+      </div>
+      <div class="capabilities">
+        <div><strong>10</strong><span>표현 요소</span></div><div><strong>8</strong><span>진입·퇴장 방식</span></div><div><strong>6</strong><span>rendering 환경</span></div><div><strong>1</strong><span>공통 JSON Schema</span></div>
       </div>
     </div>
-    <div class="not-prose rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-      <h2 class="mt-0">하나의 문서, 여러 adapter</h2>
-      <p>Core가 계산한 같은 scene을 React, Vue, DOM, SVG, Node.js와 GIF adapter가 표현합니다.</p>
-      <ul>
-        <li>JSON Schema와 의미 검증</li>
-        <li>결정적인 timeline 계산</li>
-        <li>light/dark theme와 접근성</li>
-        <li>시각 편집기와 AI authoring</li>
-      </ul>
-    </div>
   </section>
-  <section>
-    <p class="font-semibold text-indigo-600">Gallery</p>
-    <h2 class="text-3xl font-bold">지원하는 표현을 실제로 확인하세요.</h2>
-    <p class="mb-8 text-lg text-slate-600 dark:text-slate-300">아래 아홉 문서는 Clotho 저장소의 공식 gallery와 같은 JSON입니다. 각 player를 재생하거나 원본 JSON을 열어 구조를 확인할 수 있습니다.</p>
+  <section class="gallery-section">
+    <div class="section-heading">
+      <div><p>공식 Gallery</p><h2>기능을 설명보다 먼저 확인하세요.</h2></div>
+      <p>각 예시는 실제 Clotho JSON을 사용합니다. 재생하고 시간을 옮겨본 뒤 원본 문서도 바로 열어볼 수 있습니다.</p>
+    </div>
     <Gallery client:load />
   </section>
 </DocsLayout>
+
+<style>
+  .hero { position: relative; padding: 104px 24px 82px; border-bottom: 1px solid #e8e9ef; background: radial-gradient(circle at 50% -20%, #ebeaff 0, #fafaff 38%, #fff 72%); text-align: center; }
+  .hero-glow { position: absolute; left: 50%; top: 52px; width: 420px; height: 240px; transform: translateX(-50%); border-radius: 50%; background: #7770ff24; filter: blur(75px); pointer-events: none; }
+  .hero-inner { position: relative; max-width: 920px; margin: auto; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 24px; padding: 7px 12px; border: 1px solid #dcdaf9; border-radius: 999px; color: #554fe0; background: #ffffffa8; font-size: 13px; font-weight: 700; }
+  .eyebrow span { width: 7px; height: 7px; border-radius: 50%; background: #6c65ff; box-shadow: 0 0 0 4px #6c65ff1c; }
+  h1 { margin: 0; color: #171a24; font-size: clamp(3rem, 7vw, 5.6rem); line-height: 1.03; letter-spacing: -.065em; }
+  h1 em { color: #625bf5; font-style: normal; }
+  .hero-copy { max-width: 720px; margin: 30px auto 0; color: #626a7b; font-size: clamp(1.05rem, 2vw, 1.25rem); line-height: 1.75; word-break: keep-all; }
+  .hero-actions { display: flex; justify-content: center; gap: 12px; margin-top: 34px; }
+  .hero-actions a { padding: 13px 19px; border-radius: 11px; font-size: 15px; font-weight: 700; text-decoration: none; }
+  .primary-action { color: white; background: #5e57ed; box-shadow: 0 10px 28px #5e57ed38; }
+  .primary-action span { margin-left: 12px; }
+  .secondary-action { color: #363b49; border: 1px solid #dcdfe7; background: #fff; }
+  .capabilities { max-width: 760px; margin: 66px auto 0; display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid #e4e5ec; border-radius: 16px; background: #ffffffb5; box-shadow: 0 14px 40px #25294a0b; }
+  .capabilities div { display: flex; flex-direction: column; gap: 4px; padding: 20px 10px; border-right: 1px solid #e8e9ef; }
+  .capabilities div:last-child { border: 0; }.capabilities strong { font-size: 21px; }.capabilities span { color: #7a8190; font-size: 12px; }
+  .gallery-section { max-width: 1160px; margin: auto; padding: 88px 24px 100px; }
+  .section-heading { display: grid; grid-template-columns: 1.15fr .85fr; gap: 60px; align-items: end; margin-bottom: 38px; }
+  .section-heading p { margin: 0; color: #6c7383; line-height: 1.7; word-break: keep-all; }.section-heading > div > p { margin-bottom: 8px; color: #625bf5; font-size: 13px; font-weight: 750; }.section-heading h2 { margin: 0; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.15; letter-spacing: -.045em; }
+  @media (prefers-color-scheme: dark) { .hero { border-color: #292d37; background: radial-gradient(circle at 50% -20%, #28254c 0, #15161d 42%, #101217 75%); }.eyebrow { border-color: #39365f; background: #1b1a28; color: #b5b1ff; } h1 { color: #f4f5f8; }.hero-copy, .section-heading p { color: #a7adba; }.secondary-action { color: #edf1f7; border-color: #343844; background: #191c23; }.capabilities { border-color: #30333d; background: #171920cc; }.capabilities div { border-color: #30333d; } }
+  @media (max-width: 700px) { .hero { padding-top: 72px; }.hero-actions { flex-direction: column; }.capabilities { grid-template-columns: repeat(2, 1fr); }.capabilities div:nth-child(2) { border-right: 0; }.capabilities div:nth-child(-n+2) { border-bottom: 1px solid #e8e9ef; }.section-heading { grid-template-columns: 1fr; gap: 18px; } }
+</style>

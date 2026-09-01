@@ -1,15 +1,31 @@
 ---
-import "../styles/global.css";
+import "@/styles/global.css";
 
+interface Heading { depth: number; slug: string; text: string }
 interface Props {
   title?: string;
   description?: string;
   frontmatter?: { title?: string; description?: string };
+  headings?: Heading[];
+  landing?: boolean;
 }
 
-const { frontmatter } = Astro.props;
+type NavItem = readonly [href: string, label: string];
+type NavSection = { label: string; items: readonly NavItem[] };
+const sections: readonly NavSection[] = [
+  { label: "시작", items: [["/docs/getting-started", "시작하기"], ["/docs/react", "React에서 사용하기"]] },
+  { label: "핵심 안내서", items: [["/docs/features", "기능과 표현 요소"], ["/docs/api", "API와 hooks"], ["/docs/schema", "JSON Schema"], ["/docs/ai-authoring", "AI로 만들기"]] },
+  { label: "AI 작성 Skill", items: [["/docs/skill/overview", "Skill 안내"], ["/docs/skill/schema", "Schema reference"], ["/docs/skill/patterns", "작성 pattern"], ["/docs/skill/integration", "Editor와 MCP 연동"]] },
+];
+const pages: NavItem[] = sections.flatMap((section) => [...section.items]);
+const { frontmatter, landing = false } = Astro.props;
 const title = Astro.props.title ?? frontmatter?.title ?? "문서";
 const description = Astro.props.description ?? frontmatter?.description ?? "JSON으로 작성하고 어디서나 재생하는 애니메이션 라이브러리";
+const headings = (Astro.props.headings ?? []).filter((heading) => heading.depth === 2 || heading.depth === 3);
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const pageIndex = pages.findIndex(([href]) => href === pathname);
+const previous = pageIndex > 0 ? pages[pageIndex - 1] : undefined;
+const next = pageIndex >= 0 && pageIndex < pages.length - 1 ? pages[pageIndex + 1] : undefined;
 ---
 
 <!doctype html>
@@ -21,22 +37,46 @@ const description = Astro.props.description ?? frontmatter?.description ?? "JSON
     <title>{title} · Clotho</title>
   </head>
   <body>
-    <header class="border-b border-slate-200 bg-white/90 dark:border-slate-800 dark:bg-slate-950/90">
-      <nav class="mx-auto flex max-w-6xl items-center gap-6 px-6 py-4">
-        <a class="text-lg font-semibold" href="/">Clotho</a>
-        <a href="/docs/getting-started">시작하기</a>
-        <a href="/docs/features">기능</a>
-        <a href="/docs/api">API</a>
-        <a href="/docs/schema">JSON Schema</a>
-        <a href="/docs/ai-authoring">AI Skill</a>
-        <a class="ml-auto" href="https://clotho-editor.shinkeonkim.com/">Editor</a>
-        <a href="https://github.com/shinkeonkim/clotho">GitHub</a>
+    <header class="site-header">
+      <nav class="top-nav" aria-label="주요 메뉴">
+        <a class="brand" href="/"><span class="brand-mark">C</span><span>Clotho</span></a>
+        <div class="top-links">
+          <a href="/docs/getting-started">문서</a>
+          <a href="/docs/skill/overview">AI Skill</a>
+          <a href="https://clotho-editor.shinkeonkim.com/">Editor</a>
+          <a href="https://github.com/shinkeonkim/clotho">GitHub ↗</a>
+        </div>
       </nav>
     </header>
-    <main class="mx-auto max-w-6xl px-6 py-12">
-      <article class="prose prose-slate max-w-none dark:prose-invert">
-        <slot />
-      </article>
-    </main>
+    {landing ? (
+      <main class="landing-main"><slot /></main>
+    ) : (
+      <div class="docs-shell">
+        <aside class="docs-sidebar">
+          <nav aria-label="문서 목차">
+            {sections.map((section) => (
+              <section class="sidebar-section">
+                <h2>{section.label}</h2>
+                {section.items.map(([href, label]) => <a href={href} class:list={["sidebar-link", { active: pathname === href }]}>{label}</a>)}
+              </section>
+            ))}
+          </nav>
+        </aside>
+        <main class="doc-main">
+          <div class="breadcrumb"><a href="/">Clotho</a><span>/</span><span>{title}</span></div>
+          <article class="doc-content prose prose-slate dark:prose-invert"><slot /></article>
+          {(previous || next) && (
+            <nav class="page-navigation" aria-label="이전 및 다음 문서">
+              {previous ? <a href={previous[0]}><small>← 이전</small><strong>{previous[1]}</strong></a> : <span />}
+              {next ? <a class="next" href={next[0]}><small>다음 →</small><strong>{next[1]}</strong></a> : <span />}
+            </nav>
+          )}
+        </main>
+        <aside class="page-toc">
+          <h2>이 페이지의 목차</h2>
+          {headings.length ? headings.map((heading) => <a class:list={[`depth-${heading.depth}`]} href={`#${heading.slug}`}>{heading.text}</a>) : <p>이 페이지에는 별도 목차가 없습니다.</p>}
+        </aside>
+      </div>
+    )}
   </body>
 </html>

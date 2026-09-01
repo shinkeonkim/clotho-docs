@@ -6,5 +6,13 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   integrations: [mdx(), react()],
   output: "static",
-  vite: { plugins: [tailwindcss()] },
+  vite: {
+    plugins: [tailwindcss()],
+    resolve: {
+      alias: {
+        "@": new URL("./src", import.meta.url).pathname,
+        "@public": new URL("./public", import.meta.url).pathname,
+      },
+    },
+  },
 });
