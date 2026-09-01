@@ -14,7 +14,7 @@
   "dependencies": {
     "@astrojs/mdx": "5.0.6",
     "@astrojs/react": "^5.0.5",
-    "@kokoa/clotho": "^0.1.9",
+    "@kokoa/clotho": "^0.2.0",
     "@tailwindcss/vite": "^4.0.0",
     "astro": "6.3.7",
     "marked": "^18.0.11",
