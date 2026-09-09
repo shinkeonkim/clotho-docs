@@ -1,6 +1,7 @@
 import { animationDocumentSchema, type AnimationDocument } from "@kokoa/clotho";
 import { AnimationPlayer, koreanStrings } from "@kokoa/clotho/react";
 import { useSiteTheme } from "@/components/useSiteTheme";
+import camera from "@public/animations/documents/camera.json";
 import chapters from "@public/animations/documents/chapters.json";
 import connectors from "@public/animations/documents/connectors.json";
 import easing from "@public/animations/documents/easing.json";
@@ -22,6 +23,7 @@ const documents: AnimationDocument[] = [
   connectors,
   groups,
   chapters,
+  camera,
   incidentWalkthrough,
 ].map((value) => animationDocumentSchema.parse(value));
 
@@ -39,6 +41,10 @@ const koreanMetadata: Record<string, { title: string; description: string }> = {
   connectors: { title: "Anchor와 화살표", description: "움직이는 hub를 추적하는 anchor와 모든 arrowhead를 보여줍니다." },
   groups: { title: "중첩 Group", description: "바깥 group의 transform이 모든 자식에게 적용됩니다." },
   chapters: { title: "Chapter와 Caption", description: "네 단계의 caption과 단계 목록이 재생 시간에 맞춰 바뀝니다." },
+  camera: {
+    title: "Camera track",
+    description: "화면이 이동하고 확대됩니다. focus는 요소를 지정하면 그 요소가 화면에 꽉 차도록 카메라를 계산하고, 요소가 움직이면 따라갑니다.",
+  },
 };
 
 export function Gallery({ locale = "ko" }: { locale?: "ko" | "en" }) {
