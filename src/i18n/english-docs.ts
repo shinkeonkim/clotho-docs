@@ -188,9 +188,121 @@ Use \`highlight\`, \`pulse\`, and \`flow\` for temporary emphasis. A line or arr
 
 Chapters drive captions and a list positioned on any side. Images refer to reusable inline, external, or host-resolved assets. Players support light, dark, reduced-motion, and off-screen playback behavior.
 
+## Camera
+
+\`camera\` decides which part of the canvas is on screen. Write \`zoom\`, \`x\`, and \`y\` directly as \`tracks\`, or name elements in \`focus\` and let the camera work out the framing — resolved against live bounds, so it follows a moving target. See [Camera](/en/docs/camera).
+
 ## Output adapters
 
 Clotho provides React, Vue, DOM, SVG, Node.js, GIF, and CLI entry points.`,
+  },
+  camera: {
+    title: "Camera",
+    description: "Move the viewport instead of the elements: pan, zoom, and frame named elements.",
+    body: `# Camera
+
+The camera decides **which part of the canvas the reader is looking at**. It moves the view, not the elements.
+
+Before it existed, explaining a large graph left two options: draw the whole thing small enough that nothing is legible, or split the document and break the flow. \`camera\` lets one document show the whole picture, go in where it matters, and come back out.
+
+The [gallery](/en#gallery) has a running example.
+
+## Two ways to write it
+
+\`camera\` is a top-level field with \`tracks\`, \`focus\`, and \`strokeScaling\`. The two can be combined: **a focus entry that has already started wins**, and otherwise the tracks supply the value. A focus transition starts from wherever the tracks had the camera at that moment, so mixing them does not make the view jump.
+
+### focus — name the elements
+
+This is the usual choice. Instead of coordinates and a zoom level, you say **what to show**.
+
+\`\`\`json
+{
+  "camera": {
+    "focus": [
+      { "time": 1200, "duration": 800, "elementIds": ["ingest"], "padding": 24 },
+      { "time": 3200, "duration": 900, "elementIds": ["worker", "retry"], "padding": 22 }
+    ]
+  }
+}
+\`\`\`
+
+| Field | Meaning |
+| --- | --- |
+| \`time\` | When the move starts, in ms |
+| \`duration\` | How long the move takes. Defaults to 600; \`0\` is a cut |
+| \`elementIds\` | What to frame. Several ids frame the region containing all of them |
+| \`padding\` | Breathing room around the target, in canvas units. Defaults to 24 |
+| \`maxZoom\` | Ceiling on the zoom. Defaults to 4 |
+| \`ease\` | Easing for the move |
+
+A focus is **resolved against live element bounds on every frame**, so it follows a target that moves.
+
+A focus **holds until the next one or the end of the document.** To return to the whole canvas, add a focus that frames everything.
+
+\`maxZoom\` keeps a focus on one small element from filling the stage with it.
+
+### tracks — write the values
+
+Use this when the camera movement is itself part of the explanation. It reuses the element keyframe model.
+
+\`\`\`json
+{
+  "camera": {
+    "tracks": [
+      {
+        "property": "zoom",
+        "keyframes": [
+          { "time": 0, "value": 1 },
+          { "time": 2000, "value": 2.6, "ease": "easeInOut" }
+        ]
+      },
+      { "property": "x", "keyframes": [{ "time": 0, "value": 400 }, { "time": 2000, "value": 140 }] },
+      { "property": "y", "keyframes": [{ "time": 0, "value": 250 }, { "time": 2000, "value": 150 }] }
+    ]
+  }
+}
+\`\`\`
+
+\`property\` is one of \`zoom\`, \`x\`, \`y\`, and camera values are always numbers. \`x\` and \`y\` are the canvas coordinates the **center of the view** sits at; \`zoom\` is the magnification. The default is the canvas center at \`zoom: 1\`.
+
+Because the values are in canvas coordinates, a responsive variant changing the stage size does not change what the camera points at.
+
+## strokeScaling — line weight under zoom
+
+| Value | Behaviour |
+| --- | --- |
+| \`scale\` (default) | What an optical camera does: magnifying the drawing thickens its lines |
+| \`fixed\` | Divides stroke widths by the zoom so line weight stays constant — better for dense diagrams |
+
+\`fixed\` is applied to the scene as plain numbers rather than through \`vector-effect\`, so every adapter and the resvg-based GIF renderer agree.
+
+## Reduced motion
+
+A moving viewport is the single most reliable way to make a reader motion sick. So \`prefers-reduced-motion\` does not merely slow the camera down: interpolation is replaced by holding the previous value until the next keyframe, which turns every move into a cut.
+
+Documents need to do nothing for this. The adapters handle it.
+
+## Reading camera values in code
+
+\`computeCamera(document, time)\` returns the visible rectangle together with the values that produced it.
+
+\`\`\`ts
+import { computeCamera } from "@kokoa/clotho";
+
+// null for a document without a camera.
+const view = computeCamera(document, 3200);
+// view.x, view.y, view.width, view.height — the viewBox
+// view.centerX, view.centerY, view.zoom   — the authored values
+// view.issues                             — focus entries that could not resolve
+\`\`\`
+
+The same time always gives the same answer. That is why seeking, static export, GIF frames, and an editor's scrubbing all agree about what is on screen.
+
+If \`elementIds\` names something not visible at that time, the camera holds its previous state and reports \`focus-unresolved\` in \`issues\` rather than jumping somewhere meaningless.
+
+## Adapters and output
+
+The camera leaves the core as a single \`Scene.viewBox\` string. \`Scene\` already carried that field, so **no adapter changed**: React, Vue, DOM, the SVG string renderer, and the GIF renderer all pass it through.`,
   },
   "authoring-platform": {
     title: "Extensible authoring platform",

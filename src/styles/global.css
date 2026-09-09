@@ -167,6 +167,96 @@ code {
   color: #fff;
   background: var(--accent);
 }
+.camera-example {
+  margin: 28px 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 28px #20243a0d;
+}
+.camera-example-stages {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--line);
+}
+.camera-example-stages figure {
+  margin: 0;
+  padding: 0;
+  background: var(--surface);
+}
+.camera-example-stages figcaption {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+}
+/* The overlay is positioned against the stage, so the stage owns the box it sits in. */
+.camera-example-overview {
+  position: relative;
+}
+.camera-example-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.camera-example-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+}
+.camera-example-controls button {
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--surface);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+}
+.camera-example-controls input[type="range"] {
+  flex: 1;
+  min-width: 120px;
+}
+.camera-example-controls label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.camera-example-readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 0;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 12px;
+}
+.camera-example-readout div {
+  display: flex;
+  gap: 6px;
+}
+.camera-example-readout dt {
+  color: var(--muted);
+}
+.camera-example-readout dd {
+  margin: 0;
+}
+@media (max-width: 760px) {
+  .camera-example-stages {
+    grid-template-columns: 1fr;
+  }
+}
 .gallery-card-heading {
   display: flex;
   flex-wrap: wrap;
@@ -454,6 +544,9 @@ html[data-theme="dark"] .element-example {
   background: #12141a;
 }
 html[data-theme="dark"] .localized-example {
+  background: #12141a;
+}
+html[data-theme="dark"] .camera-example {
   background: #12141a;
 }
 html[data-theme="dark"] .gallery-card-heading h2 {

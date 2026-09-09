@@ -84,6 +84,12 @@ anchor는 `auto`, `top`, `right`, `bottom`, `left`, `center`, 네 대각선(`top
 
 chapter는 `id`, `time`, `label`, `subtitle`로 구성합니다. `settings`에서 현재 caption과 chapter 목록을 켜고 목록 위치를 `left`, `right`, `top`, `bottom`으로 선택합니다. chapter가 없으면 목록과 caption 영역은 표시하지 않습니다.
 
+## Camera
+
+`camera`는 캔버스의 어느 부분을 보여줄지를 정합니다. `tracks`로 `zoom`·`x`·`y`를 직접 적거나, `focus`로 요소를 지정하면 그 요소가 화면에 담기도록 카메라를 계산합니다. focus는 매 프레임 실제 요소 위치를 다시 계산하므로 움직이는 대상을 따라갑니다.
+
+자세한 내용은 [Camera](/docs/camera)에서 확인하세요.
+
 ## 이미지 Asset
 
 문서의 `assets`는 ID를 key로 쓰는 map입니다.
