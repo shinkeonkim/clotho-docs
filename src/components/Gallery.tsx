@@ -11,6 +11,7 @@ import groups from "@public/animations/documents/groups.json";
 import incidentWalkthrough from "@public/animations/documents/incident-walkthrough.json";
 import interpolation from "@public/animations/documents/interpolation.json";
 import iteration from "@public/animations/documents/iteration.json";
+import spotlight from "@public/animations/documents/spotlight.json";
 import transitions from "@public/animations/documents/transitions.json";
 
 const documents: AnimationDocument[] = [
@@ -23,6 +24,7 @@ const documents: AnimationDocument[] = [
   connectors,
   groups,
   chapters,
+  spotlight,
   camera,
   incidentWalkthrough,
 ].map((value) => animationDocumentSchema.parse(value));
@@ -41,6 +43,11 @@ const koreanMetadata: Record<string, { title: string; description: string }> = {
   connectors: { title: "Anchor와 화살표", description: "움직이는 hub를 추적하는 anchor와 모든 arrowhead를 보여줍니다." },
   groups: { title: "중첩 Group", description: "바깥 group의 transform이 모든 자식에게 적용됩니다." },
   chapters: { title: "Chapter와 Caption", description: "네 단계의 caption과 단계 목록이 재생 시간에 맞춰 바뀝니다." },
+  spotlight: {
+    title: "Spotlight",
+    description:
+      "대상을 바꾸는 대신 나머지를 어둡게 합니다. 색 자체가 정보인 문서에서 강조가 정보를 지우지 않습니다.",
+  },
   camera: {
     title: "Camera track",
     description: "화면이 이동하고 확대됩니다. focus는 요소를 지정하면 그 요소가 화면에 꽉 차도록 카메라를 계산하고, 요소가 움직이면 따라갑니다.",
