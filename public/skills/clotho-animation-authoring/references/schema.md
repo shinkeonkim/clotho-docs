@@ -57,6 +57,18 @@ Appearance fields: `start`, `end`, optional `entryMode`/`exitMode`, `entryDurati
 
 Property track fields: `property`, optional `interpolate`, non-empty `keyframes`. Interpolation: `auto`, `number`, `color`, `discrete`. Keyframe fields: `time`, string/number/boolean `value`, optional ease. Ease: `linear`, `easeIn`, `easeOut`, `easeInOut`.
 
+## Camera
+
+Optional top-level `camera` with `tracks`, `focus`, and `strokeScaling`. Omit the field entirely for a document that does not move the view.
+
+- track: `property` (`zoom`, `x`, `y`), non-empty `keyframes` of `{ time, value, ease? }`. Values are always numeric; `x`/`y` are the canvas coordinates of the view centre and default to the canvas centre at `zoom: 1`.
+- focus: `time`, `duration` (default 600; `0` is a cut), non-empty `elementIds`, `padding` (default 24), `maxZoom` (default 4), optional `ease`. Resolved against live element bounds each frame.
+- `strokeScaling`: `scale` (default; lines thicken with zoom) or `fixed` (constant line weight).
+
+A focus that has started wins over the tracks, and it transitions from wherever the tracks had the camera. A focus holds until the next one or the end of the document. A focus naming an element that is not visible at that time holds the previous view and reports `focus-unresolved`.
+
+Read `references/patterns.md` before adding a camera: it is emphasis, not layout, and is easy to overuse.
+
 ## Effects
 
 All effects have `type`, `id`, `elementId`, `time`.

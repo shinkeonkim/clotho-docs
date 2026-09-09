@@ -13,13 +13,13 @@ Begin with the story, not the shapes. List the states a reader must understand, 
 
 1. Establish the intended audience, canvas, duration, theme behavior, and the states the animation must explain. Make reasonable defaults when they do not change the lesson.
 2. Give every document, element, chapter, effect, and asset a stable lowercase ID. Reuse IDs for references; never refer to labels or array positions.
-3. Model persistent change with property tracks, visibility windows with appearances, and short emphasis with effects. Use chapters only for meaningful narrative boundaries.
+3. Model persistent change with property tracks, visibility windows with appearances, and short emphasis with effects. Use chapters only for meaningful narrative boundaries. Move the view with a camera only when the drawing cannot be read whole; it is a dramatic device and loses its effect when used often.
 4. Prefer `fromId`/`toId` connectors with explicit anchors when endpoints should follow moving elements. Use coordinates only for fixed endpoints.
 5. Keep images in the document-level `assets` map. Refer to them with `assetId`; do not put a raw `src` on an image element.
 6. Parse the complete document with `animationDocumentSchema` and run `validateDocument`. Do not discard unknown or invalid fields merely to make validation pass; fix the intended representation.
-7. Inspect the start, each chapter boundary, the middle of every transition, and the final frame. Check light and dark themes, reduced motion, labels, connector endpoints, and text contrast.
+7. Inspect the start, each chapter boundary, the middle of every transition, and the final frame. Check light and dark themes, reduced motion, labels, connector endpoints, and text contrast. With a camera, check what is on screen at each focus and confirm every destination frame reads without the movement that led to it.
 
-Read [references/schema.md](references/schema.md) whenever creating or changing fields. Read [references/patterns.md](references/patterns.md) for iteration, effects, moving connectors, grouping, or chapter layouts. Read [references/integration.md](references/integration.md) only when the document will be stored through an application, MCP server, or editor.
+Read [references/schema.md](references/schema.md) whenever creating or changing fields. Read [references/patterns.md](references/patterns.md) for iteration, effects, camera use and restraint, moving connectors, grouping, or chapter layouts. Read [references/integration.md](references/integration.md) only when the document will be stored through an application, MCP server, or editor.
 
 ## Output contract
 
