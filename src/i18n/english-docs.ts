@@ -184,6 +184,31 @@ Appearances define visible time windows and entry or exit modes. Tracks change a
 
 Use \`highlight\`, \`pulse\`, and \`flow\` for temporary emphasis. A line or arrow can use fixed coordinates or follow moving elements through IDs and anchors.
 
+### Spotlight
+
+\`highlight\` replaces a target's fill, which costs the element its own colour — and in a document where colour carries meaning (visited, type, owner) the emphasis erases the information. \`spotlight\` does the opposite: the targets are left exactly as they are and a scrim is laid over the rest.
+
+\`\`\`json
+{
+  "type": "spotlight",
+  "id": "sp-1",
+  "elementIds": ["node-a", "edge-ab"],
+  "time": 2000,
+  "duration": 1200,
+  "dim": 0.72,
+  "shape": "elements",
+  "padding": 12
+}
+\`\`\`
+
+It is the only effect whose targets are plural, because the other three decorate one element and this one decorates everything else.
+
+\`shape\` is \`bbox\` (a rectangle holding all the targets, the default), \`circle\` (its circumcircle), or \`elements\` (the targets' own silhouettes). **Reach for \`elements\` when the targets are scattered**: a box that holds three corners also lights everything between them.
+
+\`dim\` is the scrim's opacity and \`dimColor\` its colour, defaulting to a theme token that is near-black in both themes — dimming means darkening either way. \`lit\` and \`litColor\` add a wash over the lit area, like a gel on a real lamp; \`lit\` is 0 by default, so the targets keep their own colours unless asked.
+
+A lit target that moves keeps its lit area under it, whether it moves by its own track, by a parent group, or through an entry transition. Several active spotlights share one scrim — separate scrims would darken the overlap twice, and one would dim the other's target.
+
 ## Chapters, assets, and themes
 
 Chapters drive captions and a list positioned on any side. Images refer to reusable inline, external, or host-resolved assets. Players support light, dark, reduced-motion, and off-screen playback behavior.
@@ -543,7 +568,7 @@ An appearance contains \`start\`, \`end\`, entry and exit modes, and their durat
 
 ## Assets and effects
 
-Assets are \`inline\`, \`external\`, or \`ref\` records. Image elements point to them through \`assetId\`. Effects share \`id\`, \`elementId\`, and \`time\`, then add highlight, pulse, or flow options.
+Assets are \`inline\`, \`external\`, or \`ref\` records. Image elements point to them through \`assetId\`. Effects share \`id\`, \`elementId\`, and \`time\`, then add highlight, pulse, or flow options. \`spotlight\` takes \`elementIds\` instead, plus \`dim\`/\`dimColor\`, \`lit\`/\`litColor\`, \`shape\`, \`padding\`, and \`fadeIn\`.
 
 ## Semantic validation
 

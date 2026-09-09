@@ -1,0 +1,380 @@
+{
+  "clothoVersion": 1,
+  "category": "gallery",
+  "canvas": {
+    "width": 720,
+    "height": 280,
+    "background": "transparent"
+  },
+  "settings": {
+    "loop": true,
+    "autoplay": true,
+    "showCaption": true,
+    "showChapterList": false
+  },
+  "id": "spotlight",
+  "title": "Spotlight",
+  "description": "Dim everything else instead of recolouring the target, so the colours that carry meaning survive",
+  "duration": 9000,
+  "chapters": [
+    {
+      "id": "c1",
+      "time": 0,
+      "label": "the whole graph",
+      "subtitle": "colour already means something: healthy, degraded, down"
+    },
+    {
+      "id": "c2",
+      "time": 1200,
+      "label": "one service",
+      "subtitle": "the target keeps its own fill — highlight would replace it"
+    },
+    {
+      "id": "c3",
+      "time": 3200,
+      "label": "a path, not a box",
+      "subtitle": "shape: elements — scattered targets stay separate"
+    },
+    {
+      "id": "c4",
+      "time": 5400,
+      "label": "a box around a cluster",
+      "subtitle": "shape: bbox lights the space between too"
+    },
+    {
+      "id": "c5",
+      "time": 7000,
+      "label": "a coloured lamp",
+      "subtitle": "dimColor tints the surround, lit washes the lit area"
+    }
+  ],
+  "elements": [
+    {
+      "type": "rect",
+      "id": "web",
+      "x": 30,
+      "y": 38,
+      "width": 92,
+      "height": 48,
+      "cornerRadius": 10,
+      "fill": "#bbf7d0",
+      "stroke": "#4338ca",
+      "strokeWidth": 2,
+      "label": "web",
+      "labelSize": 12,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "api",
+      "x": 240,
+      "y": 38,
+      "width": 92,
+      "height": 48,
+      "cornerRadius": 10,
+      "fill": "#fde68a",
+      "stroke": "#4338ca",
+      "strokeWidth": 2,
+      "label": "api",
+      "labelSize": 12,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "auth",
+      "x": 240,
+      "y": 176,
+      "width": 92,
+      "height": 48,
+      "cornerRadius": 10,
+      "fill": "#bbf7d0",
+      "stroke": "#4338ca",
+      "strokeWidth": 2,
+      "label": "auth",
+      "labelSize": 12,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "queue",
+      "x": 430,
+      "y": 107,
+      "width": 92,
+      "height": 48,
+      "cornerRadius": 10,
+      "fill": "#fecaca",
+      "stroke": "#4338ca",
+      "strokeWidth": 2,
+      "label": "queue",
+      "labelSize": 12,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "worker",
+      "x": 602,
+      "y": 38,
+      "width": 92,
+      "height": 48,
+      "cornerRadius": 10,
+      "fill": "#fde68a",
+      "stroke": "#4338ca",
+      "strokeWidth": 2,
+      "label": "worker",
+      "labelSize": 12,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "store",
+      "x": 602,
+      "y": 176,
+      "width": 92,
+      "height": 48,
+      "cornerRadius": 10,
+      "fill": "#bbf7d0",
+      "stroke": "#4338ca",
+      "strokeWidth": 2,
+      "label": "store",
+      "labelSize": 12,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "arrow",
+      "id": "e1",
+      "fromId": "web",
+      "toId": "api",
+      "fromAnchor": "right",
+      "toAnchor": "left",
+      "headEnd": "arrow",
+      "strokeWidth": 2,
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "arrow",
+      "id": "e2",
+      "fromId": "web",
+      "toId": "auth",
+      "fromAnchor": "bottom",
+      "toAnchor": "left",
+      "headEnd": "arrow",
+      "strokeWidth": 2,
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "arrow",
+      "id": "e3",
+      "fromId": "api",
+      "toId": "queue",
+      "fromAnchor": "right",
+      "toAnchor": "top",
+      "headEnd": "arrow",
+      "strokeWidth": 2,
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "arrow",
+      "id": "e4",
+      "fromId": "auth",
+      "toId": "queue",
+      "fromAnchor": "right",
+      "toAnchor": "bottom",
+      "headEnd": "arrow",
+      "strokeWidth": 2,
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "arrow",
+      "id": "e5",
+      "fromId": "queue",
+      "toId": "worker",
+      "fromAnchor": "top",
+      "toAnchor": "left",
+      "headEnd": "arrow",
+      "strokeWidth": 2,
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "arrow",
+      "id": "e6",
+      "fromId": "queue",
+      "toId": "store",
+      "fromAnchor": "bottom",
+      "toAnchor": "left",
+      "headEnd": "arrow",
+      "strokeWidth": 2,
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "legend",
+      "x": 360,
+      "y": 268,
+      "content": "green healthy · amber degraded · red down",
+      "fontSize": 11,
+      "color": "#64748b",
+      "textAnchor": "middle",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "type": "spotlight",
+      "id": "sp-one",
+      "elementIds": [
+        "api"
+      ],
+      "time": 1200,
+      "duration": 1900,
+      "dim": 0.72,
+      "shape": "elements",
+      "padding": 10,
+      "fadeIn": 250
+    },
+    {
+      "type": "spotlight",
+      "id": "sp-path",
+      "elementIds": [
+        "api",
+        "e3",
+        "queue",
+        "e5",
+        "worker"
+      ],
+      "time": 3200,
+      "duration": 2100,
+      "dim": 0.75,
+      "shape": "elements",
+      "padding": 8,
+      "fadeIn": 250
+    },
+    {
+      "type": "spotlight",
+      "id": "sp-box",
+      "elementIds": [
+        "queue",
+        "worker",
+        "store"
+      ],
+      "time": 5400,
+      "duration": 1500,
+      "dim": 0.75,
+      "shape": "bbox",
+      "padding": 14,
+      "fadeIn": 250
+    },
+    {
+      "type": "spotlight",
+      "id": "sp-colour",
+      "elementIds": [
+        "queue"
+      ],
+      "time": 7000,
+      "duration": 2000,
+      "dim": 0.8,
+      "dimColor": "#1e1b4b",
+      "lit": 0.28,
+      "litColor": "#fde68a",
+      "shape": "circle",
+      "padding": 6,
+      "fadeIn": 300
+    }
+  ]
+}

@@ -14,6 +14,10 @@ Use multiple appearances or `repeatAppearances({ start, duration, interval, coun
 
 Use a track when a value must remain changed. Use `highlight`, `pulse`, or `flow` when the emphasis is temporary. Space overlapping effects so their intended ordering is visible.
 
+Prefer `spotlight` over `highlight` when the target's own colour carries meaning — visited, type, owner. `highlight` replaces the fill and erases that; `spotlight` leaves the targets alone and dims everything else. It is also the only emphasis that scales: one scrim reads the same whether the stage holds three elements or forty.
+
+Use `shape: "elements"` when the targets are scattered. The default `bbox` is a rectangle holding all of them, so three targets in three corners light most of the stage, including whatever sits between them. Set `lit` above zero only when a coloured wash is part of the point; the default of 0 is what keeps the targets' own colours intact.
+
 ## Camera
 
 The camera moves the view rather than the elements: `focus` names elements and lets the camera work out the framing, `tracks` write `zoom`/`x`/`y` directly. A focus resolves against live bounds every frame, so it follows a target that moves.

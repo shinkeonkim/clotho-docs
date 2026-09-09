@@ -206,6 +206,12 @@ export const sections: readonly LlmsSection[] = [
           "A complete document using `camera.focus`, including one focus that follows a moving element.",
       },
       {
+        path: "/animations/documents/spotlight.json",
+        title: "spotlight.json",
+        description:
+          "A dependency graph where colour already carries meaning, lit one part at a time — including a scattered path with `shape: \"elements\"`.",
+      },
+      {
         path: "/animations/documents/incident-walkthrough.json",
         title: "incident-walkthrough.json",
         description:

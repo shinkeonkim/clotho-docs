@@ -77,6 +77,14 @@ All effects have `type`, `id`, `elementId`, `time`.
 - `pulse`: positive `scale`, `duration`
 - `flow`: `color`, `particles` (1–10), positive `radius`, `duration`; use on a connector
 
+`spotlight` is the exception: it takes `elementIds` (non-empty) rather than `elementId`, because it decorates everything *except* its targets.
+
+- `duration` (default 1200), `fadeIn` (default 200, applied at both ends)
+- `dim` 0–1 (default 0.7) and optional `dimColor` — opacity and colour of the scrim over everything else. `dimColor` defaults to a theme token that is near-black in both themes.
+- `lit` 0–1 (default 0) and `litColor` (default `#fde68a`) — a wash over the lit area. Zero by default, so targets keep their own colours.
+- `shape`: `bbox` (default), `circle`, `elements`
+- `padding` (default 12) — lit area kept around the targets
+
 ## Assets
 
 - inline: `{ "kind": "inline", "mime": "image/png", "data": "raw-base64" }`
