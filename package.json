@@ -5,11 +5,12 @@
   "packageManager": "bun@1.3.14",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build",
+    "build": "astro check && astro build && bun scripts/check-links.ts",
     "preview": "astro preview",
     "typecheck": "astro check",
     "dev:cloudflare": "bun run build && wrangler dev",
-    "deploy:cloudflare": "bun run build && wrangler deploy"
+    "deploy:cloudflare": "bun run build && wrangler deploy",
+    "check:links": "bun scripts/check-links.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "5.0.6",

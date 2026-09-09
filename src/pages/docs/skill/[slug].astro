@@ -5,6 +5,7 @@ import overviewSource from "@public/skills/clotho-animation-authoring/SKILL.md?r
 import schemaSource from "@public/skills/clotho-animation-authoring/references/schema.md?raw";
 import patternsSource from "@public/skills/clotho-animation-authoring/references/patterns.md?raw";
 import integrationSource from "@public/skills/clotho-animation-authoring/references/integration.md?raw";
+import { rewriteSkillLinks } from "@/i18n/skill-links";
 
 const documents = {
   overview: { title: "Clotho Animation Authoring Skill", file: "SKILL.md", source: overviewSource },
@@ -27,10 +28,13 @@ const headings = [...source.matchAll(/^(#{2,3})\s+(.+)$/gm)].map((match, index) 
   slug: `section-${index + 1}`,
 }));
 let headingIndex = 0;
-const html = (await marked.parse(source)).replace(/<h([23])>([\s\S]*?)<\/h\1>/g, (_match, depth, content) => {
-  const id = headings[headingIndex++]?.slug;
-  return `<h${depth} id="${id}">${content}</h${depth}>`;
-});
+const html = rewriteSkillLinks(
+  (await marked.parse(source)).replace(/<h([23])>([\s\S]*?)<\/h\1>/g, (_match, depth, content) => {
+    const id = headings[headingIndex++]?.slug;
+    return `<h${depth} id="${id}">${content}</h${depth}>`;
+  }),
+  "ko",
+);
 ---
 
 <DocsLayout title={document.title} headings={headings}>

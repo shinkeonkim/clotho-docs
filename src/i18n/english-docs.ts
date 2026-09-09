@@ -207,6 +207,28 @@ Before it existed, explaining a large graph left two options: draw the whole thi
 
 The [gallery](/en#gallery) has a running example.
 
+## When to use it, and when not to
+
+The camera is **emphasis, not layout.** Moving the view is the strongest way to tell a reader "look here now", and that makes it dramatic. Like every strong device it stops working when used often, and what remains is motion sickness.
+
+Reach for it when:
+
+- The drawing is large enough that showing all of it leaves the labels unreadable.
+- The explanation is about one part right now, and the rest can recede for a moment.
+- The subject moves and has to be followed — hard to fake without \`focus\`.
+- The move itself is part of the explanation: whole → part → whole.
+
+Do not reach for it when:
+
+- **It is standing in for layout.** A well-arranged drawing needs no camera. Fix the canvas size and the element positions before you move the view.
+- **Every chapter gets one.** Once a camera move is the default scene transition it has stopped being emphasis.
+- **One element needs attention.** \`highlight\`, \`pulse\` and the spotlight effect exist for that, and they keep the context on screen.
+- **There is text to read.** Nobody reads while the view is moving.
+
+As a sense of scale: three or four focus entries is usually the ceiling for one document. More than that usually means the canvas is too large, or one document is carrying two explanations. Leave the view still between moves — a reader takes in the content after arriving, not during.
+
+And a document with a camera has **every move replaced by a cut under \`prefers-reduced-motion\`.** Do not put explanation in the travel; make the destination frame stand on its own.
+
 ## Two ways to write it
 
 \`camera\` is a top-level field with \`tracks\`, \`focus\`, and \`strokeScaling\`. The two can be combined: **a focus entry that has already started wins**, and otherwise the tracks supply the value. A focus transition starts from wherever the tracks had the camera at that moment, so mixing them does not make the view jump.
@@ -538,6 +560,19 @@ bunx clotho validate animation.json --strict
 
 The \`clotho-animation-authoring\` skill teaches an AI coding agent to plan the visual story first, use the installed Clotho schema as its source of truth, validate the complete document, and inspect representative frames.
 
+## llms.txt
+
+[\`/llms.txt\`](/llms.txt) is the index a model reads first: every document on this site with a line saying **when to read it**, rather than a summary of what it says. A summary tempts a model to answer from the index; a purpose tells it which document to open.
+
+When handing Clotho to an agent without installing the skill, this one file is the shortest route.
+
+\`\`\`text
+Read https://clotho-docs.shinkeonkim.com/llms.txt first, then open what you need
+and produce a Clotho JSON document.
+\`\`\`
+
+Every link it promises is checked against the built site, because a 404 is indistinguishable from a missing feature.
+
 ## Install
 
 \`\`\`bash
@@ -563,6 +598,10 @@ curl -L "$base/references/integration.md" --create-dirs -o "$target/references/i
 Use $clotho-animation-authoring to create an eight-second animation that explains
 Bellman-Ford edge relaxation. Put the chapter list on the right and verify both themes.
 \`\`\`
+
+## Use the camera sparingly
+
+Moving the view is the strongest emphasis available, which makes it dramatic — and a dramatic device used often stops being one. Use \`highlight\` or \`pulse\` to draw attention to a single element, and fix the canvas size and coordinates rather than moving the view to compensate for layout.
 
 The final document should still be opened in Clotho Editor or a real \`AnimationPlayer\` for visual review.`,
   },

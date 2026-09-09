@@ -14,6 +14,18 @@ Use multiple appearances or `repeatAppearances({ start, duration, interval, coun
 
 Use a track when a value must remain changed. Use `highlight`, `pulse`, or `flow` when the emphasis is temporary. Space overlapping effects so their intended ordering is visible.
 
+## Camera
+
+The camera moves the view rather than the elements: `focus` names elements and lets the camera work out the framing, `tracks` write `zoom`/`x`/`y` directly. A focus resolves against live bounds every frame, so it follows a target that moves.
+
+**Treat it as emphasis, not layout, and use it sparingly.** Moving the view is the strongest way to say "look here now", which makes it dramatic — and a dramatic device used often stops being one, leaving only motion sickness. Three or four focus entries is usually the ceiling for a document.
+
+Use a camera when the drawing is large enough that showing all of it leaves labels unreadable, when the subject moves and must be followed, or when the whole → part → whole movement is itself the explanation.
+
+Do not use a camera to compensate for layout: fix the canvas size and element positions first. Do not move the view on every chapter — once it is the default scene transition it is no longer emphasis. To draw attention to one element, use `highlight`, `pulse`, or the spotlight effect instead; they keep the context on screen. Never move the view over text the reader is meant to read.
+
+Leave the view still between moves, and make each destination frame stand on its own: `prefers-reduced-motion` replaces every camera move with a cut, so explanation carried by the travel is lost.
+
 ## Moving connectors
 
 Use `fromId`, `toId`, `fromAnchor`, and `toAnchor`. Anchored connectors recalculate endpoints as shapes move. Pick explicit anchors when `auto` would switch sides during motion. Fix the start endpoint with coordinates and track only the destination only when that is the actual visual story.
