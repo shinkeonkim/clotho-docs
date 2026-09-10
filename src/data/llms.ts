@@ -212,6 +212,12 @@ export const sections: readonly LlmsSection[] = [
           "A dependency graph where colour already carries meaning, lit one part at a time — including a scattered path with `shape: \"elements\"`.",
       },
       {
+        path: "/animations/documents/trail.json",
+        title: "trail.json",
+        description:
+          "Two cursors sweeping the same row, one blended and one stepped, so the `auto` mode decision is one frame. They then hold still, which is where the trail drains away rather than leaving a smear.",
+      },
+      {
         path: "/animations/documents/incident-walkthrough.json",
         title: "incident-walkthrough.json",
         description:

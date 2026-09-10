@@ -1,0 +1,456 @@
+{
+  "clothoVersion": 1,
+  "category": "gallery",
+  "id": "trail",
+  "title": "Motion trail",
+  "description": "Where the element has been, re-derived every frame rather than accumulated",
+  "duration": 9000,
+  "canvas": {
+    "width": 720,
+    "height": 300,
+    "background": "transparent"
+  },
+  "settings": {
+    "loop": true,
+    "autoplay": true,
+    "showCaption": true,
+    "showChapterList": false
+  },
+  "chapters": [
+    {
+      "id": "c1",
+      "time": 0,
+      "label": "where it has been",
+      "subtitle": "a still frame still says where the cursor came from"
+    },
+    {
+      "id": "c2",
+      "time": 1800,
+      "label": "a line, or dots",
+      "subtitle": "blended interpolation joins the samples; stepped never was in between"
+    },
+    {
+      "id": "c3",
+      "time": 4400,
+      "label": "it stops when the cursor stops",
+      "subtitle": "samples piled on one spot do not darken it, and the tail ages out with the window"
+    },
+    {
+      "id": "c4",
+      "time": 6400,
+      "label": "coming back leaves no smear",
+      "subtitle": "the trail is re-derived from the document every frame, never accumulated"
+    }
+  ],
+  "elements": [
+    {
+      "type": "rect",
+      "id": "cell-0",
+      "x": 39,
+      "y": 118,
+      "width": 66,
+      "height": 64,
+      "cornerRadius": 8,
+      "fill": "#eef2ff",
+      "stroke": "#4338ca",
+      "strokeWidth": 1.5,
+      "label": "0",
+      "labelSize": 13,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "cell-1",
+      "x": 111,
+      "y": 118,
+      "width": 66,
+      "height": 64,
+      "cornerRadius": 8,
+      "fill": "#eef2ff",
+      "stroke": "#4338ca",
+      "strokeWidth": 1.5,
+      "label": "1",
+      "labelSize": 13,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "cell-2",
+      "x": 183,
+      "y": 118,
+      "width": 66,
+      "height": 64,
+      "cornerRadius": 8,
+      "fill": "#eef2ff",
+      "stroke": "#4338ca",
+      "strokeWidth": 1.5,
+      "label": "2",
+      "labelSize": 13,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "cell-3",
+      "x": 255,
+      "y": 118,
+      "width": 66,
+      "height": 64,
+      "cornerRadius": 8,
+      "fill": "#eef2ff",
+      "stroke": "#4338ca",
+      "strokeWidth": 1.5,
+      "label": "3",
+      "labelSize": 13,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "cell-4",
+      "x": 327,
+      "y": 118,
+      "width": 66,
+      "height": 64,
+      "cornerRadius": 8,
+      "fill": "#eef2ff",
+      "stroke": "#4338ca",
+      "strokeWidth": 1.5,
+      "label": "4",
+      "labelSize": 13,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "cell-5",
+      "x": 399,
+      "y": 118,
+      "width": 66,
+      "height": 64,
+      "cornerRadius": 8,
+      "fill": "#eef2ff",
+      "stroke": "#4338ca",
+      "strokeWidth": 1.5,
+      "label": "5",
+      "labelSize": 13,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "cell-6",
+      "x": 471,
+      "y": 118,
+      "width": 66,
+      "height": 64,
+      "cornerRadius": 8,
+      "fill": "#eef2ff",
+      "stroke": "#4338ca",
+      "strokeWidth": 1.5,
+      "label": "6",
+      "labelSize": 13,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "cell-7",
+      "x": 543,
+      "y": 118,
+      "width": 66,
+      "height": 64,
+      "cornerRadius": 8,
+      "fill": "#eef2ff",
+      "stroke": "#4338ca",
+      "strokeWidth": 1.5,
+      "label": "7",
+      "labelSize": 13,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "rect",
+      "id": "cell-8",
+      "x": 615,
+      "y": 118,
+      "width": 66,
+      "height": 64,
+      "cornerRadius": 8,
+      "fill": "#eef2ff",
+      "stroke": "#4338ca",
+      "strokeWidth": 1.5,
+      "label": "8",
+      "labelSize": 13,
+      "labelColor": "#1e1b4b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "circle",
+      "id": "smooth",
+      "cx": 72,
+      "cy": 74,
+      "r": 13,
+      "fill": "#f59e0b",
+      "stroke": "#f59e0b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ],
+      "tracks": [
+        {
+          "property": "cx",
+          "keyframes": [
+            {
+              "time": 400,
+              "value": 72,
+              "ease": "linear"
+            },
+            {
+              "time": 4200,
+              "value": 648,
+              "ease": "linear"
+            },
+            {
+              "time": 6200,
+              "value": 648
+            },
+            {
+              "time": 8200,
+              "value": 72,
+              "ease": "linear"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "circle",
+      "id": "stepped",
+      "cx": 72,
+      "cy": 226,
+      "r": 13,
+      "fill": "#16a34a",
+      "stroke": "#16a34a",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ],
+      "tracks": [
+        {
+          "property": "cx",
+          "interpolate": "discrete",
+          "keyframes": [
+            {
+              "time": 400,
+              "value": 72
+            },
+            {
+              "time": 875,
+              "value": 144
+            },
+            {
+              "time": 1350,
+              "value": 216
+            },
+            {
+              "time": 1825,
+              "value": 288
+            },
+            {
+              "time": 2300,
+              "value": 360
+            },
+            {
+              "time": 2775,
+              "value": 432
+            },
+            {
+              "time": 3250,
+              "value": 504
+            },
+            {
+              "time": 3725,
+              "value": 576
+            },
+            {
+              "time": 4200,
+              "value": 648
+            },
+            {
+              "time": 6200,
+              "value": 648
+            },
+            {
+              "time": 6450,
+              "value": 576
+            },
+            {
+              "time": 6700,
+              "value": 504
+            },
+            {
+              "time": 6950,
+              "value": 432
+            },
+            {
+              "time": 7200,
+              "value": 360
+            },
+            {
+              "time": 7450,
+              "value": 288
+            },
+            {
+              "time": 7700,
+              "value": 216
+            },
+            {
+              "time": 7950,
+              "value": 144
+            },
+            {
+              "time": 8200,
+              "value": 72
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "label-smooth",
+      "x": 700,
+      "y": 44,
+      "content": "blended → line",
+      "fontSize": 13,
+      "textAnchor": "end",
+      "color": "#f59e0b",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "label-stepped",
+      "x": 700,
+      "y": 268,
+      "content": "stepped → dots",
+      "fontSize": 13,
+      "textAnchor": "end",
+      "color": "#16a34a",
+      "appearances": [
+        {
+          "start": 0,
+          "end": 9000,
+          "entryDuration": 0,
+          "exitDuration": 0
+        }
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "type": "trail",
+      "id": "tr-smooth",
+      "elementId": "smooth",
+      "time": 0,
+      "duration": 9000,
+      "window": 1500,
+      "samples": 18,
+      "mode": "auto",
+      "color": "#f59e0b",
+      "width": 3
+    },
+    {
+      "type": "trail",
+      "id": "tr-stepped",
+      "elementId": "stepped",
+      "time": 0,
+      "duration": 9000,
+      "window": 2400,
+      "samples": 16,
+      "mode": "auto",
+      "color": "#16a34a",
+      "width": 5
+    }
+  ]
+}

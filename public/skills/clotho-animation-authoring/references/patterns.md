@@ -16,6 +16,10 @@ Use a track when a value must remain changed. Use `highlight`, `pulse`, or `flow
 
 Prefer `spotlight` over `highlight` when the target's own colour carries meaning — visited, type, owner. `highlight` replaces the fill and erases that; `spotlight` leaves the targets alone and dims everything else. It is also the only emphasis that scales: one scrim reads the same whether the stage holds three elements or forty.
 
+Reach for `trail` when the movement itself is the information — a cursor sweeping an array, a search visiting nodes, two pointers closing in. A still frame of a moving element says only "something is somewhere", and a GIF thumbnail or a document capture is exactly that still frame. Do not fake it with a row of trace elements switched on one at a time; that costs an element and an appearance window per step, and it will not survive a change to the timing.
+
+Set `window` from the beat of the movement, not from taste: about one step for a stepped cursor, a little more for a sweep. `samples` is resolution — twelve is enough for almost everything, and raising it lengthens nothing. Leave `mode` at `auto` unless the element teleports for a reason the interpolation does not express.
+
 Use `shape: "elements"` when the targets are scattered. The default `bbox` is a rectangle holding all of them, so three targets in three corners light most of the stage, including whatever sits between them. Set `lit` above zero only when a coloured wash is part of the point; the default of 0 is what keeps the targets' own colours intact.
 
 ## Camera
