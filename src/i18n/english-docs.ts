@@ -209,6 +209,34 @@ It is the only effect whose targets are plural, because the other three decorate
 
 A lit target that moves keeps its lit area under it, whether it moves by its own track, by a parent group, or through an entry transition. Several active spotlights share one scrim — separate scrims would darken the overlap twice, and one would dim the other's target.
 
+### Motion trail
+
+Movement is often the information — a cursor sweeping an array, a search visiting nodes, two pointers closing on each other — and a still frame loses all of it. \`trail\` leaves the path behind the element.
+
+\`\`\`json
+{
+  "type": "trail",
+  "id": "tr-1",
+  "elementId": "cursor",
+  "time": 0,
+  "duration": 6000,
+  "window": 1200,
+  "samples": 12,
+  "mode": "auto",
+  "fade": true,
+  "color": "#94a3b8",
+  "width": 2
+}
+\`\`\`
+
+It is derived, never accumulated. At time \`t\` the positions over \`[t - window, t]\` are re-evaluated from the document, so seeking backwards, exporting a still and rendering frame 900 first all give the same trail. A buffer appended to during playback would answer differently depending on how the viewer arrived.
+
+\`mode\` is \`auto\` (the default), \`path\`, or \`dots\`. \`auto\` draws dots when the position track interpolates discretely, because joining the samples of a teleporting element would draw a route it never took. \`window\` sets the length and \`samples\` the resolution — raising \`samples\` does not make the tail longer.
+
+Samples that land on the same place are merged into one piece. A sample rate measures time, not distance, so a slow or stalled element piles several samples on one spot, and translucent pieces stacked on one spot composite: eleven dots fading from 0.08 to 1 come out solid, and the fade is drawn but not seen. As a result an element that is not moving leaves no trail at all, and once it stops the tail fades out as the window passes over the stall.
+
+The window reaches back no further than the moment the element — or any ancestor group — came on stage, and the trail draws beneath the element it follows.
+
 ## Chapters, assets, and themes
 
 Chapters drive captions and a list positioned on any side. Images refer to reusable inline, external, or host-resolved assets. Players support light, dark, reduced-motion, and off-screen playback behavior.

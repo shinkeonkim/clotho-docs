@@ -12,6 +12,7 @@ import incidentWalkthrough from "@public/animations/documents/incident-walkthrou
 import interpolation from "@public/animations/documents/interpolation.json";
 import iteration from "@public/animations/documents/iteration.json";
 import spotlight from "@public/animations/documents/spotlight.json";
+import trail from "@public/animations/documents/trail.json";
 import transitions from "@public/animations/documents/transitions.json";
 
 const documents: AnimationDocument[] = [
@@ -25,6 +26,7 @@ const documents: AnimationDocument[] = [
   groups,
   chapters,
   spotlight,
+  trail,
   camera,
   incidentWalkthrough,
 ].map((value) => animationDocumentSchema.parse(value));
@@ -47,6 +49,11 @@ const koreanMetadata: Record<string, { title: string; description: string }> = {
     title: "Spotlight",
     description:
       "대상을 바꾸는 대신 나머지를 어둡게 합니다. 색 자체가 정보인 문서에서 강조가 정보를 지우지 않습니다.",
+  },
+  trail: {
+    title: "Motion trail",
+    description:
+      "지나온 자리가 꼬리로 남습니다. 재생 중에 쌓는 게 아니라 매 프레임 문서에서 다시 계산하므로, 되감아도 얼룩지지 않고 멈추면 사라집니다.",
   },
   camera: {
     title: "Camera track",

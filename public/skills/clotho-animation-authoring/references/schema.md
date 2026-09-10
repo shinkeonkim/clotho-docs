@@ -85,6 +85,15 @@ All effects have `type`, `id`, `elementId`, `time`.
 - `shape`: `bbox` (default), `circle`, `elements`
 - `padding` (default 12) — lit area kept around the targets
 
+`trail` takes a single `elementId` and leaves the path the element has travelled.
+
+- `window` (default 1200) — how far back the tail reaches, in milliseconds
+- `samples` (default 12, 2–32) — how many past instants are evaluated. This is resolution, not length; raising it does not lengthen the tail.
+- `mode`: `auto` (default), `path`, `dots`. `auto` draws dots when the element's position track interpolates discretely.
+- `fade` (default true), `color` (default `#94a3b8`), positive `width` (default 2), `duration` (default 3000)
+
+The trail is re-derived from the document at every frame rather than accumulated, so it survives seeking and still-frame export. Samples that land on the same place are merged, which means an element that is not moving leaves no trail, and one that stops has its tail fade out as the window passes.
+
 ## Assets
 
 - inline: `{ "kind": "inline", "mime": "image/png", "data": "raw-base64" }`

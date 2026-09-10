@@ -133,8 +133,10 @@ inline `data`에는 `data:image/...;base64,` prefix를 넣지 않습니다. imag
 - highlight: 공통 필드 + `color #facc15`, `duration 500`
 - pulse: 공통 필드 + 양수 `scale 1.12`, `duration 500`
 - flow: 공통 필드 + `color #facc15`, `particles 3`(1~10), 양수 `radius 4`, `duration 800`
+- spotlight: `elementId` 대신 **`elementIds`** + `dim 0.7`, `dimColor?`, `lit 0`, `litColor #fde68a`, `shape bbox`, `padding 12`, `fadeIn 200`, `duration 1500`
+- trail: 공통 필드 + `window 1200`, `samples 12`(2~32), `mode auto`, `fade true`, `color #94a3b8`, 양수 `width 2`, `duration 3000`
 
-공통 필드는 `type`, `id`, `elementId`, `time`입니다.
+공통 필드는 `type`, `id`, `elementId`, `time`입니다. `spotlight`만 요소 하나가 아니라 집합을 지목하므로 `elementIds`를 씁니다.
 
 ## 의미 검증
 
