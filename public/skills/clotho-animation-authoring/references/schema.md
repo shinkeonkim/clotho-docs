@@ -46,6 +46,7 @@ Every element has `type`, `id`, optional `name` and `parentId`, `rotation` (defa
 - `polygon`: SVG `points`; fill/stroke, opacity.
 - `group`: `x`, `y`; children point to its ID through `parentId`.
 - `code`: position, positive size, `content`; language, line numbers, palette, padding, title.
+- `math`: `x`, `y`, `tex`; `display`, `fontSize`, `color`, `textAnchor`, optional `alt`. The typesetter is injected by the host through `mathRenderer` — without one the TeX source is drawn as monospace and a diagnostic is reported, so the frame still says what the author meant.
 
 Connector anchors: `auto`, `top`, `right`, `bottom`, `left`, `center`, `top-left`, `top-right`, `bottom-left`, `bottom-right`.
 

@@ -3,7 +3,7 @@ import { ElementExample } from "@/components/ElementExample";
 import { elementGuides, type ElementSlug } from "@/data/element-guides";
 import DocsLayout from "@/layouts/DocsLayout.astro";
 
-export function getStaticPaths() { return ["rect", "circle", "line", "arrow", "text", "image", "path", "polygon", "group", "code"].map((slug) => ({ params: { slug } })); }
+export function getStaticPaths() { return ["rect", "circle", "line", "arrow", "text", "image", "path", "polygon", "group", "code", "math"].map((slug) => ({ params: { slug } })); }
 const slug = Astro.params.slug as ElementSlug;
 const guide = elementGuides[slug];
 const headings = [{ depth: 2, slug: "example", text: "실행 예시" }, { depth: 2, slug: "options", text: "사용할 수 있는 옵션" }, { depth: 2, slug: "json", text: "JSON 예시" }];
