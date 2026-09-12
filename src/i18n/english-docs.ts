@@ -165,7 +165,7 @@ The same document and time always produce the same scene. Use the pages below fo
 ### Shapes and content
 
 - [Rectangle](/en/docs/elements/rect), [Circle](/en/docs/elements/circle), [Text](/en/docs/elements/text)
-- [Image](/en/docs/elements/image), [Code](/en/docs/elements/code)
+- [Image](/en/docs/elements/image), [Code](/en/docs/elements/code), [Math](/en/docs/elements/math)
 
 ### Connections and free-form shapes
 

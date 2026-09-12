@@ -11,6 +11,7 @@ export const elementSlugs = [
   "polygon",
   "group",
   "code",
+  "math",
 ] as const;
 export type ElementSlug = (typeof elementSlugs)[number];
 export interface ElementGuide {
@@ -434,6 +435,43 @@ export const elementGuides: Record<ElementSlug, ElementGuide> = {
         showLineNumbers: true,
         content:
           "for (const item of items) {\n  visit(item);\n}\n\nreturn result;",
+        appearances: visible,
+      },
+    ]),
+  },
+  math: {
+    title: "Math",
+    summary:
+      "TeX 수식을 요소로 배치합니다. 조판기는 호스트가 주입하며, 없으면 원문을 그대로 보여줍니다.",
+    options: [
+      ["x, y", "number", "수식의 앵커 좌표"],
+      ["tex", "string", "TeX 원문"],
+      ["display", "block | inline", "자기 줄 baseline인지 글줄 baseline인지"],
+      ["fontSize", "positive number", "문자 크기; 기본 18"],
+      ["color", "string", "색; 기본 #18181b"],
+      ["textAnchor", "start | middle | end", "앵커를 기준으로 한 정렬"],
+      ["alt", "string?", "조판 결과를 볼 수 없는 독자를 위한 낭독 문구"],
+    ],
+    document: doc("math", "Math", [
+      {
+        type: "math",
+        id: "quadratic",
+        x: 60,
+        y: 120,
+        tex: "x = \\frac{-b}{2a}",
+        fontSize: 22,
+        alt: "x equals minus b over two a",
+        appearances: visible,
+      },
+      {
+        type: "math",
+        id: "euler",
+        x: 320,
+        y: 220,
+        tex: "e^{i\\pi} + 1 = 0",
+        fontSize: 22,
+        textAnchor: "middle",
+        alt: "e to the i pi plus one equals zero",
         appearances: visible,
       },
     ]),

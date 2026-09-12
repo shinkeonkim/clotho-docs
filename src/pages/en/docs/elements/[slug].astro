@@ -3,7 +3,7 @@ import { ElementExample } from "@/components/ElementExample";
 import { elementGuides, type ElementSlug } from "@/data/element-guides";
 import { elementEnglish } from "@/i18n/element-english";
 import DocsLayout from "@/layouts/DocsLayout.astro";
-export function getStaticPaths() { return ["rect", "circle", "line", "arrow", "text", "image", "path", "polygon", "group", "code"].map((slug) => ({ params: { slug } })); }
+export function getStaticPaths() { return ["rect", "circle", "line", "arrow", "text", "image", "path", "polygon", "group", "code", "math"].map((slug) => ({ params: { slug } })); }
 const slug = Astro.params.slug as ElementSlug;
 const guide = elementGuides[slug];
 const copy = elementEnglish[slug];
