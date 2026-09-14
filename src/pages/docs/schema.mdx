@@ -86,6 +86,8 @@ arrow 추가 필드: `label?`, `labelColor #0b0b0f`, `labelOffsetX 0`, `labelOff
 
 필수: `x`, `y`, 양수 `width`, 양수 `height`, `content`. 기본값: `language javascript`, `fontSize 12`, `showLineNumbers false`, `fill #1e293b`, `textColor #e2e8f0`, `padding 12`, `cornerRadius 8`. `title?`을 지원합니다.
 
+`source?`로 `content`가 어디서 왔는지 기록합니다: `{ file, region? | lines?, hash? }`. `region: "compute"`는 소스의 `// #region compute`를 찾으므로 **위에 줄이 추가돼도 살아남고**, `lines: [40, 58]`은 줄이 밀리는 순간 조용히 틀린 곳을 가리킵니다. 이름이 같은 region이 둘이면 앞의 것을 고르지 않고 **거부합니다.** 런타임은 파일을 읽지 않습니다 — `content`가 언제나 진실입니다. 자세한 내용은 [CLI 도구](/docs/tooling)의 `clotho sync`를 보세요.
+
 ### math
 
 필수: `x`, `y`, `tex`. 기본값: `display block`, `fontSize 18`, `color #18181b`, `textAnchor start`. `alt?`을 지원합니다.
@@ -143,6 +145,24 @@ inline `data`에는 `data:image/...;base64,` prefix를 넣지 않습니다. imag
 - trail: 공통 필드 + `window 1200`, `samples 12`(2~32), `mode auto`, `fade true`, `color #94a3b8`, 양수 `width 2`, `duration 3000`
 
 공통 필드는 `type`, `id`, `elementId`, `time`입니다. `spotlight`만 요소 하나가 아니라 집합을 지목하므로 `elementIds`를 씁니다.
+
+## Chart
+
+`charts`는 **저작 시간 스펙**이고 `compileCharts`가 평범한 v1 요소로 낮춥니다. 문서에는 그 결과만 남으므로 **런타임은 차트를 모릅니다.**
+
+필드: `id`, `x`, `y`, 양수 `width`, 양수 `height`, `kind` (`bar` | `line`), `data[]`, `encode`, `scale?`, `axes?`, `reveal?`, `legend?`.
+
+생성되는 id는 `bench__series-quick__point-3` 형태로 예측 가능하며, 이것이 이 기능의 계약입니다 — 차트 전용 강조 문법 없이 기존 effect와 camera가 그대로 통합니다. 자세한 내용은 [Chart](/docs/chart)를 보세요.
+
+## Render style
+
+`style`은 선택 필드입니다: `{ preset, seed?, roughness? }`. `preset`은 `clean`(기본) · `sketch` · `mono`입니다.
+
+`clean`의 출력은 이전과 **바이트 단위로 동일**합니다. 자세한 내용은 [Render style](/docs/style)을 보세요.
+
+## Chapter
+
+`id`, `time`, `label`, `subtitle`에 더해 **`notes?`** 를 지원합니다. 발표자 메모이며 [발표자 모드](/docs/embedding)에서만 보입니다 — `subtitle`은 청중이 읽는 자막이라 겸용할 수 없습니다.
 
 ## 의미 검증
 

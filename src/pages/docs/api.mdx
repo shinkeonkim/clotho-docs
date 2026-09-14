@@ -182,6 +182,35 @@ import "@kokoa/clotho/styles.css";
 
 Node.js에서는 `listDocumentFiles(dir)`, `listDocumentIds(dir)`, `loadDocument(dir, id, options)`, `loadAllDocuments(dir, options)`로 JSON 파일을 다룹니다. `renderDocumentToGif(document, options)`는 GIF byte를 만들고, `renderDocumentGifFrame(document, time, options)`은 player 전체 또는 stage만 담은 SVG frame을 반환합니다. SVG adapter의 `renderDocumentToSvg(document, time, options)`는 browser global 없이 문자열을 반환합니다.
 
+## 저작·분석 API
+
+```ts
+import {
+  compileCharts,      // charts 스펙 → 평범한 v1 요소
+  bakeMathElements,   // math → 글리프 path (저작 시간)
+  diffDocuments,      // 저작자의 단위로 본 변경점
+  explainDocument,    // 그 시점 화면이 왜 그런지
+  buildStoryboard,    // 정지 프레임 묶음
+} from "@kokoa/clotho";
+```
+
+전부 문서를 받아 문서나 보고서를 돌려주는 **순수 함수**입니다. 렌더 경로에 들어가지 않습니다.
+
+## 브라우저 통합 API
+
+```ts
+import {
+  bindUrlState, shareUrl,   // 딥링크
+  mountScrollPlayer,        // 스크롤리텔링
+  mountPresenter,           // 발표자 모드
+} from "@kokoa/clotho/dom";
+
+import { remarkClotho, hydrateClothoEmbeds } from "@kokoa/clotho/mdx";
+import { defineClothoPlayer } from "@kokoa/clotho/element";
+```
+
+사용법은 [문서에 끼워 넣기](/docs/embedding)에 있습니다.
+
 ## Clotho Editor package
 
 ```tsx

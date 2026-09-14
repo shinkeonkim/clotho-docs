@@ -20,6 +20,10 @@ export const navigation = [
       ["/docs/authoring-platform", "확장형 작성 환경", "Extensible authoring platform"],
       ["/docs/features", "기능과 표현 요소", "Features and elements"],
       ["/docs/camera", "Camera", "Camera"],
+      ["/docs/chart", "Chart", "Chart"],
+      ["/docs/style", "Render style", "Render style"],
+      ["/docs/embedding", "문서에 끼워 넣기", "Embedding"],
+      ["/docs/tooling", "CLI 도구", "CLI tools"],
       ["/docs/api", "API와 hooks", "API and hooks"],
       ["/docs/schema", "JSON Schema", "JSON Schema"],
       ["/docs/i18n", "Text 국제화", "Text localization"],
@@ -57,6 +61,7 @@ export const navigation = [
       ["/docs/elements/polygon", "Polygon", "Polygon"],
       ["/docs/elements/group", "Group", "Group"],
       ["/docs/elements/code", "Code", "Code"],
+      ["/docs/elements/math", "Math", "Math"],
     ],
   },
   {

@@ -119,6 +119,30 @@ export const sections: readonly LlmsSection[] = [
           "Moving the viewport: `focus` names elements and lets the camera frame them, `tracks` write zoom/x/y directly. Also says when *not* to move the view — it is a dramatic device and easy to overuse.",
       },
       {
+        path: "/docs/chart",
+        title: "Chart",
+        description:
+          "An authoring-time spec that compiles to ordinary primitives with predictable ids, so the runtime never learns a chart type and existing emphasis syntax works on chart parts.",
+      },
+      {
+        path: "/docs/style",
+        title: "Render style",
+        description:
+          "Presets that change how a document is drawn rather than what it draws: clean, sketch, mono. A pure Scene-to-Scene pass, deterministic and independent of time.",
+      },
+      {
+        path: "/docs/embedding",
+        title: "Embedding",
+        description:
+          "Putting the same document in markdown/MDX, a bare HTML page via the custom element, a scroll-driven article, a deep link, or a presenter screen.",
+      },
+      {
+        path: "/docs/tooling",
+        title: "CLI tools",
+        description:
+          "The loop an editor cannot fill: dev server, diff in the author's units, explain for why an element is not on screen, sync for source-linked code, storyboard for media that cannot play.",
+      },
+      {
         path: "/docs/authoring-platform",
         title: "Extensible authoring platform",
         description:
