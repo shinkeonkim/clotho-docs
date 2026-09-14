@@ -563,6 +563,244 @@ React and Vue provide \`AnimationPlayer\`, \`AnimationStage\`, and player bindin
 
 \`SceneOptions\` accepts a locale, asset resolver and cache, code highlighter, text measurer, font families, and raw-color mode. The locale selects a text translation. Clotho Editor accepts an \`AnimationRepository\` and image resolver so each host can control loading, saving, deletion, and uploads.`,
   },
+  chart: {
+    title: "Chart",
+    description:
+      "An authoring-time spec that compiles to ordinary primitives with predictable ids.",
+    body: `# Chart
+
+\`charts\` is an **authoring-time spec**. \`compileCharts\` lowers it into ordinary v1 elements, and only the result stays in the document.
+
+So **the runtime never learns about charts.** No twelfth element type appears in the four adapters, the GIF renderer, or the editor's element switch, and the render path pays nothing.
+
+## The id convention is the real contract
+
+A chart is not a new renderer. It is a **primitive generator with predictable ids**, and that is essentially the whole design.
+
+\`\`\`
+bench__plot                    frame
+bench__grid-y__line-0          grid
+bench__axis-x                  axis line
+bench__axis-x__tick-2__label   tick label
+bench__series-quick            a series (one path for line)
+bench__series-quick__point-3   one bar
+bench__legend__quick           legend entry
+\`\`\`
+
+That is why **no chart-specific emphasis syntax is needed.** The existing syntax reaches chart parts directly — \`pulse\` on a bar, \`spotlight\` on a series, \`camera.focus\` on an axis.
+
+The separator is \`__\` rather than \`/\` because the id pattern is \`^[a-z0-9][a-z0-9_-]*$\`, and that rule carries 383 documents and the migration with it. Series names are slugified and \`__\` folds to \`_\`, so a generated name cannot forge a path separator.
+
+## reveal
+
+\`reveal\` is shorthand for **ordinary tracks and appearance windows** the compiler writes. After compiling, an author can overwrite them.
+
+| mode | what it makes |
+| --- | --- |
+| \`none\` | nothing; a finished chart from the first frame |
+| \`grow\` | a bar's \`height\` from 0 with \`y\` moving alongside (rects anchor top-left, so both are needed) |
+| \`sweep\` | \`strokeDasharray\` plus \`strokeDashoffset\` the length of the path |
+| \`series\` | pushes each series' \`appearances.start\` by \`stagger\` |
+
+## Scales
+
+Only \`linear\` and \`band\`, and no \`d3-scale\`. What is needed is about 200 lines of arithmetic; pulling in interpolators, time scales and colour spaces for that is not a trade worth making.
+
+Tick steps come from the 1/2/5×10ⁿ family, and the boundaries are **geometric means** rather than arithmetic midpoints — choosing between 2 and 5 is a question of ratio, and this is what keeps a \`nice\` domain and its ticks from disagreeing.
+
+**A bar chart's value axis starts at zero.** Bar length *is* the encoding, so a truncated axis lies with length.
+
+Crowded x tick labels are **thinned out**, with a \`label-crowding\` finding. A crowded axis is harder to read than one that labels every other tick.
+
+## Scope
+
+This is for explanatory charts, not analysis. \`kind\` is \`bar\` and \`line\`, and that list stays short. Embedding an external chart library at runtime is not an option: they need Canvas or React, and they carry their own animation state, so \`(document, t) → frame\` would no longer hold.`,
+  },
+  style: {
+    title: "Render style",
+    description:
+      "Presets that change how a document is drawn rather than what it draws.",
+    body: `# Render style
+
+\`style\` decides **how** something is drawn, not **what** is drawn.
+
+The same document should suit a blog post, a lecture slide, and a paper figure. Duplicating the document and editing colours is not the answer.
+
+\`\`\`json
+{ "style": { "preset": "sketch", "seed": "bellman-ford", "roughness": 1.2 } }
+\`\`\`
+
+| preset | what it is |
+| --- | --- |
+| \`clean\` | the rendering so far. The default, and **byte-identical output** |
+| \`sketch\` | deterministic jitter. \`rect\`, \`circle\` and \`polygon\` become wobbled \`path\`s; \`line\` moves only its endpoints |
+| \`mono\` | luma greyscale, for print and papers |
+
+## Where it lives is the design
+
+It is a **pure Scene → Scene pass** after \`buildScene\` and before any adapter. That position buys three things.
+
+- **The eleven element builders are untouched.** A preset is a rule about drawing, not about what a circle is.
+- **All four adapters and the GIF renderer come along for free.**
+- **Changing a node's kind is safe.** Preserve \`key\` and the DOM patcher and React reconciliation keep working; below that, nothing cares whether it used to be a rect.
+
+## Determinism — time is not in the seed
+
+Jitter must look random without being random. Baking a GIF twice must produce the same file, and a frame reached by seeking must equal one reached by playing.
+
+The seed is \`hash(style.seed ?? doc.id, node.key, node.kind)\` and the PRNG is mulberry32.
+
+**Time \`t\` is not part of the seed.** Putting it in is the easiest way to make a sketch look alive and the surest way to make the picture boil — every frame reshuffles every line. An element travelling across the stage carries its own jitter with it.
+
+## What it leaves alone
+
+- **\`text\` and \`image\`**: wobbling letters does not read as relaxed, it reads as unreadable.
+- **\`path\`**: redrawing arbitrary path data would need a complete parser.
+- **Spotlight scrims and masks**: a wobbled edge opens bright gaps around the stage.
+- **\`var(--cloth-*)\` tokens under \`mono\`**: the page decides those values, and they are already monochrome in the sense that matters.
+
+\`mono\` also greys arrowheads and **gives those markers new ids**. Marker ids are document-global with the colour baked in, so until now the same id meant the same content; the preset breaks that assumption, and two players with different styles on one page would otherwise share whichever marker loaded first.
+
+Past a node-count threshold (400) \`sketch\` **degrades to \`clean\`**. In a drawing that dense, hand-drawn lines are noise rather than charm, and the path data doubles.`,
+  },
+  embedding: {
+    title: "Embedding",
+    description:
+      "Markdown/MDX, a custom element, deep links, scrollytelling, and presenter mode.",
+    body: `# Embedding
+
+Putting the same document into a blog post, someone else's page, a scroll-driven article, and a presentation screen — without duplicating it.
+
+## Markdown and MDX
+
+\`\`\`js
+import { remarkClotho } from "@kokoa/clotho/mdx";
+const plugins = [remarkClotho()];
+\`\`\`
+
+At build time the document is **validated** (a failure fails the build) and a poster-frame SVG is inlined into the markup. **The picture is visible without JavaScript**, and the theme tokens survive, so dark mode follows.
+
+\`\`\`ts
+import { hydrateClothoEmbeds } from "@kokoa/clotho/mdx";
+hydrateClothoEmbeds(); // promote to a player as each enters the viewport
+\`\`\`
+
+It emits **HTML** rather than a framework component, so Astro, Next (MDX), Docusaurus, Vitepress and plain markdown all take the same path.
+
+## Custom element (no bundler)
+
+\`\`\`html
+<script type="module">
+  import { defineClothoPlayer } from "@kokoa/clotho/element";
+  defineClothoPlayer();
+</script>
+
+<clotho-player src="/animations/knapsack.json" theme="dark" autoplay loop></clotho-player>
+\`\`\`
+
+It renders into a shadow root and **carries its stylesheet with it**, so it does not collide with host CSS. Theme tokens are CSS variables and cross the boundary, so a host's palette override still works.
+
+\`el.player\` exposes \`seek\`, \`play\` and \`setSpeed\`; \`clotho-ready\`, \`clotho-chapterchange\`, \`clotho-ended\` and \`clotho-error\` bubble up.
+
+## Deep links
+
+\`\`\`ts
+import { bindUrlState, shareUrl } from "@kokoa/clotho/dom";
+const unbind = bindUrlState(handle.player, doc);
+shareUrl(handle.player, doc); // https://…/knapsack?c=swap
+\`\`\`
+
+**Prefer the chapter (\`c\`) over the time (\`t\`).** Edit the document and \`t=3200\` drifts; a chapter id keeps pointing at the moment the author named.
+
+The URL is written only on **deliberate actions** — pause, seek, speed — never during playback, and through \`replaceState\`, so the back button does not fill with animation history.
+
+## Scrollytelling
+
+\`\`\`ts
+import { mountScrollPlayer } from "@kokoa/clotho/dom";
+mountScrollPlayer(stage, doc, { pin: true, snapToChapters: true });
+\`\`\`
+
+Most animations inside long articles go unwatched. Readers do not press play, and when they do the frames run at a speed unrelated to their reading. Autoplay creates the opposite problem.
+
+This swaps the clock for scroll position. Because \`Player\` already lives outside any framework and \`seek(t)\` is pure, **rewinding is free** — scrolling up is a smaller number, not an undo.
+
+Under \`prefers-reduced-motion\` it **degrades to a list of per-chapter still frames**. Scroll hijacking is especially bad for readers with vestibular disorders, and slowing it down does not fix that.
+
+## Presenter mode
+
+\`\`\`ts
+import { mountPresenter } from "@kokoa/clotho/dom";
+mountPresenter(document.body, doc);
+\`\`\`
+
+\`→\`/\`Space\` next section, \`←\` previous, \`P\` play/pause, \`N\` notes, \`B\` blackout, \`F\` fullscreen.
+
+A document with chapters already has a slide deck's structure. What was missing was **a way to advance at speaking pace**.
+
+Chapters are treated as **spans**: pressing next **plays that span and stops**, rather than jumping to the chapter's timestamp. The animation is part of the explanation, and skipping it leaves the audience with a result and no process.
+
+Speaker notes live in \`chapters[].notes\`. \`subtitle\` is **the caption the audience reads** and cannot double as notes.`,
+  },
+  tooling: {
+    title: "CLI tools",
+    description:
+      "The authoring loop an editor cannot fill: dev, diff, explain, sync, storyboard.",
+    body: `# CLI tools
+
+The UI for making documents is the [editor](/en/docs/editor). The tools here are for the loop where **the files in a git working tree are the truth**. A browser cannot open an arbitrary local directory, so this is a place the editor cannot fill.
+
+## Watching while you edit — \`clotho dev\`
+
+\`\`\`bash
+clotho dev animations/            # http://127.0.0.1:4173
+clotho dev animations/ --headless # watch and validate, no page
+\`\`\`
+
+It lists the directory's \`*.json\` and, when a file changes outside, redraws **while holding the playback position**. Validation and lint results appear on the same screen.
+
+The server has an endpoint that writes what the browser sends to a file, so **it binds to \`127.0.0.1\` by default.** Do not expose it on an untrusted network.
+
+## What changed — \`clotho diff\`
+
+A JSON text diff cannot express a change to an animation document. Adding one element moves hundreds of lines, and keyframe arrays look rewritten wholesale.
+
+\`\`\`bash
+clotho diff before.json after.json
+clotho diff a.json b.json --format md   # a table for a PR comment
+\`\`\`
+
+It reports in the author's units — an element moved, a track gained a keyframe, a chapter shifted. When only an id changed it **infers a rename rather than a delete plus an add**, and says that it is inferring.
+
+It answers a different question from visual regression testing: that decides *whether something broke*, this explains *what changed* to a person.
+
+## Why it looks like this — \`clotho explain\`
+
+The question that actually comes up while authoring always has the same shape: **why is this element not showing.**
+
+\`\`\`bash
+clotho explain doc.json --at 3200 --element cursor
+\`\`\`
+
+Visibility reasons come first, because a missing element could have half a dozen causes and each is fixed differently. And it **does not stop at the first reason** — an element can be outside its appearance window *and* inside a hidden group, and fixing one leaves it invisible.
+
+## Keeping code in step — \`clotho sync\`
+
+\`\`\`bash
+clotho sync animations/         # refresh content and hash
+clotho sync animations/ --check # write nothing; exit 1 if stale
+\`\`\`
+
+With \`clotho validate --strict\` in CI, **a PR that changes code without updating the animation fails on its own.**
+
+## For media that cannot play — \`clotho storyboard\`
+
+\`\`\`bash
+clotho storyboard doc.json --out sheet.png --per-row 3
+\`\`\`
+
+Frames are chosen from **chapters** by default — the author already divided the piece into steps, which beats any heuristic. When there are too many frames they are thinned evenly, because the end of an animation is usually where the point is, and cropping the tail is the worst cut.`,
+  },
   schema: {
     title: "JSON Schema",
     description:

@@ -1,0 +1,93 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: CLI 도구
+---
+
+# CLI 도구
+
+문서를 만드는 UI는 [Clotho Editor](/docs/editor)입니다. 이 페이지의 도구들은 **git 작업 트리의 파일이 진실인 루프**를 위한 것입니다. 브라우저는 임의의 로컬 디렉터리를 열 수 없으므로, 이 자리는 에디터가 채울 수 없습니다.
+
+```bash
+clotho validate animations/            # 스키마 + 의미 검증
+clotho validate animations/ --strict   # 경고도 실패로
+clotho migrate  animations/ --write    # legacy v3/v4 → v1 변환
+clotho dev      animations/            # 라이브 리로드 프리뷰
+clotho diff     before.json after.json # 무엇이 바뀌었는지
+clotho explain  doc.json --at 3200     # 왜 이렇게 보이는지
+clotho sync     animations/            # source 연결된 code 갱신
+clotho storyboard doc.json --out sheet.png
+clotho gif      doc.json out.gif --fps 12
+```
+
+## 편집하면서 보기 — `clotho dev`
+
+```bash
+clotho dev animations/            # http://127.0.0.1:4173
+clotho dev animations/ --port 5000
+clotho dev animations/ --headless # 페이지 없이 감시 + 검증만
+```
+
+디렉터리의 `*.json`을 목록으로 띄우고, 파일이 밖에서 바뀌면 **재생 위치를 유지한 채** 다시 그립니다. 검증과 린트 결과를 같은 화면에 띄우므로 저장하고 터미널로 옮겨가지 않아도 됩니다.
+
+브라우저가 보낸 내용을 파일로 쓰는 엔드포인트가 있으므로 **기본 바인딩이 `127.0.0.1`입니다.** 신뢰할 수 없는 네트워크에 노출하지 마세요.
+
+## 무엇이 바뀌었는지 — `clotho diff`
+
+JSON 텍스트 diff로는 애니메이션 문서의 변경을 읽을 수 없습니다. 요소 하나를 추가하면 수백 줄이 움직이고, keyframe 배열은 통째로 재작성된 것처럼 보입니다.
+
+```bash
+clotho diff before.json after.json
+clotho diff a.json b.json --format md   # PR 코멘트용 표
+clotho diff a.json b.json --all         # 접어둔 사소한 차이까지
+```
+
+저작자의 단위로 보고합니다 — 요소가 움직였다, track에 keyframe이 늘었다, chapter가 밀렸다. `cell-0`을 `slot-0`으로 바꾼 것처럼 id만 달라진 경우는 **삭제+추가가 아니라 rename으로 추정해서** 보여주고(추정임을 표시합니다), 2px 미만의 이동이나 부동소수 마지막 자리는 기본적으로 접습니다.
+
+시각 회귀 테스트와는 다른 질문에 답합니다. 그쪽은 "깨졌는가"를 자동으로 판정하고, 이쪽은 **"무엇이 바뀌었는가"를 사람에게 설명합니다.**
+
+## 왜 이렇게 보이는지 — `clotho explain`
+
+저작 중 실제로 나오는 질문은 늘 같은 형태입니다. **이 요소가 왜 안 보이지**, 이 색이 왜 저 값이지, 내가 넣은 keyframe이 왜 아무 효과가 없지.
+
+```bash
+clotho explain animations/knapsack.json --at 3200
+clotho explain animations/knapsack.json --at 3200 --element cursor
+clotho explain animations/knapsack.json --at 3200 --json
+```
+
+```
+dot (circle) — on screen at 1000ms
+  cx = 190  [track] 20 → 360, 50% through, easeInOut, number
+  fill = "#facc15"  [effect] base → effect (h)
+
+inside (rect) — not on screen at 1000ms
+  · its ancestor group "g" is off stage, and a group takes its subtree with it
+```
+
+가시성 사유를 먼저 보여줍니다. 요소가 그냥 없으면 대여섯 가지 원인 중 무엇인지 알 길이 없고, 원인마다 고치는 방법이 다르기 때문입니다.
+
+사유는 **하나만 찾고 멈추지 않습니다.** 등장 구간 밖이면서 동시에 숨겨진 그룹 안에 있을 수 있고, 한쪽만 고치면 여전히 안 보입니다.
+
+## 코드와 어긋나지 않게 — `clotho sync`
+
+`code.source`가 붙은 요소의 `content`를 실제 파일에서 갱신합니다. 자세한 내용은 [JSON Schema](/docs/schema)의 `code` 항목을 보세요.
+
+```bash
+clotho sync animations/            # content와 hash를 갱신
+clotho sync animations/ --check    # 쓰지 않고, 낡았으면 종료 코드 1
+clotho validate animations/        # 낡은 문서를 stale-code 경고로 보고
+```
+
+CI에 `clotho validate --strict`가 있다면 **코드를 바꾸고 애니메이션을 안 고친 PR이 자동으로 실패합니다.**
+
+## 재생할 수 없는 자리로 — `clotho storyboard`
+
+```bash
+clotho storyboard doc.json --out sheet.png --per-row 3
+clotho storyboard doc.json --out frames/
+clotho storyboard doc.json --out sheet.png --frames count --count 6
+```
+
+인쇄물·논문 PDF·발표 슬라이드·코드 리뷰 코멘트처럼 **애니메이션이 재생될 수 없는 자리**를 위한 정지 이미지 묶음입니다.
+
+프레임은 기본적으로 **chapter에서 고릅니다** — 저작자가 이미 단계를 나눠 놓았으므로 어떤 휴리스틱보다 낫습니다. chapter가 없으면 고르게 퍼뜨립니다. 프레임이 너무 많으면 고르게 솎아냅니다 — 애니메이션의 끝은 대개 요점이 있는 곳이라 **뒤를 잘라내는 것이 최악의 자르기**입니다.

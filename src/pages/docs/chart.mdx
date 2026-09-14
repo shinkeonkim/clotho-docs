@@ -1,0 +1,76 @@
+---
+layout: ../../layouts/DocsLayout.astro
+title: Chart
+---
+
+# Chart
+
+`charts`는 **저작 시간 스펙**입니다. `compileCharts`가 이것을 평범한 v1 요소로 낮추고, 그 결과만 문서에 남습니다.
+
+그래서 **런타임은 차트를 전혀 모릅니다.** adapter 4종에도, GIF renderer에도, 에디터의 요소 switch에도 12번째 타입이 생기지 않습니다. 렌더 경로가 내는 비용은 0입니다.
+
+```json
+{
+  "charts": [{
+    "id": "bench", "x": 60, "y": 40, "width": 520, "height": 300,
+    "kind": "bar",
+    "data": [{ "name": "naive", "ms": 120 }, { "name": "memo", "ms": 45 }],
+    "encode": { "x": "name", "y": "ms", "series": "impl" },
+    "scale": { "y": { "type": "linear", "domain": [0, "auto"], "nice": true } },
+    "axes": { "x": { "label": "구현" }, "y": { "label": "ms", "grid": true } },
+    "reveal": { "mode": "grow", "start": 500, "duration": 2500, "stagger": 120 },
+    "legend": true
+  }]
+}
+```
+
+## id 규약이 진짜 계약입니다
+
+차트는 새 renderer가 아니라 **예측 가능한 id를 가진 primitive 생성기**입니다. 이 기능의 설계는 사실상 이것이 전부입니다.
+
+```
+bench__plot                    프레임
+bench__grid-y__line-0          격자
+bench__axis-x                  축 선
+bench__axis-x__tick-2__label   눈금 라벨
+bench__series-quick            시리즈 (line은 path 하나)
+bench__series-quick__point-3   막대 하나
+bench__legend__quick           범례 항목
+```
+
+그래서 **차트를 위한 특별한 강조 문법이 필요 없습니다.** 기존 문법이 그대로 통합니다.
+
+```json
+{ "type": "pulse", "elementId": "bench__series-quick__point-3", "time": 4000 }
+{ "type": "spotlight", "elementIds": ["bench__series-quick"], "time": 5000 }
+{ "camera": { "focus": [{ "time": 6000, "elementIds": ["bench__axis-y"] }] } }
+```
+
+구분자가 `/`가 아니라 `__`인 이유는 단순합니다. id 정규식이 `^[a-z0-9][a-z0-9_-]*$`이고 이 규칙에는 383개 문서와 migration이 걸려 있어서, 차트 때문에 넓힐 것이 아닙니다. 시리즈 이름은 slugify를 거치며 `__`는 `_`로 접히므로 **생성된 이름이 경로 구분자를 위조할 수 없습니다.**
+
+## reveal
+
+`reveal`은 compiler가 만드는 **평범한 track과 등장 구간**의 단축 표기입니다. compile 후 저작자가 그대로 덮어쓸 수 있습니다.
+
+| mode | 생성물 |
+| --- | --- |
+| `none` | 없음. 처음부터 완성된 차트 |
+| `grow` | 막대의 `height` 0→값과 `y`를 함께 움직입니다 (rect는 좌상단 기준이라 둘 다 필요합니다) |
+| `sweep` | 경로 길이만 한 `strokeDasharray` + `strokeDashoffset` track |
+| `series` | 시리즈별 `appearances.start`를 `stagger`만큼 밉니다 |
+
+## 스케일
+
+`linear`과 `band`만 있고 `d3-scale`을 쓰지 않습니다. 필요한 것이 200줄 남짓의 산술(`nice`·`ticks`·선형 매핑)인데, 그것 때문에 보간기·시간 스케일·색 공간을 함께 들여올 이유가 없습니다.
+
+눈금 간격은 1/2/5×10ⁿ 계열에서 고르고, 경계는 산술 중앙값이 아니라 **기하 평균**(√50·√10·√2)입니다. 2와 5 중 고르는 것은 비율의 문제이기 때문이고, 그래야 `nice`한 도메인과 `ticks`가 서로 어긋나지 않습니다.
+
+**막대 차트의 값 축은 0에서 시작합니다.** 막대 길이가 곧 인코딩이므로 잘린 축은 길이로 거짓말을 합니다.
+
+x축 눈금 라벨은 겹치면 **솎아냅니다**(`label-crowding` finding과 함께). 겹친 축은 두 칸 걸러 하나만 이름을 붙인 축보다 읽기 어렵습니다.
+
+## 범위
+
+설명용 차트이며 분석용 차트 도구가 아닙니다. `kind`는 `bar`와 `line` 둘뿐이고 이 목록은 좁게 유지합니다.
+
+외부 차트 라이브러리를 런타임에 임베드하지 않는 이유는 분명합니다 — Canvas가 필요하거나 React 전용이고, **자체 애니메이션 상태를 가지므로 `(문서, t) → 화면`이 성립하지 않습니다.**
