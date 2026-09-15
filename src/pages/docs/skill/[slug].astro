@@ -5,17 +5,27 @@ import overviewSource from "@public/skills/clotho-animation-authoring/SKILL.md?r
 import schemaSource from "@public/skills/clotho-animation-authoring/references/schema.md?raw";
 import patternsSource from "@public/skills/clotho-animation-authoring/references/patterns.md?raw";
 import integrationSource from "@public/skills/clotho-animation-authoring/references/integration.md?raw";
+import chartSource from "@public/skills/clotho-animation-authoring/references/chart.md?raw";
+import styleSource from "@public/skills/clotho-animation-authoring/references/style.md?raw";
+import mathSource from "@public/skills/clotho-animation-authoring/references/math.md?raw";
+import toolingSource from "@public/skills/clotho-animation-authoring/references/tooling.md?raw";
+import embeddingSource from "@public/skills/clotho-animation-authoring/references/embedding.md?raw";
 import { rewriteSkillLinks } from "@/i18n/skill-links";
 
 const documents = {
   overview: { title: "Clotho Animation Authoring Skill", file: "SKILL.md", source: overviewSource },
   schema: { title: "Skill · Schema reference", file: "references/schema.md", source: schemaSource },
   patterns: { title: "Skill · 작성 pattern", file: "references/patterns.md", source: patternsSource },
-  integration: { title: "Skill · Editor와 MCP 연동", file: "references/integration.md", source: integrationSource },
+  chart: { title: "Skill · 차트", file: "references/chart.md", source: chartSource },
+  style: { title: "Skill · 렌더 스타일", file: "references/style.md", source: styleSource },
+  math: { title: "Skill · 수식", file: "references/math.md", source: mathSource },
+  tooling: { title: "Skill · CLI 도구", file: "references/tooling.md", source: toolingSource },
+  embedding: { title: "Skill · 문서에 끼워 넣기", file: "references/embedding.md", source: embeddingSource },
+  integration: { title: "Skill · 편집기와 MCP 연동", file: "references/integration.md", source: integrationSource },
 } as const;
 
 export function getStaticPaths() {
-  return ["overview", "schema", "patterns", "integration"].map((slug) => ({ params: { slug } }));
+  return ["overview", "schema", "patterns", "chart", "style", "math", "tooling", "embedding", "integration"].map((slug) => ({ params: { slug } }));
 }
 
 const slug = Astro.params.slug as keyof typeof documents;

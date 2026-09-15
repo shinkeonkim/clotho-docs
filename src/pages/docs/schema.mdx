@@ -70,6 +70,22 @@ arrow 추가 필드: `label?`, `labelColor #0b0b0f`, `labelOffsetX 0`, `labelOff
 
 필수: `x`, `y`, 양수 `width`, 양수 `height`, `assetId`. 선택: `alt?`, `preserveAspectRatio "xMidYMid meet"`, 0~1 `opacity 1`.
 
+`assetId`는 문서의 `assets`에 등록한 자산을 가리킵니다. 자산은 세 가지 중 하나입니다.
+
+```json
+{
+  "assets": {
+    "logo":  { "kind": "external", "url": "https://example.com/logo.svg" },
+    "chart": { "kind": "inline", "mime": "image/png", "data": "iVBORw0KG..." },
+    "avatar": { "kind": "ref", "key": "user-avatar" }
+  }
+}
+```
+
+- **`external`** — `url`에 **https 주소를 그대로 넣습니다.** 이미지를 base64로 문서에 박아 넣을 필요가 없고, 문서가 가벼워집니다. 대신 그 주소가 살아 있어야 하고, 정적 SVG로 내보내거나 GIF로 구울 때 그 환경에서 접근할 수 있어야 합니다.
+- **`inline`** — base64를 문서에 담습니다. 문서 하나로 완결되므로 네트워크가 없어도 그려집니다. `data:<mime>;base64,` 접두사는 넣지 않습니다 — `mime`과 중복입니다.
+- **`ref`** — 호스트가 `AssetResolver`로 풀어 줍니다. 풀리기 전에는 자리 표시자를 그립니다.
+
 ### path
 
 필수: SVG `d`. 기본값: `x 0`, `y 0`, `fill none`, `stroke #6366f1`, `strokeWidth 2`, `opacity 1`. `strokeDasharray?`를 지원합니다.

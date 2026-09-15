@@ -18,6 +18,11 @@ import type { Locale } from "@/i18n/navigation";
 const REFERENCE_SLUGS: Record<string, string> = {
   "schema.md": "schema",
   "patterns.md": "patterns",
+  "chart.md": "chart",
+  "style.md": "style",
+  "math.md": "math",
+  "tooling.md": "tooling",
+  "embedding.md": "embedding",
   "integration.md": "integration",
   "SKILL.md": "overview",
 };

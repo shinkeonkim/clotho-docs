@@ -1,4 +1,9 @@
-import { animationDocumentSchema, type AnimationDocument } from "@kokoa/clotho";
+import {
+  animationDocumentSchema,
+  bakeMathElements,
+  type AnimationDocument,
+} from "@kokoa/clotho";
+import { mathjaxBaker } from "@/lib/math-baker";
 
 export const elementSlugs = [
   "rect",
@@ -258,11 +263,12 @@ export const elementGuides: Record<ElementSlug, ElementGuide> = {
   },
   image: {
     title: "Image",
-    summary: "문서의 asset registry를 참조하여 이미지를 재사용합니다.",
+    summary:
+      "문서의 자산 목록에 등록한 이미지를 참조합니다. 자산은 base64로 직접 넣을 수도 있고, https URL을 가리킬 수도 있습니다.",
     options: [
       ["x, y", "number", "좌측 상단 좌표"],
       ["width, height", "positive number", "표시 크기"],
-      ["assetId", "string", "assets map의 key"],
+      ["assetId", "string", "assets에 등록한 자산의 이름"],
       ["alt", "string?", "접근성 설명"],
       ["preserveAspectRatio", "string", "SVG 비율 규칙"],
       ["opacity", "0…1", "불투명도"],
@@ -452,7 +458,11 @@ export const elementGuides: Record<ElementSlug, ElementGuide> = {
       ["textAnchor", "start | middle | end", "앵커를 기준으로 한 정렬"],
       ["alt", "string?", "조판 결과를 볼 수 없는 독자를 위한 낭독 문구"],
     ],
-    document: doc("math", "Math", [
+    // Typeset at build time rather than at runtime: `bakeMathElements` turns each
+    // expression into ordinary `path` elements, so the page shows real mathematics
+    // and no reader downloads a TeX engine to see it.
+    document: bakeMathElements(
+      doc("math", "Math", [
       {
         type: "math",
         id: "quadratic",
@@ -474,6 +484,8 @@ export const elementGuides: Record<ElementSlug, ElementGuide> = {
         alt: "e to the i pi plus one equals zero",
         appearances: visible,
       },
-    ]),
+      ]),
+      mathjaxBaker,
+    ).document,
   },
 };

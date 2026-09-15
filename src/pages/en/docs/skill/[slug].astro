@@ -5,9 +5,14 @@ import overviewSource from "@public/skills/clotho-animation-authoring/SKILL.md?r
 import schemaSource from "@public/skills/clotho-animation-authoring/references/schema.md?raw";
 import patternsSource from "@public/skills/clotho-animation-authoring/references/patterns.md?raw";
 import integrationSource from "@public/skills/clotho-animation-authoring/references/integration.md?raw";
+import chartSource from "@public/skills/clotho-animation-authoring/references/chart.md?raw";
+import styleSource from "@public/skills/clotho-animation-authoring/references/style.md?raw";
+import mathSource from "@public/skills/clotho-animation-authoring/references/math.md?raw";
+import toolingSource from "@public/skills/clotho-animation-authoring/references/tooling.md?raw";
+import embeddingSource from "@public/skills/clotho-animation-authoring/references/embedding.md?raw";
 import { rewriteSkillLinks } from "@/i18n/skill-links";
-const documents = { overview: { title: "Clotho Animation Authoring Skill", file: "SKILL.md", source: overviewSource }, schema: { title: "Skill · Schema reference", file: "references/schema.md", source: schemaSource }, patterns: { title: "Skill · Authoring patterns", file: "references/patterns.md", source: patternsSource }, integration: { title: "Skill · Editor and MCP integration", file: "references/integration.md", source: integrationSource } } as const;
-export function getStaticPaths() { return ["overview", "schema", "patterns", "integration"].map((slug) => ({ params: { slug } })); }
+const documents = { overview: { title: "Clotho Animation Authoring Skill", file: "SKILL.md", source: overviewSource }, schema: { title: "Skill · Schema reference", file: "references/schema.md", source: schemaSource }, patterns: { title: "Skill · Authoring patterns", file: "references/patterns.md", source: patternsSource }, chart: { title: "Skill · Charts", file: "references/chart.md", source: chartSource }, style: { title: "Skill · Render style", file: "references/style.md", source: styleSource }, math: { title: "Skill · Math", file: "references/math.md", source: mathSource }, tooling: { title: "Skill · CLI tools", file: "references/tooling.md", source: toolingSource }, embedding: { title: "Skill · Embedding", file: "references/embedding.md", source: embeddingSource }, integration: { title: "Skill · Editor and MCP integration", file: "references/integration.md", source: integrationSource } } as const;
+export function getStaticPaths() { return ["overview", "schema", "patterns", "chart", "style", "math", "tooling", "embedding", "integration"].map((slug) => ({ params: { slug } })); }
 const document = documents[Astro.params.slug as keyof typeof documents];
 let source = document.source.replace(/^---\n[\s\S]*?\n---\n/, "");
 const headings = [...source.matchAll(/^(#{2,3})\s+(.+)$/gm)].map((match, index) => ({ depth: match[1].length, text: match[2].replace(/[`*_]/g, ""), slug: `section-${index + 1}` }));

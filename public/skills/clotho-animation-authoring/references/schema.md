@@ -48,6 +48,14 @@ Every element has `type`, `id`, optional `name` and `parentId`, `rotation` (defa
 - `code`: position, positive size, `content`; language, line numbers, palette, padding, title.
 - `math`: `x`, `y`, `tex`; `display`, `fontSize`, `color`, `textAnchor`, optional `alt`. The typesetter is injected by the host through `mathRenderer` — without one the TeX source is drawn as monospace and a diagnostic is reported, so the frame still says what the author meant.
 
+## Document fields added in 0.5.0
+
+- `charts`: authoring-time chart specs. See [chart.md](chart.md).
+- `style`: render preset. See [style.md](style.md).
+- `chapters[].notes`: speaker notes, shown only in presenter mode. `subtitle` is the caption the audience reads and cannot double as notes.
+- `code.source`: `{ file, region? | lines?, hash? }` recording where `content` came from. `region` survives lines being added above it; `lines` silently drifts. The runtime never reads the file — `content` is always the truth.
+- `math`: the eleventh element type. See [math.md](math.md).
+
 Connector anchors: `auto`, `top`, `right`, `bottom`, `left`, `center`, `top-left`, `top-right`, `bottom-left`, `bottom-right`.
 
 Arrow heads: `none`, `arrow`, `triangle`, `triangle-open`, `circle`, `circle-open`, `diamond`, `diamond-open`, `bar`.
@@ -98,7 +106,7 @@ The trail is re-derived from the document at every frame rather than accumulated
 ## Assets
 
 - inline: `{ "kind": "inline", "mime": "image/png", "data": "raw-base64" }`
-- external: `{ "kind": "external", "url": "https://..." }`
+- external: `{ "kind": "external", "url": "https://..." }` — an ordinary https URL. Prefer this over inline base64 when the image is already hosted; it keeps the document small. The URL must be reachable wherever the document is rendered, including static SVG export and GIF baking.
 - ref: `{ "kind": "ref", "key": "host-key" }`
 
 Inline data excludes the `data:<mime>;base64,` prefix. A ref asset requires a host `AssetResolver`.
