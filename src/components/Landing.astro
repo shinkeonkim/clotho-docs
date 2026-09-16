@@ -1,5 +1,6 @@
 ---
 import { Gallery } from "@/components/Gallery";
+import FeatureShowcase from "@/components/FeatureShowcase.astro";
 import type { Locale } from "@/i18n/navigation";
 const { locale } = Astro.props as { locale: Locale };
 const ko = locale === "ko";
@@ -26,6 +27,7 @@ const ko = locale === "ko";
   </div>
   <Gallery locale={locale} client:load />
 </section>
+<FeatureShowcase locale={locale} />
 
 <style>
   .hero { position: relative; padding: 104px 24px 82px; border-bottom: 1px solid #e8e9ef; background: radial-gradient(circle at 50% -20%, #ebeaff 0, #fafaff 38%, #fff 72%); text-align: center; }

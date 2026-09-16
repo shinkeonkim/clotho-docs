@@ -1,38 +1,38 @@
 ---
 layout: ../../layouts/DocsLayout.astro
 title: 코드 라이브러리
-description: Clotho runtime과 adapter를 코드에서 사용하는 방법을 설명합니다.
+description: Clotho의 런타임과 어댑터를 코드에서 쓰는 방법을 설명합니다.
 ---
 
 # 코드 라이브러리
 
-`@kokoa/clotho`는 JSON 문서를 검증하고 특정 시간의 scene을 계산하는 핵심 라이브러리입니다. 화면을 직접 편집하려면 [Clotho Editor](/docs/editor)를 사용하고, 애플리케이션 코드에서 재생하거나 SVG와 GIF를 만들려면 이 라이브러리를 사용합니다.
+`@kokoa/clotho`는 JSON 문서를 검증하고 특정 시각의 장면을 계산하는 핵심 라이브러리입니다. 화면을 직접 편집할 때는 [Clotho 편집기](/docs/editor)를, 애플리케이션 코드에서 재생하거나 SVG와 GIF를 만들 때는 이 라이브러리를 씁니다.
 
-## 어떤 package를 설치해야 하나요?
+## 무엇을 설치해야 하나요?
 
 ```bash
 npm install @kokoa/clotho
 ```
 
-React player를 사용할 때는 React와 React DOM도 설치합니다.
+React 플레이어를 쓸 때는 React와 React DOM도 함께 설치합니다.
 
 ```bash
 npm install @kokoa/clotho react react-dom
 ```
 
-## Package entry point
+## 진입점
 
-| import | 역할 |
+| 진입점 | 역할 |
 | --- | --- |
-| `@kokoa/clotho` | Schema, runtime, authoring, layout, data binding, story와 linter |
-| `@kokoa/clotho/react` | React player, stage와 hooks |
-| `@kokoa/clotho/vue` | Vue player, stage와 composable |
-| `@kokoa/clotho/dom` | Vanilla DOM player와 scene patching |
+| `@kokoa/clotho` | 스키마, 런타임, 작성 도우미, 레이아웃, 데이터 연결, 스토리, 린터 |
+| `@kokoa/clotho/react` | React 플레이어와 무대, 그리고 훅 |
+| `@kokoa/clotho/vue` | Vue 플레이어와 무대, 그리고 컴포저블 |
+| `@kokoa/clotho/dom` | 바닐라 DOM 플레이어와 장면 갱신 |
 | `@kokoa/clotho/svg` | 결정적인 SVG 문자열 생성 |
-| `@kokoa/clotho/node` | 파일 loading과 GIF 생성 |
-| `@kokoa/clotho/testing` | Animation assertion과 visual regression 도구 |
-| `@kokoa/clotho/plugins` | Plugin API 전용 entry point |
-| `@kokoa/clotho/mdx` | 마크다운·MDX embed 빌더와 hydration |
+| `@kokoa/clotho/node` | 파일 불러오기와 GIF 만들기 |
+| `@kokoa/clotho/testing` | 애니메이션 단언과 시각 회귀 검사 도구 |
+| `@kokoa/clotho/plugins` | 플러그인 API 전용 진입점 |
+| `@kokoa/clotho/mdx` | 마크다운·MDX 삽입 빌더와 활성화 |
 | `@kokoa/clotho/element` | `<clotho-player>` 커스텀 엘리먼트 |
 
 ## 가장 작은 사용 예
@@ -51,16 +51,16 @@ export function Example() {
 
 ## 기능을 선택하는 기준
 
-- 반복 가능한 장면을 코드로 만들려면 `defineTemplate`과 parameter를 사용합니다.
-- API 응답이나 고정 JSON 값을 연결하려면 data binding을 사용합니다.
-- 요소 간 간격과 정렬을 유지하려면 constraint layout을 사용합니다.
-- 사용자의 응답을 기다리려면 checkpoint를 사용합니다.
+- 되풀이되는 장면을 코드로 만들 때는 `defineTemplate`과 매개변수를 씁니다.
+- API 응답이나 고정된 JSON 값을 이어 붙일 때는 데이터 연결을 씁니다.
+- 요소 사이의 간격과 정렬을 유지할 때는 제약 레이아웃을 씁니다.
+- 읽는 사람의 응답을 기다릴 때는 체크포인트를 씁니다.
 - 여러 문서로 갈라지는 흐름은 `StoryManifest`로 구성합니다.
-- container 폭에 따라 stage를 바꾸려면 responsive variant를 사용합니다.
-- 배포 전에 `validateDocument`, `lintDocument`와 visual regression을 실행합니다.
+- 바깥 폭에 따라 무대를 바꿀 때는 반응형 변형을 씁니다.
+- 배포 전에 `validateDocument`와 `lintDocument`, 그리고 시각 회귀 검사를 돌립니다.
 
 각 기능의 관계와 실행 순서는 [확장형 작성 환경](/docs/authoring-platform), 전체 공개 함수는 [API와 hooks](/docs/api)에서 확인할 수 있습니다.
 
-## Editor와 역할 구분
+## 편집기와 역할이 어떻게 갈리나
 
-코드 라이브러리는 문서의 의미, 계산과 rendering을 담당합니다. Editor는 같은 schema 위에서 문서를 만드는 UI입니다. Editor가 저장한 JSON을 다시 `@kokoa/clotho`로 검증하고 재생하기 때문에 두 구현 사이에 별도 변환 계층이 필요하지 않습니다.
+이 라이브러리는 문서의 뜻을 해석하고, 계산하고, 그리는 일을 맡습니다. 편집기는 같은 스키마 위에서 문서를 만드는 화면입니다. 편집기가 저장한 JSON을 다시 `@kokoa/clotho`로 검증하고 재생하므로, 둘 사이에 따로 변환 계층을 둘 필요가 없습니다.

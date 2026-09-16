@@ -5,7 +5,7 @@ title: 시작하기
 
 # 시작하기
 
-Clotho는 JSON 문서를 시간에 따른 scene으로 계산하고 원하는 환경에서 렌더링합니다.
+Clotho는 JSON 문서를 시각에 따른 장면으로 계산하고, 원하는 환경에서 그려 줍니다.
 
 ## 설치
 
@@ -13,7 +13,7 @@ Clotho는 JSON 문서를 시간에 따른 scene으로 계산하고 원하는 환
 npm install @kokoa/clotho
 ```
 
-React에서 player를 사용하려면 React package도 함께 설치합니다.
+React에서 플레이어를 쓰려면 React 패키지도 함께 설치합니다.
 
 ```bash
 npm install @kokoa/clotho react react-dom
@@ -33,7 +33,7 @@ const document = animationDocumentSchema.parse({
 });
 ```
 
-외부 JSON은 `parseDocument`로 검사한 뒤 사용하세요. legacy v3/v4 문서는 `migrateLegacyDocument`로 v1으로 변환할 수 있습니다.
+바깥에서 받은 JSON은 `parseDocument`로 검사한 뒤 쓰세요. 예전 v3·v4 문서는 `migrateLegacyDocument`로 v1으로 바꿀 수 있습니다.
 
 ## 다음 단계
 
@@ -41,4 +41,4 @@ const document = animationDocumentSchema.parse({
 - [Vue.js에서 재생하기](/docs/vue)
 - [Vanilla JS에서 재생하기](/docs/vanilla)
 - [JSON 문서 구성하기](/docs/schema)
-- [Clotho Editor 열기](https://clotho-editor.shinkeonkim.com/)
+- [Clotho 편집기 열기](https://clotho-editor.shinkeonkim.com/)

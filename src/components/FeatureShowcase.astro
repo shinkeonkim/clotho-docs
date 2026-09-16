@@ -1,0 +1,250 @@
+---
+import { localizedPath, type Locale } from "@/i18n/navigation";
+
+const { locale } = Astro.props as { locale: Locale };
+const ko = locale === "ko";
+
+type Feature = {
+  id: string;
+  eyebrow: [string, string];
+  title: [string, string];
+  description: [string, string];
+  href: string;
+};
+
+type FeatureGroup = {
+  label: [string, string];
+  title: [string, string];
+  description: [string, string];
+  features: Feature[];
+};
+
+const groups: FeatureGroup[] = [
+  {
+    label: ["문서에서 장면으로", "Document to scene"],
+    title: ["데이터와 표현을 한 흐름에 담습니다.", "Bring data and expression into one timeline."],
+    description: [
+      "수식과 차트를 평범한 Clotho 요소로 바꾸고, 같은 문서에 서로 다른 렌더 스타일을 입힙니다.",
+      "Turn math and charts into ordinary Clotho elements, then apply different render styles to the same document.",
+    ],
+    features: [
+      {
+        id: "math-baked",
+        eyebrow: ["MATH · 사전 변환", "MATH · BUILD-TIME BAKING"],
+        title: ["수식도 재생 가능한 요소로", "Math that plays like any other element"],
+        description: [
+          "MathJax 글리프를 경로로 변환해 브라우저와 정적 출력에서 같은 수식을 재생합니다.",
+          "Bake MathJax glyphs into paths so the same equation plays in browsers and static output.",
+        ],
+        href: "/docs/elements/math",
+      },
+      {
+        id: "charts",
+        eyebrow: ["CHART · BAR + LINE", "CHART · BAR + LINE"],
+        title: ["데이터를 애니메이션 문법으로", "Data in the animation vocabulary"],
+        description: [
+          "막대와 선 차트를 기본 요소로 컴파일해 키프레임, 효과와 모든 렌더러를 그대로 재사용합니다.",
+          "Compile bar and line charts into core elements, reusing keyframes, effects, and every renderer.",
+        ],
+        href: "/docs/chart",
+      },
+      {
+        id: "styles",
+        eyebrow: ["STYLE · CLEAN / SKETCH / MONO", "STYLE · CLEAN / SKETCH / MONO"],
+        title: ["내용은 그대로, 인상은 다르게", "Same content, a different voice"],
+        description: [
+          "문서 하나를 clean, sketch, mono 스타일로 바꾸면서 시간과 구조는 유지합니다.",
+          "Switch one document between clean, sketch, and mono while preserving its timing and structure.",
+        ],
+        href: "/docs/style",
+      },
+    ],
+  },
+  {
+    label: ["독자에게 전달하기", "Deliver to readers"],
+    title: ["한 문서를 여러 읽기 경험으로 펼칩니다.", "Turn one document into many reading experiences."],
+    description: [
+      "발표, 스크롤 기사, 웹 컴포넌트와 Markdown까지 별도의 애니메이션 사본 없이 연결합니다.",
+      "Connect presentations, scroll-driven stories, Web Components, and Markdown without duplicating the animation.",
+    ],
+    features: [
+      {
+        id: "presenter",
+        eyebrow: ["PRESENTER", "PRESENTER"],
+        title: ["발표 흐름과 노트를 한 화면에", "The talk and its notes in one view"],
+        description: [
+          "키보드로 챕터를 진행하고 발표자 노트, 진행 상태와 블랙아웃을 함께 제어합니다.",
+          "Advance chapters by keyboard and control speaker notes, progress, and blackout together.",
+        ],
+        href: "/docs/embedding",
+      },
+      {
+        id: "scroll",
+        eyebrow: ["SCROLLYTELLING", "SCROLLYTELLING"],
+        title: ["스크롤이 곧 재생 막대가 됩니다", "Let scrolling become the playhead"],
+        description: [
+          "페이지 진행률을 재생 시각에 연결해 아래로 읽으면 진행되고 위로 돌아가면 되감깁니다.",
+          "Map page progress to time: read down to advance and scroll back up to rewind.",
+        ],
+        href: "/docs/embedding",
+      },
+      {
+        id: "element",
+        eyebrow: ["WEB COMPONENT", "WEB COMPONENT"],
+        title: ["프레임워크 없이 플레이어 삽입", "Embed a player without a framework"],
+        description: [
+          "`<clotho-player>` 하나로 재생하고 테마와 속도를 속성 또는 JavaScript에서 바꿉니다.",
+          "Use one `<clotho-player>` and change playback, theme, or speed through attributes or JavaScript.",
+        ],
+        href: "/docs/embedding",
+      },
+      {
+        id: "deeplink",
+        eyebrow: ["DEEP LINK", "DEEP LINK"],
+        title: ["보고 있던 장면으로 바로 연결", "Link directly to the scene in view"],
+        description: [
+          "챕터와 재생 속도를 URL에 담아 공유한 사람이 같은 문맥에서 시작하게 합니다.",
+          "Put the chapter and playback speed in the URL so a shared link opens in the same context.",
+        ],
+        href: "/docs/embedding",
+      },
+      {
+        id: "mdx",
+        eyebrow: ["MARKDOWN · MDX", "MARKDOWN · MDX"],
+        title: ["정적 포스터에서 동적 플레이어로", "From static poster to live player"],
+        description: [
+          "빌드할 때 SVG 포스터를 만들고, 브라우저에서는 필요할 때 같은 자리를 플레이어로 활성화합니다.",
+          "Build an SVG poster first, then hydrate the same space into a player only when the browser needs it.",
+        ],
+        href: "/docs/embedding",
+      },
+    ],
+  },
+  {
+    label: ["검사하고 확장하기", "Inspect and extend"],
+    title: ["제작과 검증도 같은 문서를 중심으로 돕습니다.", "Keep authoring and verification centered on the same document."],
+    description: [
+      "CLI로 변경과 가시성을 살피고, 반응형 레이아웃과 독자의 선택을 재생 흐름 안에 포함합니다.",
+      "Inspect changes and visibility from the CLI, then include responsive layouts and reader choices in playback.",
+    ],
+    features: [
+      {
+        id: "tooling",
+        eyebrow: ["CLI · DIFF / EXPLAIN / STORYBOARD", "CLI · DIFF / EXPLAIN / STORYBOARD"],
+        title: ["문서를 눈으로 검토하는 CLI", "A CLI for reviewing the document visually"],
+        description: [
+          "변경된 요소를 비교하고 특정 시각의 가시성을 설명하며 챕터별 정지 이미지를 한 번에 만듭니다.",
+          "Compare changed elements, explain visibility at a moment, and generate chapter stills in one workflow.",
+        ],
+        href: "/docs/tooling",
+      },
+      {
+        id: "checkpoint",
+        eyebrow: ["INTERACTIVE CHECKPOINT", "INTERACTIVE CHECKPOINT"],
+        title: ["독자의 선택을 기다리는 타임라인", "A timeline that waits for the reader"],
+        description: [
+          "정해진 시점에 멈추고 답을 받은 뒤, 그 선택을 반영해 다음 설명을 이어 갑니다.",
+          "Pause at a defined moment, collect an answer, then continue the explanation with that choice.",
+        ],
+        href: "/docs/authoring-platform",
+      },
+      {
+        id: "responsive",
+        eyebrow: ["RESPONSIVE STAGE", "RESPONSIVE STAGE"],
+        title: ["폭은 바뀌어도 장면은 이어지게", "Keep the scene moving as its width changes"],
+        description: [
+          "컨테이너 폭에 맞는 배치로 전환하면서 현재 재생 시각과 이야기의 맥락을 유지합니다.",
+          "Switch layouts for the container width while preserving the current time and narrative context.",
+        ],
+        href: "/docs/authoring-platform",
+      },
+    ],
+  },
+];
+
+const pick = ([korean, english]: [string, string]) => ko ? korean : english;
+---
+
+<section class="feature-showcase" aria-labelledby="feature-showcase-title">
+  <header class="showcase-heading">
+    <p>{ko ? "Clotho 0.5 · 더 많은 실제 예제" : "Clotho 0.5 · More real examples"}</p>
+    <h2 id="feature-showcase-title">{ko ? "문서 밖까지 이어지는 애니메이션." : "Animation that extends beyond the document."}</h2>
+    <p>{ko
+      ? "재생 버튼을 눌러 최근 추가된 기능이 실제 작성과 배포 흐름에서 어떻게 동작하는지 확인해 보세요. 각 예제는 공개된 @kokoa/clotho 0.5.0으로 만들었습니다."
+      : "Press play to see how the latest features behave in real authoring and delivery workflows. Every example was made with the published @kokoa/clotho 0.5.0 package."}</p>
+  </header>
+
+  {groups.map((group) => (
+    <section class="feature-group">
+      <div class="feature-group-heading">
+        <p>{pick(group.label)}</p>
+        <h3>{pick(group.title)}</h3>
+        <span>{pick(group.description)}</span>
+      </div>
+      <div class="feature-grid">
+        {group.features.map((feature, index) => (
+          <article class:list={["feature-card", { wide: group.features.length % 2 === 1 && index === 0 }]}>
+            <video
+              controls
+              loop
+              muted
+              playsinline
+              preload="none"
+              poster={`/images/features/${feature.id}.png`}
+              aria-label={`${pick(feature.title)} — ${ko ? "기능 예제 영상" : "feature example video"}`}
+            >
+              <source src={`/videos/features/${feature.id}.mp4`} type="video/mp4" />
+            </video>
+            <div class="feature-copy">
+              <p>{pick(feature.eyebrow)}</p>
+              <h4>{pick(feature.title)}</h4>
+              <span>{pick(feature.description)}</span>
+              <a href={localizedPath(feature.href, locale)}>{ko ? "관련 문서 보기" : "Read the guide"} <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  ))}
+</section>
+
+<style>
+  .feature-showcase { padding: 100px max(24px, calc((100vw - 1160px) / 2)) 120px; border-top: 1px solid #e8e9ef; background: #f7f8fb; }
+  .showcase-heading { max-width: 860px; margin-bottom: 72px; }
+  .showcase-heading > p:first-child, .feature-group-heading > p { margin: 0 0 10px; color: #625bf5; font-size: 13px; font-weight: 750; letter-spacing: .02em; }
+  .showcase-heading h2 { margin: 0; color: #171a24; font-size: clamp(2.25rem, 5vw, 3.7rem); line-height: 1.08; letter-spacing: -.05em; text-wrap: balance; }
+  .showcase-heading > p:last-child { max-width: 760px; margin: 24px 0 0; color: #6c7383; font-size: 17px; line-height: 1.75; word-break: keep-all; }
+  .feature-group + .feature-group { margin-top: 96px; }
+  .feature-group-heading { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(280px, .95fr); column-gap: 56px; margin-bottom: 30px; }
+  .feature-group-heading > p { grid-column: 1 / -1; }
+  .feature-group-heading h3 { margin: 0; color: #202532; font-size: clamp(1.7rem, 3vw, 2.35rem); line-height: 1.2; letter-spacing: -.04em; text-wrap: balance; }
+  .feature-group-heading > span { align-self: end; color: #747b8b; line-height: 1.7; word-break: keep-all; }
+  .feature-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+  .feature-card { overflow: hidden; border: 1px solid #e2e4eb; border-radius: 18px; background: #fff; box-shadow: 0 14px 36px #20243a0a; }
+  .feature-card.wide { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(300px, .75fr); }
+  .feature-card video { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-bottom: 1px solid #e8e9ef; background: #eef0f5; object-fit: cover; }
+  .feature-card.wide video { height: 100%; border-right: 1px solid #e8e9ef; border-bottom: 0; }
+  .feature-copy { padding: 24px 26px 27px; }
+  .feature-card.wide .feature-copy { align-self: center; padding: 32px; }
+  .feature-copy > p { margin: 0 0 9px; color: #625bf5; font-size: 11px; font-weight: 800; letter-spacing: .08em; }
+  .feature-copy h4 { margin: 0; color: #202532; font-size: 21px; letter-spacing: -.025em; }
+  .feature-copy > span { display: block; margin-top: 11px; color: #6c7383; line-height: 1.65; word-break: keep-all; }
+  .feature-copy a { display: inline-flex; gap: 9px; margin-top: 19px; color: #554ee2; font-size: 14px; font-weight: 700; text-decoration: none; }
+  .feature-copy a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  :global(html[data-theme="dark"]) .feature-showcase { border-color: #292d37; background: #13151b; }
+  :global(html[data-theme="dark"]) .showcase-heading h2, :global(html[data-theme="dark"]) .feature-group-heading h3, :global(html[data-theme="dark"]) .feature-copy h4 { color: #f0f2f7; }
+  :global(html[data-theme="dark"]) .showcase-heading > p:last-child, :global(html[data-theme="dark"]) .feature-group-heading > span, :global(html[data-theme="dark"]) .feature-copy > span { color: #a7adba; }
+  :global(html[data-theme="dark"]) .feature-card { border-color: #30333d; background: #191c23; box-shadow: none; }
+  :global(html[data-theme="dark"]) .feature-card video { border-color: #30333d; background: #101217; }
+  @media (max-width: 760px) {
+    .feature-showcase { padding-top: 76px; padding-bottom: 88px; }
+    .showcase-heading { margin-bottom: 58px; }
+    .feature-group + .feature-group { margin-top: 72px; }
+    .feature-group-heading { display: block; }
+    .feature-group-heading > span { display: block; margin-top: 14px; }
+    .feature-grid { grid-template-columns: 1fr; }
+    .feature-card.wide { grid-column: auto; display: block; }
+    .feature-card.wide video { height: auto; border-right: 0; border-bottom: 1px solid #e8e9ef; }
+    .feature-card.wide .feature-copy { padding: 24px 26px 27px; }
+  }
+</style>
